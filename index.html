@@ -4,10 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ângelo Henrique</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap" rel="stylesheet">
-    
     <style>
         /* Reset Geral */
         * {
@@ -23,7 +19,6 @@
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            font-family: 'Poppins', sans-serif;
             display: flex;
             justify-content: center;
             align-items: flex-start;
@@ -57,19 +52,21 @@
             display: block;
         }
 
-        /* Nome Principal */
-        .nome-marca {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 400;
-            font-size: 24px;
-            letter-spacing: 5px;
-            color: #1a1a1a;
-            text-transform: uppercase;
-            text-align: center;
+        /* Nome Principal (Logo em PNG) */
+        .nome-container {
+            width: 100%;
             margin-bottom: 45px;
+            display: flex;
+            justify-content: center;
             opacity: 0;
             transform: translateY(15px);
             animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 0.7s forwards;
+        }
+
+        .nome-img {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
         /* Grid dos 4 Botões */
@@ -163,7 +160,9 @@
             <img src="angelo.jpg" alt="Ângelo Henrique" class="perfil-img">
         </div>
 
-        <h1 class="nome-marca">Ângelo Henrique</h1>
+        <div class="nome-container">
+            <img src="logo.png" alt="Ângelo Henrique" class="nome-img">
+        </div>
 
         <div class="grid-botoes">
             
