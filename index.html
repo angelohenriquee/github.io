@@ -28,35 +28,22 @@
             animation: fadeInPage 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
-        /* Container Principal com Proporção Travada em 1080x2440 */
         .container {
             width: 100%;
             max-width: 540px; 
-            position: relative;
-            padding-top: 225.92%; /* Proporção exata matemática (2440 / 1080) * 100 */
-        }
-
-        /* Camada Base Interna */
-        .conteudo-absoluto {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
             padding: 40px 35px 60px 35px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* Foto de Perfil (Ocupa apenas a sua área superior) */
+        /* Foto de Perfil */
         .perfil-container {
             width: 100%;
             margin-bottom: 35px;
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 0.4s forwards;
-            z-index: 1;
         }
 
         .perfil-img {
@@ -65,24 +52,21 @@
             display: block;
         }
 
-        /* Camada da Logo Invisível/Transparente Cobrindo Toda a Área */
+        /* Logo Recortada (Rente ao Texto) */
         .nome-container {
-            position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            pointer-events: none; /* Permite clicar nos botões que estão por baixo */
+            max-width: 380px; /* Garante que o PNG não fique nem gigante nem pequeno */
+            margin-bottom: 45px;
+            display: flex;
+            justify-content: center;
             opacity: 0;
             transform: translateY(15px);
             animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 0.7s forwards;
-            z-index: 3;
         }
 
         .nome-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            width: 90%;
+            height: auto;
             display: block;
         }
 
@@ -92,14 +76,13 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 18px;
-            z-index: 2;
         }
 
         /* Bloco do Botão */
         .card-botao {
             position: relative;
             width: 100%;
-            padding-top: 142.2%; 
+            padding-top: 142.2%; /* Proporção exata de 1,42 x 2,02 */
             overflow: hidden;
             text-decoration: none;
             opacity: 0;
@@ -112,7 +95,7 @@
         .card-botao:nth-child(3) { animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 1.3s forwards; }
         .card-botao:nth-child(4) { animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 1.45s forwards; }
 
-        /* Imagem da Foto de Fundo do Botão */
+        /* Imagem da Foto de Fundo */
         .bg-botao {
             position: absolute;
             top: 0;
@@ -125,13 +108,13 @@
             z-index: 1;
         }
 
-        /* Efeito de Zoom na Foto do Botão */
+        /* Efeito de Zoom na Foto */
         .card-botao:hover .bg-botao,
         .card-botao:active .bg-botao {
             transform: scale(1.06);
         }
 
-        /* Texto em PNG do Botão */
+        /* Camada Exata do Texto em PNG */
         .texto-botao-container {
             position: absolute;
             top: 0;
@@ -173,48 +156,44 @@
 
     <div class="container">
         
-        <div class="conteudo-absoluto">
-            
-            <div class="perfil-container">
-                <img src="angelo.jpg" alt="Ângelo Henrique" class="perfil-img">
-            </div>
-
-            <div class="grid-botoes">
-                
-                <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+de+retratos.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
-                    <div class="bg-botao" style="background-image: url('retratos.jpg');"></div>
-                    <div class="texto-botao-container">
-                        <img src="textoretratos.png" alt="Para você Retratos" class="texto-botao-img">
-                    </div>
-                </a>
-
-                <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+minha+imagem+profissional.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
-                    <div class="bg-botao" style="background-image: url('profissional.jpg');"></div>
-                    <div class="texto-botao-container">
-                        <img src="textoprofissional.png" alt="Para sua imagem Profissional" class="texto-botao-img">
-                    </div>
-                </a>
-
-                <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+o+meu+anivers%C3%A1rio.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
-                    <div class="bg-botao" style="background-image: url('aniversario.jpg');"></div>
-                    <div class="texto-botao-container">
-                        <img src="textoaniversario.png" alt="Para celebrar seu Aniversário" class="texto-botao-img">
-                    </div>
-                </a>
-
-                <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+minha+marca.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
-                    <div class="bg-botao" style="background-image: url('marcas.jpg');"></div>
-                    <div class="texto-botao-container">
-                        <img src="textomarcas.png" alt="Para sua Marca e Coleção" class="texto-botao-img">
-                    </div>
-                </a>
-
-            </div>
-
+        <div class="perfil-container">
+            <img src="angelo.jpg" alt="Ângelo Henrique" class="perfil-img">
         </div>
 
         <div class="nome-container">
             <img src="logo.png" alt="Ângelo Henrique" class="nome-img">
+        </div>
+
+        <div class="grid-botoes">
+            
+            <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+de+retratos.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
+                <div class="bg-botao" style="background-image: url('retratos.jpg');"></div>
+                <div class="texto-botao-container">
+                    <img src="textoretratos.png" alt="Para você Retratos" class="texto-botao-img">
+                </div>
+            </a>
+
+            <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+minha+imagem+profissional.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
+                <div class="bg-botao" style="background-image: url('profissional.jpg');"></div>
+                <div class="texto-botao-container">
+                    <img src="textoprofissional.png" alt="Para sua imagem Profissional" class="texto-botao-img">
+                </div>
+            </a>
+
+            <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+o+meu+anivers%C3%A1rio.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
+                <div class="bg-botao" style="background-image: url('aniversario.jpg');"></div>
+                <div class="texto-botao-container">
+                    <img src="textoaniversario.png" alt="Para celebrar seu Aniversário" class="texto-botao-img">
+                </div>
+            </a>
+
+            <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+minha+marca.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
+                <div class="bg-botao" style="background-image: url('marcas.jpg');"></div>
+                <div class="texto-botao-container">
+                    <img src="textomarcas.png" alt="Para sua Marca e Coleção" class="texto-botao-img">
+                </div>
+            </a>
+
         </div>
 
     </div>
