@@ -28,6 +28,7 @@
             animation: fadeInPage 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
+        /* Container do Layout */
         .container {
             width: 100%;
             max-width: 540px; 
@@ -35,17 +36,19 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
         }
 
-        /* Foto de Perfil - Proporção de 1080x800 travada via CSS */
+        /* Foto de Perfil - Proporção de 1080x800 travada */
         .perfil-container {
             width: 100%;
             position: relative;
-            padding-top: 74%; /* Trava matematicamente a proporção de 1080x800 */
+            padding-top: 74%; 
             margin-bottom: 35px;
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 0.4s forwards;
+            z-index: 1;
         }
 
         .perfil-img {
@@ -58,7 +61,7 @@
             display: block;
         }
 
-        /* Espaço da Logo - Expandindo na largura real do arquivo */
+        /* Espaço da Logo - Ocupa a largura total para alinhar com o arquivo do PS */
         .nome-container {
             width: 100%;
             margin-bottom: 45px;
@@ -68,6 +71,7 @@
             opacity: 0;
             transform: translateY(15px);
             animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 0.7s forwards;
+            z-index: 2;
         }
 
         .nome-img {
@@ -82,13 +86,14 @@
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 18px;
+            z-index: 1;
         }
 
         /* Bloco do Botão */
         .card-botao {
             position: relative;
             width: 100%;
-            padding-top: 142.2%; /* Proporção exata de 1,42 x 2,02 */
+            padding-top: 142.2%; 
             overflow: hidden;
             text-decoration: none;
             opacity: 0;
@@ -133,7 +138,6 @@
             display: flex;
         }
 
-        /* O PNG ocupa 100% da área do botão para casar milimetricamente */
         .texto-botao-img {
             width: 100%;
             height: 100%;
