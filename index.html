@@ -4,11 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ângelo Henrique</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap" rel="stylesheet">
-    
     <style>
+        /* Reset Geral */
         * {
             margin: 0;
             padding: 0;
@@ -22,7 +19,6 @@
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            font-family: 'Poppins', sans-serif;
             display: flex;
             justify-content: center;
             align-items: flex-start;
@@ -41,6 +37,7 @@
             align-items: center;
         }
 
+        /* Foto de Perfil */
         .perfil-container {
             width: 100%;
             margin-bottom: 35px;
@@ -53,23 +50,29 @@
             width: 100%;
             height: auto;
             display: block;
-            object-fit: cover;
         }
 
-        .nome-marca {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 400;
-            font-size: 24px;
-            letter-spacing: 5px;
-            color: #1a1a1a;
-            text-transform: uppercase;
-            text-align: center;
+        /* Nome Principal (Travado na proporção exata) */
+        .nome-container {
+            width: 100%;
+            position: relative;
+            /* Se o bloco do nome no Photoshop tiver uma proporção específica, 
+               o padding-top garante que ele mantenha o aspecto sem distorcer */
+            overflow: hidden;
             margin-bottom: 45px;
             opacity: 0;
             transform: translateY(15px);
             animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 0.7s forwards;
         }
 
+        .nome-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: contain;
+        }
+
+        /* Grid dos 4 Botões */
         .grid-botoes {
             width: 100%;
             display: grid;
@@ -77,21 +80,24 @@
             gap: 18px;
         }
 
+        /* Bloco do Botão */
         .card-botao {
             position: relative;
             width: 100%;
-            padding-top: 142.2%; /* Proporção de 1,42 x 2,02 */
+            padding-top: 142.2%; /* Proporção exata de 1,42 x 2,02 */
             overflow: hidden;
             text-decoration: none;
             opacity: 0;
             transform: translateY(25px);
         }
 
+        /* Entrada em Cascata */
         .card-botao:nth-child(1) { animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 1s forwards; }
         .card-botao:nth-child(2) { animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 1.15s forwards; }
         .card-botao:nth-child(3) { animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 1.3s forwards; }
         .card-botao:nth-child(4) { animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 1.45s forwards; }
 
+        /* Imagem da Foto de Fundo */
         .bg-botao {
             position: absolute;
             top: 0;
@@ -104,45 +110,35 @@
             z-index: 1;
         }
 
+        /* Efeito de Zoom na Foto */
         .card-botao:hover .bg-botao,
         .card-botao:active .bg-botao {
             transform: scale(1.06);
         }
 
+        /* Camada Exata do Texto em PNG */
         .texto-botao-container {
             position: absolute;
-            bottom: 0;
+            top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            align-items: center;
-            text-align: center;
-            padding: 0 15px 25px 15px; /* Travado na Base */
             z-index: 2;
             opacity: 0;
             animation: fadeInText 0.8s ease-out 1.8s forwards;
-            color: #ffffff;
+            display: flex;
         }
 
-        .txt-linha1 {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 300;
-            font-size: 13px;
-            letter-spacing: 1px;
-            opacity: 0.9;
-            margin-bottom: 2px;
+        /* O PNG ocupa 100% da área do botão para casar milimetricamente */
+        .texto-botao-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
         }
 
-        .txt-linha2 {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 400;
-            font-size: 16px;
-            letter-spacing: 1.5px;
-        }
-
+        /* Animações */
         @keyframes fadeInPage {
             to { opacity: 1; }
         }
@@ -167,39 +163,37 @@
             <img src="angelo.jpg" alt="Ângelo Henrique" class="perfil-img">
         </div>
 
-        <h1 class="nome-marca">Ângelo Henrique</h1>
+        <div class="nome-container">
+            <img src="logo.png" alt="Ângelo Henrique" class="nome-img">
+        </div>
 
         <div class="grid-botoes">
             
             <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+de+retratos.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
                 <div class="bg-botao" style="background-image: url('retratos.jpg');"></div>
                 <div class="texto-botao-container">
-                    <span class="txt-linha1">Para você</span>
-                    <strong class="txt-linha2">Retratos</strong>
+                    <img src="textoretratos.png" alt="Para você Retratos" class="texto-botao-img">
                 </div>
             </a>
 
             <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+minha+imagem+profissional.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
                 <div class="bg-botao" style="background-image: url('profissional.jpg');"></div>
                 <div class="texto-botao-container">
-                    <span class="txt-linha1">Para sua imagem</span>
-                    <strong class="txt-linha2">Profissional</strong>
+                    <img src="textoprofissional.png" alt="Para sua imagem Profissional" class="texto-botao-img">
                 </div>
             </a>
 
             <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+o+meu+anivers%C3%A1rio.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
                 <div class="bg-botao" style="background-image: url('aniversario.jpg');"></div>
                 <div class="texto-botao-container">
-                    <span class="txt-linha1">Para celebrar seu</span>
-                    <strong class="txt-linha2">Aniversário</strong>
+                    <img src="textoaniversario.png" alt="Para celebrar seu Aniversário" class="texto-botao-img">
                 </div>
             </a>
 
             <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+minha+marca.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
                 <div class="bg-botao" style="background-image: url('marcas.jpg');"></div>
                 <div class="texto-botao-container">
-                    <span class="txt-linha1">Para sua</span>
-                    <strong class="txt-linha2">Marca e Coleção</strong>
+                    <img src="textomarcas.png" alt="Para sua Marca e Coleção" class="texto-botao-img">
                 </div>
             </a>
 
