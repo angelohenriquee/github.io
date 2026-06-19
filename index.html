@@ -1,223 +1,42 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ângelo Henrique</title>
-    <style>
-        /* Reset Geral */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: #ededed;
-            background-image: url('fundo.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            overflow-x: hidden;
-            opacity: 0;
-            animation: fadeInPage 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-        }
-
-        /* Container Principal com Proporção Travada em 1080x2440 */
-        .container {
-            width: 100%;
-            max-width: 540px; 
-            position: relative;
-            padding-top: 225.92%; /* Proporção exata matemática (2440 / 1080) * 100 */
-        }
-
-        /* Camada Base Interna */
-        .conteudo-absoluto {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            padding: 40px 35px 60px 35px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Foto de Perfil (Ocupa apenas a sua área superior) */
-        .perfil-container {
-            width: 100%;
-            margin-bottom: 35px;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 0.4s forwards;
-            z-index: 1;
-        }
-
-        .perfil-img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        /* Camada da Logo Invisível/Transparente Cobrindo Toda a Área */
-        .nome-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none; /* Permite clicar nos botões que estão por baixo */
-            opacity: 0;
-            transform: translateY(15px);
-            animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 0.7s forwards;
-            z-index: 3;
-        }
-
-        .nome-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        /* Grid dos 4 Botões */
-        .grid-botoes {
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 18px;
-            z-index: 2;
-        }
-
-        /* Bloco do Botão */
-        .card-botao {
-            position: relative;
-            width: 100%;
-            padding-top: 142.2%; 
-            overflow: hidden;
-            text-decoration: none;
-            opacity: 0;
-            transform: translateY(25px);
-        }
-
-        /* Entrada em Cascata */
-        .card-botao:nth-child(1) { animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 1s forwards; }
-        .card-botao:nth-child(2) { animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 1.15s forwards; }
-        .card-botao:nth-child(3) { animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 1.3s forwards; }
-        .card-botao:nth-child(4) { animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 1.45s forwards; }
-
-        /* Imagem da Foto de Fundo do Botão */
-        .bg-botao {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
-            z-index: 1;
-        }
-
-        /* Efeito de Zoom na Foto do Botão */
-        .card-botao:hover .bg-botao,
-        .card-botao:active .bg-botao {
-            transform: scale(1.06);
-        }
-
-        /* Texto em PNG do Botão */
-        .texto-botao-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            opacity: 0;
-            animation: fadeInText 0.8s ease-out 1.8s forwards;
-            display: flex;
-        }
-
-        .texto-botao-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            pointer-events: none;
-        }
-
-        /* Animações */
-        @keyframes fadeInPage {
-            to { opacity: 1; }
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInText {
-            to { opacity: 1; }
-        }
-    </style>
-</head>
 <body>
 
-    <div class="container">
-        
-        <div class="conteudo-absoluto">
-            
-            <div class="perfil-container">
-                <img src="angelo.jpg" alt="Ângelo Henrique" class="perfil-img">
-            </div>
+    <!-- Fundo -->
+    <div class="background"></div>
 
-            <div class="grid-botoes">
-                
-                <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+de+retratos.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
-                    <div class="bg-botao" style="background-image: url('retratos.jpg');"></div>
-                    <div class="texto-botao-container">
-                        <img src="textoretratos.png" alt="Para você Retratos" class="texto-botao-img">
-                    </div>
-                </a>
+    <!-- Conteúdo -->
+    <main class="content">
 
-                <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+minha+imagem+profissional.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
-                    <div class="bg-botao" style="background-image: url('profissional.jpg');"></div>
-                    <div class="texto-botao-container">
-                        <img src="textoprofissional.png" alt="Para sua imagem Profissional" class="texto-botao-img">
-                    </div>
-                </a>
-
-                <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+o+meu+anivers%C3%A1rio.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
-                    <div class="bg-botao" style="background-image: url('aniversario.jpg');"></div>
-                    <div class="texto-botao-container">
-                        <img src="textoaniversario.png" alt="Para celebrar seu Aniversário" class="texto-botao-img">
-                    </div>
-                </a>
-
-                <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+minha+marca.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
-                    <div class="bg-botao" style="background-image: url('marcas.jpg');"></div>
-                    <div class="texto-botao-container">
-                        <img src="textomarcas.png" alt="Para sua Marca e Coleção" class="texto-botao-img">
-                    </div>
-                </a>
-
-            </div>
-
+        <div class="profile-wrapper">
+            <img src="angelo.jpg" alt="Ângelo Henrique" class="profile">
         </div>
 
-        <div class="nome-container">
-            <img src="logo.png" alt="Ângelo Henrique" class="nome-img">
-        </div>
+        <section class="links-grid">
 
-    </div>
+            <a href="#" class="card">
+                <img src="retratos.jpg" class="card-bg">
+                <img src="textoretratos.png" class="card-text">
+            </a>
+
+            <a href="#" class="card">
+                <img src="profissional.jpg" class="card-bg">
+                <img src="textoprofissional.png" class="card-text">
+            </a>
+
+            <a href="#" class="card">
+                <img src="aniversario.jpg" class="card-bg">
+                <img src="textoaniversario.png" class="card-text">
+            </a>
+
+            <a href="#" class="card">
+                <img src="marcas.jpg" class="card-bg">
+                <img src="textomarcas.png" class="card-text">
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- Assinatura -->
+    <img src="logo.png" class="logo-overlay">
 
 </body>
-</html>
