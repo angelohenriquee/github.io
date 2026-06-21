@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Ângelo Henrique</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -66,8 +66,8 @@ body{
 
 .brand{
     text-align:center;
-    font-size:28px; /* Aumentado para dar mais presença */
-    letter-spacing:6px; /* Espaçamento mais luxuoso */
+    font-size:28px;
+    letter-spacing:6px;
     color:#1a1a1a;
     font-weight:400;
 
@@ -112,7 +112,7 @@ body{
     padding-top:142.2%;
 }
 
-/* FOTO */
+/* FOTO DO BOTÃO */
 
 .card-bg{
     position:absolute;
@@ -166,13 +166,14 @@ body{
 
     display:flex;
     justify-content:center;
+    align-items:flex-end;
 
-    padding-bottom:22px;
+    padding-bottom:20px;
     z-index:2;
 }
 
 .text-wrap img{
-    width:95%;
+    width:100%; /* Expansão total no computador */
     max-width:none;
     display:block;
 
@@ -203,75 +204,41 @@ body{
 }
 
 /* ==========================
-   CASCATA
+   CASCATA DAS ANIMAÇÕES
 ========================== */
 
-.card:nth-child(1){
-    animation-delay:.80s;
-}
+.card:nth-child(1){ animation-delay:.80s; }
+.card:nth-child(2){ animation-delay:.95s; }
+.card:nth-child(3){ animation-delay:1.10s; }
+.card:nth-child(4){ animation-delay:1.25s; }
 
-.card:nth-child(2){
-    animation-delay:.95s;
-}
-
-.card:nth-child(3){
-    animation-delay:1.10s;
-}
-
-.card:nth-child(4){
-    animation-delay:1.25s;
-}
-
-.card:nth-child(1) .text-wrap img{
-    animation-delay:1.05s;
-}
-
-.card:nth-child(2) .text-wrap img{
-    animation-delay:1.20s;
-}
-
-.card:nth-child(3) .text-wrap img{
-    animation-delay:1.35s;
-}
-
-.card:nth-child(4) .text-wrap img{
-    animation-delay:1.50s;
-}
+.card:nth-child(1) .text-wrap img{ animation-delay:1.05s; }
+.card:nth-child(2) .text-wrap img{ animation-delay:1.20s; }
+.card:nth-child(3) .text-wrap img{ animation-delay:1.35s; }
+.card:nth-child(4) .text-wrap img{ animation-delay:1.50s; }
 
 /* ==========================
-   ANIMAÇÕES
+   KEYFRAMES
 ========================== */
 
 @keyframes heroReveal{
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+    to{ opacity:1; transform:translateY(0); }
 }
 
 @keyframes nameReveal{
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+    to{ opacity:1; transform:translateY(0); }
 }
 
 @keyframes cardReveal{
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+    to{ opacity:1; transform:translateY(0); }
 }
 
 @keyframes textReveal{
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+    to{ opacity:1; transform:translateY(0); }
 }
 
 /* ==========================
-   MOBILE
+   MOBILE (AJUSTE FINO)
 ========================== */
 
 @media (max-width:480px){
@@ -281,7 +248,7 @@ body{
     }
 
     .brand{
-        font-size:24px; /* Aumentado para alinhar com o design original no celular */
+        font-size:24px; 
         letter-spacing:5px;
         margin-bottom:32px;
     }
@@ -291,11 +258,11 @@ body{
     }
 
     .text-wrap{
-        padding-bottom:18px;
+        padding-bottom:16px;
     }
 
     .text-wrap img{
-        width:96%;
+        width:105%; /* Força a imagem a crescer além das bordas para compensar margens transparentes */
     }
 }
 
@@ -317,54 +284,54 @@ body{
         <a class="card retratos"
         href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+de+retratos.&type=phone_number&app_absent=0"
         target="_blank">
-
             <div class="card-bg"></div>
-
             <div class="text-wrap">
-                <img src="textoretratos.png" alt="">
+                <img src="textoretratos.png" alt="Retratos">
             </div>
-
         </a>
 
         <a class="card profissional"
         href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+minha+imagem+profissional.&type=phone_number&app_absent=0"
         target="_blank">
-
             <div class="card-bg"></div>
-
             <div class="text-wrap">
-                <img src="textoprofissional.png" alt="">
+                <img src="textoprofissional.png" alt="Profissional">
             </div>
-
         </a>
 
         <a class="card aniversario"
         href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+o+meu+anivers%C3%A1rio.&type=phone_number&app_absent=0"
         target="_blank">
-
             <div class="card-bg"></div>
-
             <div class="text-wrap">
-                <img src="textoaniversario.png" alt="">
+                <img src="textoaniversario.png" alt="Aniversário">
             </div>
-
         </a>
 
         <a class="card marcas"
         href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+minha+marca.&type=phone_number&app_absent=0"
         target="_blank">
-
             <div class="card-bg"></div>
-
             <div class="text-wrap">
-                <img src="textomarcas.png" alt="">
+                <img src="textomarcas.png" alt="Marcas e Coleção">
             </div>
-
         </a>
 
     </div>
 
 </main>
+
+<script>
+    document.addEventListener('wheel', function(e) {
+        if (e.ctrlKey) { e.preventDefault(); }
+    }, { passive: false });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0' || e.keyCode === 187 || e.keyCode === 189)) {
+            e.preventDefault();
+        }
+    });
+</script>
 
 </body>
 </html>
