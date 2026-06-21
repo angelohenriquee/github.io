@@ -11,107 +11,99 @@
 
 <style>
 
-:root{
-    --container-width: 480px;
-    --gap: 18px;
-    --text-color: #1a1a1a;
-}
-
 *{
     margin:0;
     padding:0;
     box-sizing:border-box;
 }
 
-html,
-body{
-    width:100%;
+html{
     overflow-x:hidden;
 }
 
 body{
+    overflow-x:hidden;
+    min-height:100vh;
     font-family:'Poppins',sans-serif;
     background:url('fundo.jpg') center center / cover fixed no-repeat;
-    min-height:100vh;
 }
 
-/* =========================
-   FOTO TOPO 100% LARGURA
-========================= */
+/* ==========================
+   CAPA
+========================== */
 
 .hero{
     width:100%;
-    aspect-ratio:1080 / 800;
-    overflow:hidden;
+    max-width:900px;
+    margin:0 auto;
 
     opacity:0;
-    transform:translateY(-35px);
+    transform:translateY(-30px);
 
-    animation:heroReveal 1.2s cubic-bezier(.22,.61,.36,1) forwards;
+    animation:heroReveal 1.2s ease forwards;
 }
 
 .hero img{
     width:100%;
-    height:100%;
+    height:auto;
     display:block;
-    object-fit:cover;
 }
 
-/* =========================
-   CONTEÚDO CENTRAL
-========================= */
+/* ==========================
+   CONTEÚDO
+========================== */
 
 .content{
     width:90%;
-    max-width:var(--container-width);
+    max-width:700px;
     margin:0 auto;
     padding:34px 0 60px;
 }
 
-/* =========================
-   NOME
-========================= */
+/* ==========================
+   LOGO TEXTO
+========================== */
 
 .brand{
     text-align:center;
     font-size:22px;
-    color:var(--text-color);
-    letter-spacing:5px;
+    letter-spacing:4px;
+    color:#1a1a1a;
     font-weight:400;
-    margin-bottom:36px;
+
+    margin-bottom:40px;
 
     opacity:0;
-    transform:translateY(28px);
+    transform:translateY(25px);
 
-    animation:nameReveal 1s ease forwards;
-    animation-delay:.35s;
+    animation:nameReveal .9s ease forwards;
+    animation-delay:.3s;
 }
 
-/* =========================
+/* ==========================
    GRID
-========================= */
+========================== */
 
 .grid{
     display:grid;
     grid-template-columns:repeat(2,1fr);
-    gap:var(--gap);
+    gap:18px;
 }
 
-/* =========================
-   BOTÕES
-========================= */
+/* ==========================
+   CARD
+========================== */
 
 .card{
     position:relative;
     display:block;
-    width:100%;
     overflow:hidden;
     text-decoration:none;
 
     opacity:0;
-    transform:translateY(45px);
+    transform:translateY(40px);
 
-    animation:cardReveal .95s cubic-bezier(.22,.61,.36,1) forwards;
+    animation:cardReveal .9s ease forwards;
 }
 
 .card::before{
@@ -120,7 +112,7 @@ body{
     padding-top:142.2%;
 }
 
-/* camada da foto */
+/* FOTO */
 
 .card-bg{
     position:absolute;
@@ -129,25 +121,40 @@ body{
     background-size:cover;
     background-position:center;
 
-    transition:
-        transform 4.5s cubic-bezier(.22,.61,.36,1);
+    transition:transform 6s cubic-bezier(.19,1,.22,1);
 }
-
-/* hover desktop */
 
 .card:hover .card-bg{
     transform:scale(1.06);
 }
 
-/* touch mobile */
-
 .card:active .card-bg{
     transform:scale(1.06);
 }
 
-/* =========================
+/* GRADIENTE */
+
+.card::after{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+    height:42%;
+
+    background:linear-gradient(
+        to top,
+        rgba(0,0,0,.95),
+        rgba(0,0,0,.65),
+        rgba(0,0,0,0)
+    );
+
+    pointer-events:none;
+}
+
+/* ==========================
    PNG TEXTO
-========================= */
+========================== */
 
 .text-wrap{
     position:absolute;
@@ -161,22 +168,23 @@ body{
     justify-content:center;
 
     padding-bottom:22px;
+    z-index:2;
 }
 
 .text-wrap img{
-    width:80%;
-    height:auto;
+    width:95%;
+    max-width:none;
     display:block;
 
     opacity:0;
-    transform:translateY(90px);
+    transform:translateY(80px);
 
-    animation:textReveal 1s cubic-bezier(.22,.61,.36,1) forwards;
+    animation:textReveal 1s ease forwards;
 }
 
-/* =========================
+/* ==========================
    IMAGENS
-========================= */
+========================== */
 
 .retratos .card-bg{
     background-image:url('retratos.jpg');
@@ -194,9 +202,9 @@ body{
     background-image:url('marcas.jpg');
 }
 
-/* =========================
+/* ==========================
    CASCATA
-========================= */
+========================== */
 
 .card:nth-child(1){
     animation-delay:.80s;
@@ -230,9 +238,9 @@ body{
     animation-delay:1.50s;
 }
 
-/* =========================
+/* ==========================
    ANIMAÇÕES
-========================= */
+========================== */
 
 @keyframes heroReveal{
     to{
@@ -262,20 +270,32 @@ body{
     }
 }
 
-/* =========================
-   RESPONSIVO EXTRA
-========================= */
+/* ==========================
+   MOBILE
+========================== */
 
-@media (max-width:420px){
+@media (max-width:480px){
+
+    .content{
+        width:92%;
+    }
 
     .brand{
         font-size:20px;
-        letter-spacing:4px;
-        margin-bottom:30px;
+        letter-spacing:3px;
+        margin-bottom:32px;
     }
 
     .grid{
         gap:14px;
+    }
+
+    .text-wrap{
+        padding-bottom:18px;
+    }
+
+    .text-wrap img{
+        width:96%;
     }
 }
 
@@ -284,79 +304,67 @@ body{
 
 <body>
 
-    <!-- FOTO TOPO -->
+<section class="hero">
+    <img src="angelo.jpg" alt="Ângelo Henrique">
+</section>
 
-    <section class="hero">
-        <img src="angelo.jpg" alt="Ângelo Henrique">
-    </section>
+<main class="content">
 
-    <!-- CONTEÚDO -->
+    <h1 class="brand">ÂNGELO HENRIQUE</h1>
 
-    <main class="content">
+    <div class="grid">
 
-        <h1 class="brand">ÂNGELO HENRIQUE</h1>
+        <a class="card retratos"
+        href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+de+retratos.&type=phone_number&app_absent=0"
+        target="_blank">
 
-        <div class="grid">
+            <div class="card-bg"></div>
 
-            <!-- RETRATOS -->
+            <div class="text-wrap">
+                <img src="textoretratos.png" alt="">
+            </div>
 
-            <a
-                class="card retratos"
-                href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+de+retratos.&type=phone_number&app_absent=0"
-                target="_blank"
-            >
-                <div class="card-bg"></div>
+        </a>
 
-                <div class="text-wrap">
-                    <img src="textoretratos.png" alt="">
-                </div>
-            </a>
+        <a class="card profissional"
+        href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+minha+imagem+profissional.&type=phone_number&app_absent=0"
+        target="_blank">
 
-            <!-- PROFISSIONAL -->
+            <div class="card-bg"></div>
 
-            <a
-                class="card profissional"
-                href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+minha+imagem+profissional.&type=phone_number&app_absent=0"
-                target="_blank"
-            >
-                <div class="card-bg"></div>
+            <div class="text-wrap">
+                <img src="textoprofissional.png" alt="">
+            </div>
 
-                <div class="text-wrap">
-                    <img src="textoprofissional.png" alt="">
-                </div>
-            </a>
+        </a>
 
-            <!-- ANIVERSÁRIO -->
+        <a class="card aniversario"
+        href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+o+meu+anivers%C3%A1rio.&type=phone_number&app_absent=0"
+        target="_blank">
 
-            <a
-                class="card aniversario"
-                href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+o+meu+anivers%C3%A1rio.&type=phone_number&app_absent=0"
-                target="_blank"
-            >
-                <div class="card-bg"></div>
+            <div class="card-bg"></div>
 
-                <div class="text-wrap">
-                    <img src="textoaniversario.png" alt="">
-                </div>
-            </a>
+            <div class="text-wrap">
+                <img src="textoaniversario.png" alt="">
+            </div>
 
-            <!-- MARCAS -->
+        </a>
 
-            <a
-                class="card marcas"
-                href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+minha+marca.&type=phone_number&app_absent=0"
-                target="_blank"
-            >
-                <div class="card-bg"></div>
+        <a class="card marcas"
+        href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+minha+marca.&type=phone_number&app_absent=0"
+        target="_blank">
 
-                <div class="text-wrap">
-                    <img src="textomarcas.png" alt="">
-                </div>
-            </a>
+            <div class="card-bg"></div>
 
-        </div>
+            <div class="text-wrap">
+                <img src="textomarcas.png" alt="">
+            </div>
 
-    </main>
+        </a>
+
+    </div>
+
+</main>
 
 </body>
 </html>
