@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ângelo Henrique</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap" rel="stylesheet">
+
 <style>
 
 *{
@@ -13,19 +17,19 @@
     box-sizing:border-box;
 }
 
-html,
-body{
-    width:100%;
+html{
     overflow-x:hidden;
 }
 
 body{
+    overflow-x:hidden;
     min-height:100vh;
+    font-family:'Poppins',sans-serif;
     background:url('fundo.jpg') center center / cover fixed no-repeat;
 }
 
 /* ==========================
-   FOTO PRINCIPAL
+   CAPA
 ========================== */
 
 .hero{
@@ -53,32 +57,27 @@ body{
     width:90%;
     max-width:700px;
     margin:0 auto;
-    padding:10px 0 60px;
+    padding:34px 0 60px;
 }
 
 /* ==========================
-   LOGO PNG
+   LOGO TEXTO
 ========================== */
 
-.logo-wrap{
-    display:flex;
-    justify-content:center;
-    align-items:center;
+.brand{
+    text-align:center;
+    font-size:22px;
+    letter-spacing:4px;
+    color:#1a1a1a;
+    font-weight:400;
 
-    margin-bottom:24px;
+    margin-bottom:40px;
 
     opacity:0;
     transform:translateY(25px);
 
     animation:nameReveal .9s ease forwards;
     animation-delay:.3s;
-}
-
-.logo-wrap img{
-    width:100%;
-    max-width:620px;
-    height:auto;
-    display:block;
 }
 
 /* ==========================
@@ -92,7 +91,7 @@ body{
 }
 
 /* ==========================
-   BOTÕES
+   CARD
 ========================== */
 
 .card{
@@ -113,6 +112,8 @@ body{
     padding-top:142.2%;
 }
 
+/* FOTO */
+
 .card-bg{
     position:absolute;
     inset:0;
@@ -131,9 +132,7 @@ body{
     transform:scale(1.06);
 }
 
-/* ==========================
-   GRADIENTE
-========================== */
+/* GRADIENTE */
 
 .card::after{
     content:"";
@@ -154,7 +153,7 @@ body{
 }
 
 /* ==========================
-   TEXTO PNG
+   PNG TEXTO
 ========================== */
 
 .text-wrap{
@@ -163,19 +162,18 @@ body{
     right:0;
     bottom:0;
 
-    z-index:2;
-
     overflow:hidden;
 
     display:flex;
     justify-content:center;
 
     padding-bottom:22px;
+    z-index:2;
 }
 
 .text-wrap img{
     width:95%;
-    height:auto;
+    max-width:none;
     display:block;
 
     opacity:0;
@@ -280,15 +278,12 @@ body{
 
     .content{
         width:92%;
-        padding-top:6px;
     }
 
-    .logo-wrap{
-        margin-bottom:20px;
-    }
-
-    .logo-wrap img{
-        max-width:100%;
+    .brand{
+        font-size:20px;
+        letter-spacing:3px;
+        margin-bottom:32px;
     }
 
     .grid{
@@ -315,9 +310,7 @@ body{
 
 <main class="content">
 
-    <div class="logo-wrap">
-        <img src="logo.png" alt="Ângelo Henrique">
-    </div>
+    <h1 class="brand">ÂNGELO HENRIQUE</h1>
 
     <div class="grid">
 
