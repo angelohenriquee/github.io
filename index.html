@@ -7,7 +7,6 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap" rel="stylesheet">
 
 <style>
 
@@ -17,20 +16,20 @@
     box-sizing:border-box;
 }
 
-html{
+html,
+body{
+    width:100%;
     overflow-x:hidden;
 }
 
 body{
-    overflow-x:hidden;
     min-height:100vh;
-    font-family:'Poppins',sans-serif;
     background:url('fundo.jpg') center center / cover fixed no-repeat;
 }
 
-/* ==========================
-   CAPA
-========================== */
+/* ====================================
+   FOTO PRINCIPAL
+==================================== */
 
 .hero{
     width:100%;
@@ -40,7 +39,7 @@ body{
     opacity:0;
     transform:translateY(-30px);
 
-    animation:heroReveal 1.2s ease forwards;
+    animation:heroReveal 1.2s cubic-bezier(.19,1,.22,1) forwards;
 }
 
 .hero img{
@@ -49,40 +48,45 @@ body{
     display:block;
 }
 
-/* ==========================
+/* ====================================
    CONTEÚDO
-========================== */
+==================================== */
 
 .content{
     width:90%;
     max-width:700px;
     margin:0 auto;
-    padding:34px 0 60px;
+    padding:36px 0 60px;
 }
 
-/* ==========================
-   LOGO TEXTO
-========================== */
+/* ====================================
+   LOGO PNG
+==================================== */
 
-.brand{
-    text-align:center;
-    font-size:22px;
-    letter-spacing:4px;
-    color:#1a1a1a;
-    font-weight:400;
+.logo-wrap{
+    display:flex;
+    justify-content:center;
+    align-items:center;
 
     margin-bottom:40px;
 
     opacity:0;
     transform:translateY(25px);
 
-    animation:nameReveal .9s ease forwards;
+    animation:nameReveal .9s cubic-bezier(.19,1,.22,1) forwards;
     animation-delay:.3s;
 }
 
-/* ==========================
+.logo-wrap img{
+    width:100%;
+    max-width:700px;
+    height:auto;
+    display:block;
+}
+
+/* ====================================
    GRID
-========================== */
+==================================== */
 
 .grid{
     display:grid;
@@ -90,9 +94,9 @@ body{
     gap:18px;
 }
 
-/* ==========================
-   CARD
-========================== */
+/* ====================================
+   BOTÕES
+==================================== */
 
 .card{
     position:relative;
@@ -103,7 +107,7 @@ body{
     opacity:0;
     transform:translateY(40px);
 
-    animation:cardReveal .9s ease forwards;
+    animation:cardReveal .9s cubic-bezier(.19,1,.22,1) forwards;
 }
 
 .card::before{
@@ -111,8 +115,6 @@ body{
     display:block;
     padding-top:142.2%;
 }
-
-/* FOTO */
 
 .card-bg{
     position:absolute;
@@ -132,7 +134,9 @@ body{
     transform:scale(1.06);
 }
 
-/* GRADIENTE */
+/* ====================================
+   GRADIENTE
+==================================== */
 
 .card::after{
     content:"";
@@ -140,6 +144,7 @@ body{
     left:0;
     right:0;
     bottom:0;
+
     height:42%;
 
     background:linear-gradient(
@@ -152,9 +157,9 @@ body{
     pointer-events:none;
 }
 
-/* ==========================
-   PNG TEXTO
-========================== */
+/* ====================================
+   TEXTO PNG
+==================================== */
 
 .text-wrap{
     position:absolute;
@@ -162,29 +167,30 @@ body{
     right:0;
     bottom:0;
 
+    z-index:2;
+
     overflow:hidden;
 
     display:flex;
     justify-content:center;
 
     padding-bottom:22px;
-    z-index:2;
 }
 
 .text-wrap img{
     width:95%;
-    max-width:none;
+    height:auto;
     display:block;
 
     opacity:0;
     transform:translateY(80px);
 
-    animation:textReveal 1s ease forwards;
+    animation:textReveal 1s cubic-bezier(.19,1,.22,1) forwards;
 }
 
-/* ==========================
+/* ====================================
    IMAGENS
-========================== */
+==================================== */
 
 .retratos .card-bg{
     background-image:url('retratos.jpg');
@@ -202,9 +208,9 @@ body{
     background-image:url('marcas.jpg');
 }
 
-/* ==========================
+/* ====================================
    CASCATA
-========================== */
+==================================== */
 
 .card:nth-child(1){
     animation-delay:.80s;
@@ -238,9 +244,9 @@ body{
     animation-delay:1.50s;
 }
 
-/* ==========================
+/* ====================================
    ANIMAÇÕES
-========================== */
+==================================== */
 
 @keyframes heroReveal{
     to{
@@ -270,20 +276,23 @@ body{
     }
 }
 
-/* ==========================
+/* ====================================
    MOBILE
-========================== */
+==================================== */
 
 @media (max-width:480px){
 
     .content{
         width:92%;
+        padding-top:28px;
     }
 
-    .brand{
-        font-size:20px;
-        letter-spacing:3px;
+    .logo-wrap{
         margin-bottom:32px;
+    }
+
+    .logo-wrap img{
+        max-width:100%;
     }
 
     .grid{
@@ -310,7 +319,9 @@ body{
 
 <main class="content">
 
-    <h1 class="brand">ÂNGELO HENRIQUE</h1>
+    <div class="logo-wrap">
+        <img src="logo.png" alt="Ângelo Henrique">
+    </div>
 
     <div class="grid">
 
