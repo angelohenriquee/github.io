@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ângelo Henrique</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 <style>
 
 *{
@@ -27,9 +24,9 @@ body{
     background:url('fundo.jpg') center center / cover fixed no-repeat;
 }
 
-/* ====================================
+/* ==========================
    FOTO PRINCIPAL
-==================================== */
+========================== */
 
 .hero{
     width:100%;
@@ -39,7 +36,7 @@ body{
     opacity:0;
     transform:translateY(-30px);
 
-    animation:heroReveal 1.2s cubic-bezier(.19,1,.22,1) forwards;
+    animation:heroReveal 1.2s ease forwards;
 }
 
 .hero img{
@@ -48,45 +45,45 @@ body{
     display:block;
 }
 
-/* ====================================
+/* ==========================
    CONTEÚDO
-==================================== */
+========================== */
 
 .content{
     width:90%;
     max-width:700px;
     margin:0 auto;
-    padding:36px 0 60px;
+    padding:10px 0 60px;
 }
 
-/* ====================================
+/* ==========================
    LOGO PNG
-==================================== */
+========================== */
 
 .logo-wrap{
     display:flex;
     justify-content:center;
     align-items:center;
 
-    margin-bottom:40px;
+    margin-bottom:24px;
 
     opacity:0;
     transform:translateY(25px);
 
-    animation:nameReveal .9s cubic-bezier(.19,1,.22,1) forwards;
+    animation:nameReveal .9s ease forwards;
     animation-delay:.3s;
 }
 
 .logo-wrap img{
     width:100%;
-    max-width:700px;
+    max-width:620px;
     height:auto;
     display:block;
 }
 
-/* ====================================
+/* ==========================
    GRID
-==================================== */
+========================== */
 
 .grid{
     display:grid;
@@ -94,9 +91,9 @@ body{
     gap:18px;
 }
 
-/* ====================================
+/* ==========================
    BOTÕES
-==================================== */
+========================== */
 
 .card{
     position:relative;
@@ -107,7 +104,7 @@ body{
     opacity:0;
     transform:translateY(40px);
 
-    animation:cardReveal .9s cubic-bezier(.19,1,.22,1) forwards;
+    animation:cardReveal .9s ease forwards;
 }
 
 .card::before{
@@ -134,9 +131,9 @@ body{
     transform:scale(1.06);
 }
 
-/* ====================================
+/* ==========================
    GRADIENTE
-==================================== */
+========================== */
 
 .card::after{
     content:"";
@@ -144,7 +141,6 @@ body{
     left:0;
     right:0;
     bottom:0;
-
     height:42%;
 
     background:linear-gradient(
@@ -157,9 +153,9 @@ body{
     pointer-events:none;
 }
 
-/* ====================================
+/* ==========================
    TEXTO PNG
-==================================== */
+========================== */
 
 .text-wrap{
     position:absolute;
@@ -185,12 +181,12 @@ body{
     opacity:0;
     transform:translateY(80px);
 
-    animation:textReveal 1s cubic-bezier(.19,1,.22,1) forwards;
+    animation:textReveal 1s ease forwards;
 }
 
-/* ====================================
+/* ==========================
    IMAGENS
-==================================== */
+========================== */
 
 .retratos .card-bg{
     background-image:url('retratos.jpg');
@@ -208,9 +204,9 @@ body{
     background-image:url('marcas.jpg');
 }
 
-/* ====================================
+/* ==========================
    CASCATA
-==================================== */
+========================== */
 
 .card:nth-child(1){
     animation-delay:.80s;
@@ -244,9 +240,9 @@ body{
     animation-delay:1.50s;
 }
 
-/* ====================================
+/* ==========================
    ANIMAÇÕES
-==================================== */
+========================== */
 
 @keyframes heroReveal{
     to{
@@ -276,19 +272,19 @@ body{
     }
 }
 
-/* ====================================
+/* ==========================
    MOBILE
-==================================== */
+========================== */
 
 @media (max-width:480px){
 
     .content{
         width:92%;
-        padding-top:28px;
+        padding-top:6px;
     }
 
     .logo-wrap{
-        margin-bottom:32px;
+        margin-bottom:20px;
     }
 
     .logo-wrap img{
