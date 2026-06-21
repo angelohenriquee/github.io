@@ -1,207 +1,362 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ângelo Henrique</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap" rel="stylesheet">
-    
-    <style>
-        /* Reset e Configurações Globais */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ângelo Henrique</title>
 
-        body {
-            background-color: #ededed;
-            background-image: url('fundo.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            font-family: 'Poppins', sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap" rel="stylesheet">
 
-        /* 1. SEÇÃO DA FOTO: Proporção exata 1080x800 e largura total */
-        .header-image-container {
-            width: 100%;
-            max-width: 1080px; 
-            display: flex;
-            justify-content: center;
-            opacity: 0;
-            transform: translateY(-15px);
-            animation: fadeInPortrait 1s cubic-bezier(0.25, 1, 0.5, 1) 0.2s forwards;
-        }
+<style>
 
-        .perfil-img {
-            width: 100%;
-            aspect-ratio: 1080 / 800; 
-            object-fit: cover;
-            display: block;
-        }
+:root{
+    --container-width: 480px;
+    --gap: 18px;
+    --text-color: #1a1a1a;
+}
 
-        /* 2. SEÇÃO DE CONTEÚDO: Margens para ficar mais estreito que a foto */
-        .content-container {
-            width: 90%; 
-            max-width: 480px; 
-            margin: 0 auto;
-            padding: 40px 0 60px 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-        /* Nome em Fonte Real Vetorial */
-        .nome-marca {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 400;
-            font-size: 22px;
-            letter-spacing: 5px;
-            color: #1a1a1a;
-            text-transform: uppercase;
-            text-align: center;
-            margin-bottom: 45px;
-            opacity: 0;
-            transform: translateY(15px);
-            animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 0.5s forwards;
-        }
+html,
+body{
+    width:100%;
+    overflow-x:hidden;
+}
 
-        /* Grid dos Botões */
-        .grid-botoes {
-            width: 100%;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 18px; 
-        }
+body{
+    font-family:'Poppins',sans-serif;
+    background:url('fundo.jpg') center center / cover fixed no-repeat;
+    min-height:100vh;
+}
 
-        /* Estrutura do Botão */
-        .card-botao {
-            position: relative;
-            width: 100%;
-            padding-top: 142.2%; 
-            overflow: hidden;
-            text-decoration: none;
-            opacity: 0;
-            transform: translateY(25px);
-        }
+/* =========================
+   FOTO TOPO 100% LARGURA
+========================= */
 
-        /* Animação em Cascata */
-        .card-botao:nth-child(1) { animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 0.8s forwards; }
-        .card-botao:nth-child(2) { animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 0.95s forwards; }
-        .card-botao:nth-child(3) { animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 1.1s forwards; }
-        .card-botao:nth-child(4) { animation: fadeInUp 1s cubic-bezier(0.25, 1, 0.5, 1) 1.25s forwards; }
+.hero{
+    width:100%;
+    aspect-ratio:1080 / 800;
+    overflow:hidden;
 
-        /* Fundo do Botão */
-        .bg-botao {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
-            z-index: 1;
-        }
+    opacity:0;
+    transform:translateY(-35px);
 
-        .card-botao:hover .bg-botao,
-        .card-botao:active .bg-botao {
-            transform: scale(1.06);
-        }
+    animation:heroReveal 1.2s cubic-bezier(.22,.61,.36,1) forwards;
+}
 
-        /* Container do Texto em PNG */
-        .texto-botao-container {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%; 
-            display: flex;
-            justify-content: center;
-            align-items: flex-end; 
-            overflow: hidden; 
-            z-index: 2;
-            padding-bottom: 22px; 
-        }
+.hero img{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:cover;
+}
 
-        /* A imagem em PNG do texto */
-        .texto-botao-img {
-            width: 80%; 
-            height: auto;
-            display: block;
-            pointer-events: none;
-            opacity: 0;
-            transform: translateY(100%); 
-            animation: slideInText 0.8s ease-out 1.5s forwards; 
-        }
+/* =========================
+   CONTEÚDO CENTRAL
+========================= */
 
-        /* Keyframes */
-        @keyframes fadeInPortrait {
-            to { opacity: 1; transform: translateY(0); }
-        }
+.content{
+    width:90%;
+    max-width:var(--container-width);
+    margin:0 auto;
+    padding:34px 0 60px;
+}
 
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
+/* =========================
+   NOME
+========================= */
 
-        @keyframes slideInText {
-            to { opacity: 1; transform: translateY(0); }
-        }
-    </style>
+.brand{
+    text-align:center;
+    font-size:22px;
+    color:var(--text-color);
+    letter-spacing:5px;
+    font-weight:400;
+    margin-bottom:36px;
+
+    opacity:0;
+    transform:translateY(28px);
+
+    animation:nameReveal 1s ease forwards;
+    animation-delay:.35s;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:var(--gap);
+}
+
+/* =========================
+   BOTÕES
+========================= */
+
+.card{
+    position:relative;
+    display:block;
+    width:100%;
+    overflow:hidden;
+    text-decoration:none;
+
+    opacity:0;
+    transform:translateY(45px);
+
+    animation:cardReveal .95s cubic-bezier(.22,.61,.36,1) forwards;
+}
+
+.card::before{
+    content:"";
+    display:block;
+    padding-top:142.2%;
+}
+
+/* camada da foto */
+
+.card-bg{
+    position:absolute;
+    inset:0;
+
+    background-size:cover;
+    background-position:center;
+
+    transition:
+        transform 4.5s cubic-bezier(.22,.61,.36,1);
+}
+
+/* hover desktop */
+
+.card:hover .card-bg{
+    transform:scale(1.06);
+}
+
+/* touch mobile */
+
+.card:active .card-bg{
+    transform:scale(1.06);
+}
+
+/* =========================
+   PNG TEXTO
+========================= */
+
+.text-wrap{
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:0;
+
+    overflow:hidden;
+
+    display:flex;
+    justify-content:center;
+
+    padding-bottom:22px;
+}
+
+.text-wrap img{
+    width:80%;
+    height:auto;
+    display:block;
+
+    opacity:0;
+    transform:translateY(90px);
+
+    animation:textReveal 1s cubic-bezier(.22,.61,.36,1) forwards;
+}
+
+/* =========================
+   IMAGENS
+========================= */
+
+.retratos .card-bg{
+    background-image:url('retratos.jpg');
+}
+
+.profissional .card-bg{
+    background-image:url('profissional.jpg');
+}
+
+.aniversario .card-bg{
+    background-image:url('aniversario.jpg');
+}
+
+.marcas .card-bg{
+    background-image:url('marcas.jpg');
+}
+
+/* =========================
+   CASCATA
+========================= */
+
+.card:nth-child(1){
+    animation-delay:.80s;
+}
+
+.card:nth-child(2){
+    animation-delay:.95s;
+}
+
+.card:nth-child(3){
+    animation-delay:1.10s;
+}
+
+.card:nth-child(4){
+    animation-delay:1.25s;
+}
+
+.card:nth-child(1) .text-wrap img{
+    animation-delay:1.05s;
+}
+
+.card:nth-child(2) .text-wrap img{
+    animation-delay:1.20s;
+}
+
+.card:nth-child(3) .text-wrap img{
+    animation-delay:1.35s;
+}
+
+.card:nth-child(4) .text-wrap img{
+    animation-delay:1.50s;
+}
+
+/* =========================
+   ANIMAÇÕES
+========================= */
+
+@keyframes heroReveal{
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes nameReveal{
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes cardReveal{
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+@keyframes textReveal{
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* =========================
+   RESPONSIVO EXTRA
+========================= */
+
+@media (max-width:420px){
+
+    .brand{
+        font-size:20px;
+        letter-spacing:4px;
+        margin-bottom:30px;
+    }
+
+    .grid{
+        gap:14px;
+    }
+}
+
+</style>
 </head>
+
 <body>
 
-    <div class="header-image-container">
-        <img src="angelo.jpg" alt="Ângelo Henrique" class="perfil-img">
-    </div>
+    <!-- FOTO TOPO -->
 
-    <div class="content-container">
-        
-        <h1 class="nome-marca">Ângelo Henrique</h1>
+    <section class="hero">
+        <img src="angelo.jpg" alt="Ângelo Henrique">
+    </section>
 
-        <div class="grid-botoes">
-            
-            <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+de+retratos.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
-                <div class="bg-botao" style="background-image: url('retratos.jpg');"></div>
-                <div class="texto-botao-container">
-                    <img src="textoretratos.png" alt="Para você Retratos" class="texto-botao-img">
+    <!-- CONTEÚDO -->
+
+    <main class="content">
+
+        <h1 class="brand">ÂNGELO HENRIQUE</h1>
+
+        <div class="grid">
+
+            <!-- RETRATOS -->
+
+            <a
+                class="card retratos"
+                href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+de+retratos.&type=phone_number&app_absent=0"
+                target="_blank"
+            >
+                <div class="card-bg"></div>
+
+                <div class="text-wrap">
+                    <img src="textoretratos.png" alt="">
                 </div>
             </a>
 
-            <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+minha+imagem+profissional.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
-                <div class="bg-botao" style="background-image: url('profissional.jpg');"></div>
-                <div class="texto-botao-container">
-                    <img src="textoprofissional.png" alt="Para sua imagem Profissional" class="texto-botao-img">
+            <!-- PROFISSIONAL -->
+
+            <a
+                class="card profissional"
+                href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+minha+imagem+profissional.&type=phone_number&app_absent=0"
+                target="_blank"
+            >
+                <div class="card-bg"></div>
+
+                <div class="text-wrap">
+                    <img src="textoprofissional.png" alt="">
                 </div>
             </a>
 
-            <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+o+meu+anivers%C3%A1rio.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
-                <div class="bg-botao" style="background-image: url('aniversario.jpg');"></div>
-                <div class="texto-botao-container">
-                    <img src="textoaniversario.png" alt="Para celebrar seu Aniversário" class="texto-botao-img">
+            <!-- ANIVERSÁRIO -->
+
+            <a
+                class="card aniversario"
+                href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+o+meu+anivers%C3%A1rio.&type=phone_number&app_absent=0"
+                target="_blank"
+            >
+                <div class="card-bg"></div>
+
+                <div class="text-wrap">
+                    <img src="textoaniversario.png" alt="">
                 </div>
             </a>
 
-            <a href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+minha+marca.&type=phone_number&app_absent=0" class="card-botao" target="_blank">
-                <div class="bg-botao" style="background-image: url('marcas.jpg');"></div>
-                <div class="texto-botao-container">
-                    <img src="textomarcas.png" alt="Para sua Marca e Coleção" class="texto-botao-img">
+            <!-- MARCAS -->
+
+            <a
+                class="card marcas"
+                href="https://api.whatsapp.com/send/?phone=5531972055172&text=Ol%C3%A1+%C3%82ngelo%2C+gostaria+de+saber+mais+sobre+uma+sess%C3%A3o+para+minha+marca.&type=phone_number&app_absent=0"
+                target="_blank"
+            >
+                <div class="card-bg"></div>
+
+                <div class="text-wrap">
+                    <img src="textomarcas.png" alt="">
                 </div>
             </a>
 
         </div>
 
-    </div>
+    </main>
 
 </body>
 </html>
