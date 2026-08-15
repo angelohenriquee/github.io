@@ -1,5 +1,5 @@
 const CONFIG = {
-  password: "TROQUE-SUA-SENHA",
+  password: "novoeditorial",
 
   whatsappNumber: "55SEUNUMERO",
 
@@ -46,21 +46,11 @@ function showNavigation() {
 
     navigation.classList.add("visible");
 
-    /*
-      Na primeira cena da experiência,
-      só existe a opção de avançar.
-    */
-
     if (currentScene === 1) {
       backButton.hidden = true;
     } else {
       backButton.hidden = false;
     }
-
-    /*
-      Na última cena,
-      o botão muda para o CTA.
-    */
 
     if (currentScene === scenes.length - 1) {
       nextButton.textContent = "Quero essa experiência";
@@ -99,9 +89,8 @@ function playScene(index) {
   resetVideo(video);
 
   /*
-    Depois que a pessoa entrou pela senha,
-    o navegador já recebeu uma interação do usuário.
-    Isso permite tentar reproduzir os vídeos com áudio.
+    Depois que a pessoa interage com a senha,
+    tentamos reproduzir o vídeo com áudio.
   */
 
   video.muted = false;
@@ -113,17 +102,18 @@ function playScene(index) {
     playPromise.catch(() => {
 
       /*
-        Alguns navegadores podem bloquear
-        autoplay com áudio.
+        Caso o navegador bloqueie o áudio,
+        o vídeo permanece disponível.
       */
 
     });
+
   }
 
 
   /*
     Quando o vídeo termina,
-    ele permanece congelado no último frame.
+    ele permanece parado no último frame.
   */
 
   video.onended = () => {
@@ -174,8 +164,7 @@ function goToScene(index) {
 
 
   /*
-    A próxima cena entra enquanto
-    a anterior desaparece suavemente.
+    A nova cena entra por dissolve.
   */
 
   nextScene.classList.add("active");
@@ -189,7 +178,7 @@ function goToScene(index) {
 
 
   /*
-    Interrompe a cena anterior.
+    Para o vídeo anterior.
   */
 
   resetVideo(videos[currentScene]);
@@ -199,16 +188,15 @@ function goToScene(index) {
 
 
   /*
-    A nova cena sempre começa do primeiro frame.
-    Isso também vale quando o usuário clica em VOLTAR.
+    Toda cena começa novamente do início.
+    Isso também acontece ao voltar.
   */
 
   playScene(currentScene);
 
 
   /*
-    Começa a carregar a próxima cena
-    enquanto a atual está sendo assistida.
+    Pré-carrega a próxima cena.
   */
 
   preloadNext(currentScene);
@@ -240,15 +228,15 @@ function unlockExperience() {
 
 
   /*
-    Esconde o campo de senha e o botão ENTRAR.
+    Esconde senha e botão Entrar.
   */
 
   loginPanel.classList.add("hidden");
 
 
   /*
-    Depois do acesso,
-    a logo dissolve para a Tela 2.
+    Dissolve da logo para a primeira cena
+    da experiência.
   */
 
   window.setTimeout(() => {
@@ -309,8 +297,8 @@ nextButton.addEventListener("click", () => {
 
 
   /*
-    Se estiver na última tela,
-    o botão abre o WhatsApp.
+    Na última tela,
+    abre o WhatsApp.
   */
 
   if (currentScene === scenes.length - 1) {
