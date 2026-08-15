@@ -8,7 +8,7 @@ body {
   height: 100%;
   margin: 0;
   overflow: hidden;
-  background: #eeeeee;
+  background: #000000;
 }
 
 body {
@@ -20,180 +20,387 @@ body {
 
 button,
 input {
-  font: inherit;
+  font-family: "Poppins", sans-serif;
   font-weight: 400;
 }
+
+
+/* =========================
+   EXPERIÊNCIA
+========================= */
 
 .experience {
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100dvh;
+
   display: grid;
   place-items: center;
+
   overflow: hidden;
-  background: #eeeeee;
+
+  background: #000000;
 }
+
+
+/* =========================
+   CENAS
+========================= */
 
 .scene {
   position: absolute;
   inset: 0;
+
   display: grid;
   place-items: center;
+
   opacity: 0;
   visibility: hidden;
+
   pointer-events: none;
-  transition: opacity 900ms ease;
+
+  transition:
+    opacity 900ms ease,
+    visibility 0s linear 900ms;
 }
+
+
+/*
+  A cena ativa pode receber interação.
+  Isso é importante para o campo de senha
+  e para os elementos da interface.
+*/
 
 .scene.active {
   opacity: 1;
   visibility: visible;
+
+  pointer-events: auto;
+
+  transition:
+    opacity 900ms ease,
+    visibility 0s linear 0s;
 }
+
+
+/* =========================
+   VÍDEOS
+========================= */
 
 .scene-video {
   display: block;
+
   width: auto;
   height: min(100dvh, 177.7778vw);
+
   max-width: 100vw;
   max-height: 100dvh;
+
   aspect-ratio: 9 / 16;
+
   object-fit: contain;
+
+  background: #000000;
+
+  pointer-events: none;
 }
 
-/* LOGIN */
+
+/* =========================
+   LOGIN
+========================= */
 
 .login-panel {
   position: absolute;
+
   left: 50%;
   top: 58%;
+
   transform: translate(-50%, -50%);
+
   width: min(68vw, 420px);
+
   display: flex;
   flex-direction: column;
+
   gap: 8px;
-  z-index: 10;
-  transition: opacity 350ms ease;
+
+  z-index: 100;
+
+  pointer-events: auto;
+
+  transition:
+    opacity 350ms ease;
 }
+
+
+/*
+  Depois que a senha estiver correta,
+  o painel desaparece.
+*/
 
 .login-panel.hidden {
   opacity: 0;
+
   pointer-events: none;
 }
+
+
+/* =========================
+   CAMPOS E BOTÕES DO LOGIN
+========================= */
 
 .ui-box {
   width: 100%;
   height: 48px;
-  border: 1px solid rgba(255, 255, 255, 0.20);
-  border-radius: 7px;
-  background: rgba(255, 255, 255, 0.10);
-  color: #ffffff;
-  outline: none;
+
   padding: 0 16px;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+
+  border: 1px solid rgba(255, 255, 255, 0.22);
+
+  border-radius: 7px;
+
+  background: rgba(255, 255, 255, 0.10);
+
+  color: #ffffff;
+
+  outline: none;
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  pointer-events: auto;
 }
+
 
 .ui-box::placeholder {
   color: rgba(255, 255, 255, 0.90);
 }
 
+
 .ui-box:focus {
-  border-color: rgba(255, 255, 255, 0.40);
+  border-color: rgba(255, 255, 255, 0.45);
+
+  background: rgba(255, 255, 255, 0.13);
 }
+
+
+/* =========================
+   BOTÃO ENTRAR
+========================= */
 
 .ui-button {
   cursor: pointer;
+
   text-align: center;
+
+  transition:
+    background 250ms ease,
+    border-color 250ms ease;
 }
+
 
 .ui-button:hover {
   background: rgba(255, 255, 255, 0.16);
+
+  border-color: rgba(255, 255, 255, 0.35);
 }
+
+
+.ui-button:active {
+  background: rgba(255, 255, 255, 0.20);
+}
+
+
+/* =========================
+   ERRO DE SENHA
+========================= */
 
 .password-error {
   min-height: 20px;
+
   margin-top: 3px;
+
   color: #ffffff;
+
   font-size: 12px;
+
   line-height: 1.4;
+
   text-align: center;
+
   opacity: 0;
-  transition: opacity 250ms ease;
+
+  transition:
+    opacity 250ms ease;
 }
+
 
 .password-error.visible {
   opacity: 1;
 }
 
-/* NAVEGAÇÃO */
+
+/* =========================
+   NAVEGAÇÃO
+========================= */
 
 .navigation {
   position: fixed;
+
   left: 0;
   right: 0;
+
   bottom: max(22px, env(safe-area-inset-bottom));
-  z-index: 50;
+
+  z-index: 200;
+
   display: flex;
+
   justify-content: space-between;
+
   align-items: center;
-  padding: 0 22px;
+
+  padding:
+    0
+    max(22px, env(safe-area-inset-right))
+    0
+    max(22px, env(safe-area-inset-left));
+
   pointer-events: none;
+
   opacity: 0;
-  transition: opacity 700ms ease;
+
+  transition:
+    opacity 700ms ease;
 }
+
 
 .navigation.visible {
   opacity: 1;
 }
 
+
+/* =========================
+   BOTÕES DE NAVEGAÇÃO
+========================= */
+
 .nav-button {
   min-width: 112px;
+
   height: 42px;
+
   padding: 0 18px;
+
   border: 1px solid rgba(255, 255, 255, 0.20);
+
   border-radius: 7px;
+
   background: rgba(255, 255, 255, 0.10);
+
   color: #ffffff;
+
   font-size: 13px;
+
   line-height: 1;
+
   cursor: pointer;
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  transition: background 250ms ease;
+
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
   pointer-events: auto;
+
+  transition:
+    background 250ms ease,
+    border-color 250ms ease;
 }
+
 
 .nav-button:hover {
   background: rgba(255, 255, 255, 0.16);
+
+  border-color: rgba(255, 255, 255, 0.30);
 }
+
+
+.nav-button:active {
+  background: rgba(255, 255, 255, 0.20);
+}
+
 
 .nav-button[hidden] {
   display: none;
 }
 
+
+/* =========================
+   CELULAR
+========================= */
+
 @media (max-width: 600px) {
 
   .login-panel {
     width: min(76vw, 340px);
+
     top: 60%;
   }
 
+
   .ui-box {
     height: 46px;
+
     font-size: 13px;
   }
 
+
   .nav-button {
     min-width: 100px;
+
     height: 40px;
-    font-size: 12px;
+
     padding: 0 14px;
+
+    font-size: 12px;
   }
+
 
   .navigation {
     bottom: max(18px, env(safe-area-inset-bottom));
-    padding-left: max(16px, env(safe-area-inset-left));
-    padding-right: max(16px, env(safe-area-inset-right));
+
+    padding-left:
+      max(16px, env(safe-area-inset-left));
+
+    padding-right:
+      max(16px, env(safe-area-inset-right));
   }
+}
+
+
+/* =========================
+   COMPUTADOR
+========================= */
+
+@media (min-width: 601px) {
+
+  .scene-video {
+    height: min(100dvh, 177.7778vw);
+
+    max-height: 100dvh;
+    max-width: 100vw;
+  }
+
+}
+
+
+/* =========================
+   ACESSIBILIDADE
+========================= */
+
+button:focus-visible,
+input:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.65);
+
+  outline-offset: 2px;
 }
