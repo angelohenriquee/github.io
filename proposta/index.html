@@ -2,13 +2,26 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+  >
+
   <meta name="theme-color" content="#000000">
 
   <title>Experiência Fotográfica</title>
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
 
   <link
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap"
@@ -20,33 +33,58 @@
 
 <body>
 
-  <main class="experience">
+  <main
+    id="experience"
+    class="experience"
+    aria-label="Experiência fotográfica"
+  >
 
-    <!-- =================================
+
+    <!-- =====================================================
          TELA 1 — LOGIN
-    ================================== -->
+         Sem função de pressionar para pausar
+    ====================================================== -->
 
-    <section class="scene active" data-scene="0">
+    <section
+      class="scene scene-login active"
+      data-scene="0"
+      data-login="true"
+    >
 
       <video
         class="scene-video"
         autoplay
         muted
         playsinline
+        webkit-playsinline
         preload="auto"
+        disablepictureinpicture
+        controlslist="nodownload nofullscreen noremoteplayback"
       >
-        <source src="login.mp4" type="video/mp4">
+
+        <source
+          src="login.mp4"
+          type="video/mp4"
+        >
+
       </video>
 
 
-      <div class="login-panel">
+      <div
+        class="login-panel"
+        aria-label="Acesso à proposta"
+      >
 
         <input
           id="password"
           class="ui-box"
           type="password"
-          placeholder="Senha"
+          inputmode="text"
           autocomplete="off"
+          autocapitalize="none"
+          spellcheck="false"
+          placeholder="Senha"
+          aria-label="Senha"
         >
 
 
@@ -62,6 +100,8 @@
         <div
           id="passwordError"
           class="password-error"
+          role="alert"
+          aria-live="polite"
         >
           Senha incorreta.
         </div>
@@ -71,175 +111,310 @@
     </section>
 
 
-    <!-- =================================
+
+    <!-- =====================================================
          TELA 2 — PERGUNTA
-    ================================== -->
+    ====================================================== -->
 
     <section
       class="scene"
       data-scene="1"
+      data-pausable="true"
     >
 
       <video
         class="scene-video"
         preload="auto"
         playsinline
+        webkit-playsinline
+        disablepictureinpicture
+        controlslist="nodownload nofullscreen noremoteplayback"
       >
-        <source src="tela 1.mp4" type="video/mp4">
+
+        <source
+          src="tela-1.mp4"
+          type="video/mp4"
+        >
+
       </video>
+
+
+      <!-- Camada usada pelo efeito de finalização -->
+      <div
+        class="end-frame"
+        aria-hidden="true"
+      ></div>
 
     </section>
 
 
-    <!-- =================================
-         TELA 3 — MEU VÍDEO ESCREVENDO
-    ================================== -->
+
+    <!-- =====================================================
+         TELA 3 — PENSAMENTO / ESCRITA
+    ====================================================== -->
 
     <section
       class="scene"
       data-scene="2"
+      data-pausable="true"
     >
 
       <video
         class="scene-video"
         preload="auto"
         playsinline
+        webkit-playsinline
+        disablepictureinpicture
+        controlslist="nodownload nofullscreen noremoteplayback"
       >
-        <source src="tela 2.mp4" type="video/mp4">
+
+        <source
+          src="tela-2.mp4"
+          type="video/mp4"
+        >
+
       </video>
+
+
+      <div
+        class="end-frame"
+        aria-hidden="true"
+      ></div>
 
     </section>
 
 
-    <!-- =================================
+
+    <!-- =====================================================
          TELA 4 — CLARIDADE
-    ================================== -->
+    ====================================================== -->
 
     <section
       class="scene"
       data-scene="3"
+      data-pausable="true"
     >
 
       <video
         class="scene-video"
         preload="auto"
         playsinline
+        webkit-playsinline
+        disablepictureinpicture
+        controlslist="nodownload nofullscreen noremoteplayback"
       >
-        <source src="claridade.mp4" type="video/mp4">
+
+        <source
+          src="claridade.mp4"
+          type="video/mp4"
+        >
+
       </video>
+
+
+      <div
+        class="end-frame"
+        aria-hidden="true"
+      ></div>
 
     </section>
 
 
-    <!-- =================================
+
+    <!-- =====================================================
          TELA 5 — CONTRASTE
-    ================================== -->
+    ====================================================== -->
 
     <section
       class="scene"
       data-scene="4"
+      data-pausable="true"
     >
 
       <video
         class="scene-video"
         preload="auto"
         playsinline
+        webkit-playsinline
+        disablepictureinpicture
+        controlslist="nodownload nofullscreen noremoteplayback"
       >
-        <source src="contraste.mp4" type="video/mp4">
+
+        <source
+          src="contraste.mp4"
+          type="video/mp4"
+        >
+
       </video>
+
+
+      <div
+        class="end-frame"
+        aria-hidden="true"
+      ></div>
 
     </section>
 
 
-    <!-- =================================
+
+    <!-- =====================================================
          TELA 6 — CONTROLE
-    ================================== -->
+    ====================================================== -->
 
     <section
       class="scene"
       data-scene="5"
+      data-pausable="true"
     >
 
       <video
         class="scene-video"
         preload="auto"
         playsinline
+        webkit-playsinline
+        disablepictureinpicture
+        controlslist="nodownload nofullscreen noremoteplayback"
       >
-        <source src="controle.mp4" type="video/mp4">
+
+        <source
+          src="controle.mp4"
+          type="video/mp4"
+        >
+
       </video>
+
+
+      <div
+        class="end-frame"
+        aria-hidden="true"
+      ></div>
 
     </section>
 
 
-    <!-- =================================
+
+    <!-- =====================================================
          TELA 7 — O QUE ESTÁ INCLUÍDO
-    ================================== -->
+    ====================================================== -->
 
     <section
       class="scene"
       data-scene="6"
+      data-pausable="true"
     >
 
       <video
         class="scene-video"
         preload="auto"
         playsinline
+        webkit-playsinline
+        disablepictureinpicture
+        controlslist="nodownload nofullscreen noremoteplayback"
       >
-        <source src="incluidos.mp4" type="video/mp4">
+
+        <source
+          src="incluidos.mp4"
+          type="video/mp4"
+        >
+
       </video>
+
+
+      <div
+        class="end-frame"
+        aria-hidden="true"
+      ></div>
 
     </section>
 
 
-    <!-- =================================
+
+    <!-- =====================================================
          TELA 8 — INVESTIMENTO
-    ================================== -->
+    ====================================================== -->
 
     <section
       class="scene"
       data-scene="7"
+      data-pausable="true"
     >
 
       <video
         class="scene-video"
         preload="auto"
         playsinline
+        webkit-playsinline
+        disablepictureinpicture
+        controlslist="nodownload nofullscreen noremoteplayback"
       >
-        <source src="investimento.mp4" type="video/mp4">
+
+        <source
+          src="investimento.mp4"
+          type="video/mp4"
+        >
+
       </video>
+
+
+      <div
+        class="end-frame"
+        aria-hidden="true"
+      ></div>
 
     </section>
 
 
-    <!-- =================================
+
+    <!-- =====================================================
          TELA 9 — ENCERRAMENTO
-    ================================== -->
+    ====================================================== -->
 
     <section
       class="scene"
       data-scene="8"
+      data-pausable="true"
     >
 
       <video
         class="scene-video"
         preload="auto"
         playsinline
+        webkit-playsinline
+        disablepictureinpicture
+        controlslist="nodownload nofullscreen noremoteplayback"
       >
-        <source src="encerramento.mp4" type="video/mp4">
+
+        <source
+          src="encerramento.mp4"
+          type="video/mp4"
+        >
+
       </video>
+
+
+      <div
+        class="end-frame"
+        aria-hidden="true"
+      ></div>
 
     </section>
 
 
-    <!-- =================================
-         NAVEGAÇÃO
-    ================================== -->
 
-    <nav class="navigation">
+    <!-- =====================================================
+         NAVEGAÇÃO
+         O JavaScript controla quando aparece
+    ====================================================== -->
+
+    <nav
+      id="navigation"
+      class="navigation"
+      aria-label="Navegação da proposta"
+    >
 
       <button
         id="backButton"
-        class="nav-button"
+        class="nav-button nav-back"
         type="button"
       >
         Voltar
@@ -248,13 +423,25 @@
 
       <button
         id="nextButton"
-        class="nav-button"
+        class="nav-button nav-next"
         type="button"
       >
         Avançar
       </button>
 
     </nav>
+
+
+    <!-- =====================================================
+         CAMADA PRETA FINAL
+         Usada para o dissolve elegante para preto
+    ====================================================== -->
+
+    <div
+      id="blackTransition"
+      class="black-transition"
+      aria-hidden="true"
+    ></div>
 
   </main>
 
