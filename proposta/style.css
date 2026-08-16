@@ -1,6 +1,12 @@
+/* =========================================================
+   RESET
+========================================================= */
+
 * {
   box-sizing: border-box;
+
   -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
 }
 
 
@@ -24,15 +30,17 @@ body {
 
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-
-  touch-action: manipulation;
 }
+
 
 body {
   width: 100vw;
   height: 100dvh;
 
-  font-family: "Poppins", sans-serif;
+  font-family:
+    "Poppins",
+    sans-serif;
+
   font-weight: 400;
 
   color: #ffffff;
@@ -60,15 +68,40 @@ body {
 
   overflow: hidden;
 
-  background: #000000;
-
   display: grid;
   place-items: center;
+
+  background: #000000;
 
   user-select: none;
   -webkit-user-select: none;
 
   touch-action: manipulation;
+}
+
+
+/* =========================================================
+   ÁREA DO STORY
+========================================================= */
+
+.story-stage {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width:
+    min(100vw, 56.25dvh);
+
+  height:
+    min(177.7777777778vw, 100dvh);
+
+  transform:
+    translate(-50%, -50%);
+
+  overflow: hidden;
+
+  background: #000000;
 }
 
 
@@ -97,8 +130,9 @@ body {
   pointer-events: none;
 
   transition:
-    opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 0s linear 900ms;
+    opacity 650ms
+      cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 650ms;
 }
 
 
@@ -110,41 +144,23 @@ body {
   pointer-events: auto;
 
   transition:
-    opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 650ms
+      cubic-bezier(0.22, 1, 0.36, 1),
     visibility 0s linear 0s;
 }
 
 
 /* =========================================================
-   VÍDEOS
-   QUADRO VERTICAL 9:16
+   VÍDEO
 ========================================================= */
 
 .scene-video {
   position: absolute;
 
-  top: 50%;
-  left: 50%;
+  inset: 0;
 
-  /*
-    O vídeo permanece vertical.
-
-    Em celular:
-    ocupa a altura disponível.
-
-    Em computador horizontal:
-    ocupa no máximo a altura disponível,
-    preservando 9:16 e deixando preto nas laterais.
-  */
-
-  width: min(100vw, 56.25dvh);
-
-  height: min(177.7777777778vw, 100dvh);
-
-  transform:
-    translate(-50%, -50%);
-
-  aspect-ratio: 9 / 16;
+  width: 100%;
+  height: 100%;
 
   object-fit: cover;
 
@@ -159,7 +175,104 @@ body {
   -webkit-user-select: none;
 
   -webkit-user-drag: none;
+
   -webkit-touch-callout: none;
+}
+
+
+/* =========================================================
+   BARRAS DOS STORIES
+========================================================= */
+
+.story-progress {
+  position: fixed;
+
+  z-index: 500;
+
+  top:
+    max(
+      10px,
+      env(safe-area-inset-top)
+    );
+
+  left: 50%;
+
+  transform:
+    translateX(-50%);
+
+  width:
+    min(
+      calc(100vw - 24px),
+      calc(56.25dvh - 24px)
+    );
+
+  height: 4px;
+
+  display: flex;
+
+  gap: 3px;
+
+  pointer-events: auto;
+}
+
+
+/* Cada segmento */
+
+.story-segment {
+  position: relative;
+
+  flex: 1;
+
+  height: 100%;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background:
+    rgba(255, 255, 255, 0.22);
+
+  cursor: pointer;
+}
+
+
+/* Preenchimento */
+
+.story-fill {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 0%;
+  height: 100%;
+
+  background: #ffffff;
+
+  border-radius: inherit;
+
+  transform-origin: left center;
+
+  will-change: width;
+
+  transition:
+    width 80ms linear;
+}
+
+
+/*
+  Estados visuais administrados pelo JS
+*/
+
+.story-segment.is-complete
+.story-fill {
+  width: 100%;
+}
+
+
+.story-segment.is-upcoming
+.story-fill {
+  width: 0%;
 }
 
 
@@ -170,17 +283,20 @@ body {
 .login-panel {
   position: absolute;
 
+  z-index: 100;
+
   left: 50%;
   top: 58%;
 
   transform:
     translate(-50%, -50%);
 
-  width: min(68%, 420px);
+  width: 68%;
 
-  z-index: 100;
+  max-width: 420px;
 
   display: flex;
+
   flex-direction: column;
 
   gap: 8px;
@@ -203,7 +319,7 @@ body {
 
 
 /* =========================================================
-   CAMPOS DE LOGIN
+   CAMPO DE SENHA
 ========================================================= */
 
 .ui-box {
@@ -211,10 +327,12 @@ body {
 
   height: 50px;
 
-  padding: 0 16px;
+  padding:
+    0 16px;
 
-  border: 1px solid
-    rgba(255, 255, 255, 0.22);
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.24);
 
   border-radius: 7px;
 
@@ -225,12 +343,14 @@ body {
 
   outline: none;
 
-  font-family: "Poppins", sans-serif;
+  font-family:
+    "Poppins",
+    sans-serif;
 
   /*
-    Fundamental para o iPhone:
-    16 px evita o zoom automático
-    ao tocar no campo.
+    16px é intencional.
+    Evita o zoom automático
+    do Safari ao tocar no campo.
   */
 
   font-size: 16px;
@@ -242,8 +362,6 @@ body {
   backdrop-filter: blur(7px);
   -webkit-backdrop-filter: blur(7px);
 
-  pointer-events: auto;
-
   -webkit-appearance: none;
   appearance: none;
 }
@@ -251,7 +369,7 @@ body {
 
 .ui-box::placeholder {
   color:
-    rgba(255, 255, 255, 0.90);
+    rgba(255, 255, 255, 0.88);
 
   opacity: 1;
 }
@@ -263,10 +381,10 @@ body {
   box-shadow: none;
 
   border-color:
-    rgba(255, 255, 255, 0.45);
+    rgba(255, 255, 255, 0.48);
 
   background:
-    rgba(255, 255, 255, 0.13);
+    rgba(255, 255, 255, 0.14);
 }
 
 
@@ -282,9 +400,9 @@ body {
   touch-action: manipulation;
 
   transition:
-    background 250ms ease,
-    border-color 250ms ease,
-    transform 180ms ease;
+    background 200ms ease,
+    border-color 200ms ease,
+    transform 160ms ease;
 }
 
 
@@ -293,7 +411,7 @@ body {
     rgba(255, 255, 255, 0.16);
 
   border-color:
-    rgba(255, 255, 255, 0.35);
+    rgba(255, 255, 255, 0.36);
 }
 
 
@@ -326,7 +444,7 @@ body {
   opacity: 0;
 
   transition:
-    opacity 250ms ease;
+    opacity 200ms ease;
 }
 
 
@@ -336,84 +454,96 @@ body {
 
 
 /* =========================================================
-   FINAL DO VÍDEO
-   O próprio vídeo fica congelado no último frame.
+   ÁREAS DE TOQUE
 ========================================================= */
 
-.scene.finishing .scene-video {
+.story-controls {
+  position: fixed;
 
-  /*
-    Primeiro estágio:
-    último frame ainda visível,
-    porém desfocado.
-  */
+  inset: 0;
 
-  filter: blur(18px);
+  z-index: 400;
 
-  opacity: 0.72;
-
-  transform:
-    translate(-50%, -50%)
-    scale(1.035);
-
-  transition:
-    filter 900ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 1000ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
 }
 
 
 /*
-  Impede qualquer interação
-  com o vídeo no estado final.
+  Todas as áreas ficam sobre o
+  quadro vertical, nunca sobre
+  as laterais pretas do computador.
 */
 
-.scene.finishing .scene-video {
-  pointer-events: none;
-}
-
-
-/* =========================================================
-   CAMADA DE ÚLTIMO FRAME
-   Mantida como fallback visual.
-========================================================= */
-
-.end-frame {
+.story-hit-area {
   position: absolute;
 
-  inset: 0;
+  top: 0;
+  bottom: 0;
 
-  z-index: 20;
+  pointer-events: auto;
 
-  background: #000000;
-
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-
-  opacity: 0;
-
-  visibility: hidden;
-
-  pointer-events: none;
-
-  transition:
-    opacity 900ms ease,
-    filter 900ms ease,
-    transform 1000ms ease,
-    visibility 0s linear 900ms;
-}
-
-
-.scene.finishing .end-frame {
-  opacity: 0;
-
-  visibility: hidden;
+  background: transparent;
 }
 
 
 /* =========================================================
-   ATENUAR PARA PRETO
+   TOQUE ESQUERDO
+   Voltar
+========================================================= */
+
+.story-prev {
+  left:
+    max(
+      calc((100vw - min(100vw, 56.25dvh)) / 2),
+      0px
+    );
+
+  width:
+    calc(
+      min(100vw, 56.25dvh) * 0.28
+    );
+}
+
+
+/* =========================================================
+   TOQUE CENTRAL
+   Pressionar = pausar
+========================================================= */
+
+.story-pause {
+  left: 50%;
+
+  width:
+    calc(
+      min(100vw, 56.25dvh) * 0.44
+    );
+
+  transform:
+    translateX(-50%);
+}
+
+
+/* =========================================================
+   TOQUE DIREITO
+   Avançar
+========================================================= */
+
+.story-next {
+  right:
+    max(
+      calc((100vw - min(100vw, 56.25dvh)) / 2),
+      0px
+    );
+
+  width:
+    calc(
+      min(100vw, 56.25dvh) * 0.28
+    );
+}
+
+
+/* =========================================================
+   TRANSIÇÃO PARA PRETO
 ========================================================= */
 
 .black-transition {
@@ -421,10 +551,9 @@ body {
 
   inset: 0;
 
-  z-index: 200;
+  z-index: 450;
 
-  background:
-    rgba(0, 0, 0, 1);
+  background: #000000;
 
   opacity: 0;
 
@@ -433,8 +562,9 @@ body {
   pointer-events: none;
 
   transition:
-    opacity 850ms cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 0s linear 850ms;
+    opacity 700ms
+      cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 700ms;
 }
 
 
@@ -444,147 +574,52 @@ body {
   visibility: visible;
 
   transition:
-    opacity 850ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 700ms
+      cubic-bezier(0.22, 1, 0.36, 1),
     visibility 0s linear 0s;
 }
 
 
 /* =========================================================
-   NAVEGAÇÃO
+   DESKTOP
 ========================================================= */
 
-.navigation {
-  position: fixed;
-
-  left: 50%;
-  top: 58%;
-
-  transform:
-    translate(-50%, -50%);
+@media (min-width: 601px) {
 
   /*
-    Fica acima do preto.
+    O story fica vertical e centralizado,
+    mesmo em monitores horizontais.
   */
 
-  z-index: 400;
+  .story-stage {
+    width:
+      min(100vw, 56.25dvh);
 
-  display: flex;
-
-  align-items: center;
-  justify-content: center;
-
-  gap: 14px;
-
-  width: auto;
-
-  pointer-events: none;
-
-  opacity: 0;
-
-  visibility: hidden;
-
-  transition:
-    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 0s linear 700ms;
-}
+    height:
+      min(177.7777777778vw, 100dvh);
+  }
 
 
-.navigation.visible {
-  opacity: 1;
+  .story-progress {
 
-  visibility: visible;
+    width:
+      min(
+        calc(100vw - 24px),
+        calc(56.25dvh - 24px)
+      );
 
-  pointer-events: auto;
-
-  transition:
-    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 0s linear 0s;
-}
-
-
-/* =========================================================
-   BOTÕES DE NAVEGAÇÃO
-========================================================= */
-
-.nav-button {
-  min-width: 145px;
-
-  height: 54px;
-
-  padding:
-    0 22px;
-
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.42);
-
-  border-radius: 9px;
-
-  /*
-    Fundo branco translúcido.
-  */
-
-  background:
-    rgba(255, 255, 255, 0.14);
-
-  /*
-    Texto branco.
-  */
-
-  color: #ffffff;
-
-  font-family:
-    "Poppins", sans-serif;
-
-  font-size: 14px;
-
-  line-height: 1;
-
-  font-weight: 400;
-
-  text-align: center;
-
-  cursor: pointer;
-
-  outline: none;
-
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-
-  pointer-events: auto;
-
-  touch-action: manipulation;
-
-  -webkit-appearance: none;
-  appearance: none;
-
-  transition:
-    background 250ms ease,
-    border-color 250ms ease,
-    transform 180ms ease;
-}
+    top:
+      12px;
+  }
 
 
-.nav-button:hover {
-  background:
-    rgba(255, 255, 255, 0.22);
+  .login-panel {
 
-  border-color:
-    rgba(255, 255, 255, 0.60);
-}
+    width: 68%;
 
+    max-width: 420px;
+  }
 
-.nav-button:active {
-  background:
-    rgba(255, 255, 255, 0.26);
-
-  transform:
-    scale(0.975);
-}
-
-
-.nav-button[hidden] {
-  display: none;
 }
 
 
@@ -594,13 +629,27 @@ body {
 
 @media (max-width: 600px) {
 
-  .scene-video {
+  .story-stage {
+    width: 100vw;
+
+    height: 100dvh;
+  }
+
+
+  .story-progress {
+
+    top:
+      max(
+        10px,
+        env(safe-area-inset-top)
+      );
 
     width:
-      min(100vw, 56.25dvh);
+      calc(100vw - 20px);
 
-    height:
-      min(177.7777777778vw, 100dvh);
+    height: 3px;
+
+    gap: 3px;
   }
 
 
@@ -619,151 +668,54 @@ body {
     height: 48px;
 
     /*
-      Continua 16 px.
-      Não reduzir.
+      Não diminuir.
+      16 px protege contra zoom do iPhone.
     */
 
     font-size: 16px;
   }
 
 
-  .navigation {
+  .story-hit-area {
 
-    top: 58%;
-
-    gap: 10px;
+    touch-action: none;
   }
 
 
-  .nav-button {
+  .story-prev,
+  .story-next {
 
-    min-width: 116px;
-
-    height: 48px;
-
-    padding:
-      0 16px;
-
-    font-size: 13px;
-
-    border-radius: 8px;
+    width: 30vw;
   }
 
 
-  /*
-    Blur um pouco mais delicado no iPhone.
-  */
+  .story-pause {
 
-  .scene.finishing .scene-video {
-
-    filter:
-      blur(14px);
-
-    opacity: 0.68;
-
-    transform:
-      translate(-50%, -50%)
-      scale(1.03);
+    width: 40vw;
   }
 
 }
 
 
 /* =========================================================
-   IPHONES / TELAS MUITO ESTREITAS
+   TELAS PEQUENAS
 ========================================================= */
 
 @media (max-width: 380px) {
 
-  .navigation {
-
-    gap: 7px;
-  }
-
-
-  .nav-button {
-
-    min-width: 104px;
-
-    height: 46px;
-
-    padding:
-      0 12px;
-
-    font-size: 12px;
-  }
-
-}
-
-
-/* =========================================================
-   COMPUTADOR
-========================================================= */
-
-@media (min-width: 601px) {
-
-  /*
-    Mantém sempre o formato vertical.
-
-    Em monitores horizontais:
-    quadro 9:16 no centro +
-    laterais pretas.
-  */
-
-  .scene-video {
+  .story-progress {
 
     width:
-      min(100vw, 56.25dvh);
+      calc(100vw - 16px);
 
-    height:
-      min(177.7777777778vw, 100dvh);
-  }
-
-
-  .login-panel {
-
-    width:
-      min(32vw, 420px);
-
-    max-width: 420px;
-  }
-
-
-  .navigation {
-
-    top: 58%;
-  }
-
-
-  .nav-button {
-
-    min-width: 150px;
-
-    height: 56px;
-
-    font-size: 14px;
+    gap: 2px;
   }
 
 }
 
 
 /* =========================================================
-   ACESSIBILIDADE / FOCO
-========================================================= */
-
-button:focus-visible,
-input:focus-visible {
-
-  outline:
-    1px solid
-    rgba(255, 255, 255, 0.55);
-
-  outline-offset: 2px;
-}
-
-
-/* =========================================================
-   CONTROLES NATIVOS
+   CONTROLES NATIVOS DOS VÍDEOS
 ========================================================= */
 
 video::-webkit-media-controls {
@@ -782,6 +734,21 @@ video::-webkit-media-controls-panel {
 
 
 /* =========================================================
+   FOCO
+========================================================= */
+
+button:focus-visible,
+input:focus-visible {
+
+  outline:
+    1px solid
+    rgba(255, 255, 255, 0.55);
+
+  outline-offset: 2px;
+}
+
+
+/* =========================================================
    ARRASTE / SELEÇÃO
 ========================================================= */
 
@@ -789,7 +756,8 @@ img,
 video,
 button,
 .scene,
-.experience {
+.story-stage,
+.story-progress {
 
   -webkit-user-drag: none;
 }
