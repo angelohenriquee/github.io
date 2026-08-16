@@ -3,10 +3,16 @@
   -webkit-tap-highlight-color: transparent;
 }
 
+
+/* =========================================================
+   DOCUMENTO
+========================================================= */
+
 html,
 body {
   width: 100%;
   height: 100%;
+
   margin: 0;
   padding: 0;
 
@@ -16,14 +22,10 @@ body {
 
   overscroll-behavior: none;
 
-  touch-action: manipulation;
-
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-}
 
-html {
-  overflow: hidden;
+  touch-action: manipulation;
 }
 
 body {
@@ -33,10 +35,14 @@ body {
   font-family: "Poppins", sans-serif;
   font-weight: 400;
 
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+  color: #ffffff;
+
+  background: #000000;
 
   overflow: hidden;
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 
@@ -52,12 +58,12 @@ body {
   width: 100vw;
   height: 100dvh;
 
-  display: grid;
-  place-items: center;
-
   overflow: hidden;
 
   background: #000000;
+
+  display: grid;
+  place-items: center;
 
   user-select: none;
   -webkit-user-select: none;
@@ -78,10 +84,10 @@ body {
   width: 100%;
   height: 100%;
 
+  overflow: hidden;
+
   display: grid;
   place-items: center;
-
-  overflow: hidden;
 
   background: #000000;
 
@@ -95,8 +101,10 @@ body {
     visibility 0s linear 900ms;
 }
 
+
 .scene.active {
   opacity: 1;
+
   visibility: visible;
 
   pointer-events: auto;
@@ -108,7 +116,8 @@ body {
 
 
 /* =========================================================
-   VÍDEO — QUADRO FIXO 9:16
+   VÍDEOS
+   QUADRO VERTICAL 9:16
 ========================================================= */
 
 .scene-video {
@@ -118,19 +127,22 @@ body {
   left: 50%;
 
   /*
-    O quadro visual nunca ultrapassa:
-    - a largura disponível
-    - nem a altura disponível
+    O vídeo permanece vertical.
 
-    Isso mantém a proporção 9:16
-    também em computadores horizontais.
+    Em celular:
+    ocupa a altura disponível.
+
+    Em computador horizontal:
+    ocupa no máximo a altura disponível,
+    preservando 9:16 e deixando preto nas laterais.
   */
 
   width: min(100vw, 56.25dvh);
 
   height: min(177.7777777778vw, 100dvh);
 
-  transform: translate(-50%, -50%);
+  transform:
+    translate(-50%, -50%);
 
   aspect-ratio: 9 / 16;
 
@@ -161,11 +173,8 @@ body {
   left: 50%;
   top: 58%;
 
-  transform: translate(-50%, -50%);
-
-  /*
-    Limitado ao quadro vertical.
-  */
+  transform:
+    translate(-50%, -50%);
 
   width: min(68%, 420px);
 
@@ -183,8 +192,10 @@ body {
     visibility 350ms ease;
 }
 
+
 .login-panel.hidden {
   opacity: 0;
+
   visibility: hidden;
 
   pointer-events: none;
@@ -202,11 +213,13 @@ body {
 
   padding: 0 16px;
 
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  border: 1px solid
+    rgba(255, 255, 255, 0.22);
 
   border-radius: 7px;
 
-  background: rgba(255, 255, 255, 0.10);
+  background:
+    rgba(255, 255, 255, 0.10);
 
   color: #ffffff;
 
@@ -215,8 +228,9 @@ body {
   font-family: "Poppins", sans-serif;
 
   /*
-    16px evita o zoom automático
-    do Safari ao focar no campo.
+    Fundamental para o iPhone:
+    16 px evita o zoom automático
+    ao tocar no campo.
   */
 
   font-size: 16px;
@@ -234,24 +248,30 @@ body {
   appearance: none;
 }
 
+
 .ui-box::placeholder {
-  color: rgba(255, 255, 255, 0.90);
+  color:
+    rgba(255, 255, 255, 0.90);
+
   opacity: 1;
 }
 
+
 .ui-box:focus {
-  border-color: rgba(255, 255, 255, 0.45);
-
-  background: rgba(255, 255, 255, 0.13);
-
   outline: none;
 
   box-shadow: none;
+
+  border-color:
+    rgba(255, 255, 255, 0.45);
+
+  background:
+    rgba(255, 255, 255, 0.13);
 }
 
 
 /* =========================================================
-   ENTRAR
+   BOTÃO ENTRAR
 ========================================================= */
 
 .ui-button {
@@ -267,16 +287,22 @@ body {
     transform 180ms ease;
 }
 
-.ui-button:hover {
-  background: rgba(255, 255, 255, 0.16);
 
-  border-color: rgba(255, 255, 255, 0.35);
+.ui-button:hover {
+  background:
+    rgba(255, 255, 255, 0.16);
+
+  border-color:
+    rgba(255, 255, 255, 0.35);
 }
 
-.ui-button:active {
-  background: rgba(255, 255, 255, 0.20);
 
-  transform: scale(0.985);
+.ui-button:active {
+  background:
+    rgba(255, 255, 255, 0.20);
+
+  transform:
+    scale(0.985);
 }
 
 
@@ -299,8 +325,10 @@ body {
 
   opacity: 0;
 
-  transition: opacity 250ms ease;
+  transition:
+    opacity 250ms ease;
 }
+
 
 .password-error.visible {
   opacity: 1;
@@ -308,7 +336,46 @@ body {
 
 
 /* =========================================================
-   ÚLTIMO FRAME
+   FINAL DO VÍDEO
+   O próprio vídeo fica congelado no último frame.
+========================================================= */
+
+.scene.finishing .scene-video {
+
+  /*
+    Primeiro estágio:
+    último frame ainda visível,
+    porém desfocado.
+  */
+
+  filter: blur(18px);
+
+  opacity: 0.72;
+
+  transform:
+    translate(-50%, -50%)
+    scale(1.035);
+
+  transition:
+    filter 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1000ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+
+/*
+  Impede qualquer interação
+  com o vídeo no estado final.
+*/
+
+.scene.finishing .scene-video {
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   CAMADA DE ÚLTIMO FRAME
+   Mantida como fallback visual.
 ========================================================= */
 
 .end-frame {
@@ -330,36 +397,23 @@ body {
 
   pointer-events: none;
 
-  transform: scale(1);
-
-  filter: blur(0);
-
   transition:
-    opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
-    filter 900ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 1100ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 900ms ease,
+    filter 900ms ease,
+    transform 1000ms ease,
     visibility 0s linear 900ms;
 }
 
+
 .scene.finishing .end-frame {
-  opacity: 1;
+  opacity: 0;
 
-  visibility: visible;
-
-  filter: blur(18px);
-
-  transform: scale(1.035);
-
-  transition:
-    opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
-    filter 900ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 1100ms cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 0s linear 0s;
+  visibility: hidden;
 }
 
 
 /* =========================================================
-   TRANSIÇÃO PARA PRETO
+   ATENUAR PARA PRETO
 ========================================================= */
 
 .black-transition {
@@ -367,14 +421,10 @@ body {
 
   inset: 0;
 
-  /*
-    Agora fica ACIMA do vídeo,
-    porém ABAIXO dos botões.
-  */
-
   z-index: 200;
 
-  background: #000000;
+  background:
+    rgba(0, 0, 0, 1);
 
   opacity: 0;
 
@@ -386,6 +436,7 @@ body {
     opacity 850ms cubic-bezier(0.22, 1, 0.36, 1),
     visibility 0s linear 850ms;
 }
+
 
 .black-transition.active {
   opacity: 1;
@@ -408,10 +459,11 @@ body {
   left: 50%;
   top: 58%;
 
-  transform: translate(-50%, -50%);
+  transform:
+    translate(-50%, -50%);
 
   /*
-    ACIMA da camada preta.
+    Fica acima do preto.
   */
 
   z-index: 400;
@@ -436,6 +488,7 @@ body {
     visibility 0s linear 700ms;
 }
 
+
 .navigation.visible {
   opacity: 1;
 
@@ -450,7 +503,7 @@ body {
 
 
 /* =========================================================
-   BOTÕES
+   BOTÕES DE NAVEGAÇÃO
 ========================================================= */
 
 .nav-button {
@@ -458,21 +511,30 @@ body {
 
   height: 54px;
 
-  padding: 0 22px;
+  padding:
+    0 22px;
 
-  border: 1px solid rgba(255, 255, 255, 0.42);
+  border:
+    1px solid
+    rgba(255, 255, 255, 0.42);
 
   border-radius: 9px;
 
   /*
-    Botões brancos translúcidos.
+    Fundo branco translúcido.
   */
 
-  background: rgba(255, 255, 255, 0.14);
+  background:
+    rgba(255, 255, 255, 0.14);
+
+  /*
+    Texto branco.
+  */
 
   color: #ffffff;
 
-  font-family: "Poppins", sans-serif;
+  font-family:
+    "Poppins", sans-serif;
 
   font-size: 14px;
 
@@ -502,17 +564,24 @@ body {
     transform 180ms ease;
 }
 
-.nav-button:hover {
-  background: rgba(255, 255, 255, 0.22);
 
-  border-color: rgba(255, 255, 255, 0.60);
+.nav-button:hover {
+  background:
+    rgba(255, 255, 255, 0.22);
+
+  border-color:
+    rgba(255, 255, 255, 0.60);
 }
+
 
 .nav-button:active {
-  background: rgba(255, 255, 255, 0.26);
+  background:
+    rgba(255, 255, 255, 0.26);
 
-  transform: scale(0.975);
+  transform:
+    scale(0.975);
 }
+
 
 .nav-button[hidden] {
   display: none;
@@ -526,14 +595,19 @@ body {
 @media (max-width: 600px) {
 
   .scene-video {
-    width: min(100vw, 56.25dvh);
 
-    height: min(177.7777777778vw, 100dvh);
+    width:
+      min(100vw, 56.25dvh);
+
+    height:
+      min(177.7777777778vw, 100dvh);
   }
 
 
   .login-panel {
+
     width: 76%;
+
     max-width: 340px;
 
     top: 60%;
@@ -541,13 +615,20 @@ body {
 
 
   .ui-box {
+
     height: 48px;
+
+    /*
+      Continua 16 px.
+      Não reduzir.
+    */
 
     font-size: 16px;
   }
 
 
   .navigation {
+
     top: 58%;
 
     gap: 10px;
@@ -555,36 +636,59 @@ body {
 
 
   .nav-button {
+
     min-width: 116px;
 
     height: 48px;
 
-    padding: 0 16px;
+    padding:
+      0 16px;
 
     font-size: 13px;
 
     border-radius: 8px;
   }
 
+
+  /*
+    Blur um pouco mais delicado no iPhone.
+  */
+
+  .scene.finishing .scene-video {
+
+    filter:
+      blur(14px);
+
+    opacity: 0.68;
+
+    transform:
+      translate(-50%, -50%)
+      scale(1.03);
+  }
+
 }
 
 
 /* =========================================================
-   CELULAR MUITO PEQUENO
+   IPHONES / TELAS MUITO ESTREITAS
 ========================================================= */
 
 @media (max-width: 380px) {
 
   .navigation {
+
     gap: 7px;
   }
 
+
   .nav-button {
+
     min-width: 104px;
 
     height: 46px;
 
-    padding: 0 12px;
+    padding:
+      0 12px;
 
     font-size: 12px;
   }
@@ -599,30 +703,40 @@ body {
 @media (min-width: 601px) {
 
   /*
-    A experiência permanece vertical.
-    Em uma tela horizontal, as laterais ficam pretas.
+    Mantém sempre o formato vertical.
+
+    Em monitores horizontais:
+    quadro 9:16 no centro +
+    laterais pretas.
   */
 
   .scene-video {
-    width: min(100vw, 56.25dvh);
 
-    height: min(177.7777777778vw, 100dvh);
+    width:
+      min(100vw, 56.25dvh);
+
+    height:
+      min(177.7777777778vw, 100dvh);
   }
 
 
   .login-panel {
-    width: min(32vw, 420px);
+
+    width:
+      min(32vw, 420px);
 
     max-width: 420px;
   }
 
 
   .navigation {
+
     top: 58%;
   }
 
 
   .nav-button {
+
     min-width: 150px;
 
     height: 56px;
@@ -634,28 +748,33 @@ body {
 
 
 /* =========================================================
-   ACESSIBILIDADE
+   ACESSIBILIDADE / FOCO
 ========================================================= */
 
 button:focus-visible,
 input:focus-visible {
-  outline: 1px solid rgba(255, 255, 255, 0.55);
+
+  outline:
+    1px solid
+    rgba(255, 255, 255, 0.55);
 
   outline-offset: 2px;
 }
 
 
 /* =========================================================
-   CONTROLES NATIVOS DO VÍDEO
+   CONTROLES NATIVOS
 ========================================================= */
 
 video::-webkit-media-controls {
   display: none !important;
 }
 
+
 video::-webkit-media-controls-enclosure {
   display: none !important;
 }
+
 
 video::-webkit-media-controls-panel {
   display: none !important;
@@ -663,7 +782,7 @@ video::-webkit-media-controls-panel {
 
 
 /* =========================================================
-   BLOQUEIO DE ARRASTE
+   ARRASTE / SELEÇÃO
 ========================================================= */
 
 img,
@@ -671,15 +790,17 @@ video,
 button,
 .scene,
 .experience {
+
   -webkit-user-drag: none;
 }
 
 
 /* =========================================================
-   REDUZIR EFEITOS DO IOS
+   IOS
 ========================================================= */
 
 input,
 button {
+
   -webkit-touch-callout: none;
 }
