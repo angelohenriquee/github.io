@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html,
@@ -7,70 +8,104 @@ body {
   width: 100%;
   height: 100%;
   margin: 0;
+  padding: 0;
+
   overflow: hidden;
+
   background: #000000;
+
+  overscroll-behavior: none;
+
+  touch-action: manipulation;
+
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+html {
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
 }
 
 body {
+  width: 100vw;
+  height: 100dvh;
+
   font-family: "Poppins", sans-serif;
   font-weight: 400;
+
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+
+  overflow: hidden;
+
+  overscroll-behavior: none;
 }
 
-button,
-input {
-  font-family: "Poppins", sans-serif;
-  font-weight: 400;
-}
 
-
-/* =========================
+/* =========================================================
    EXPERIÊNCIA
-========================= */
+========================================================= */
 
 .experience {
   position: fixed;
+
   inset: 0;
+
   width: 100vw;
   height: 100dvh;
+
+  min-width: 100vw;
+  min-height: 100dvh;
+
+  max-width: 100vw;
+  max-height: 100dvh;
+
+  overflow: hidden;
+
+  background: #000000;
+
+  display: grid;
+  place-items: center;
+
+  touch-action: manipulation;
+
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+
+/* =========================================================
+   CENAS
+========================================================= */
+
+.scene {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
 
   display: grid;
   place-items: center;
 
   overflow: hidden;
-
-  background: #000000;
-}
-
-
-/* =========================
-   CENAS
-========================= */
-
-.scene {
-  position: absolute;
-  inset: 0;
-
-  display: grid;
-  place-items: center;
 
   opacity: 0;
   visibility: hidden;
 
   pointer-events: none;
 
+  background: #000000;
+
   transition:
-    opacity 900ms ease,
+    opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
     visibility 0s linear 900ms;
 }
 
-
-/*
-  A cena ativa pode receber interação.
-  Isso é importante para o campo de senha
-  e para os elementos da interface.
-*/
 
 .scene.active {
   opacity: 1;
@@ -79,37 +114,73 @@ input {
   pointer-events: auto;
 
   transition:
-    opacity 900ms ease,
+    opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
     visibility 0s linear 0s;
 }
 
 
-/* =========================
+/* =========================================================
    VÍDEOS
-========================= */
+========================================================= */
 
 .scene-video {
-  display: block;
+  position: absolute;
 
-  width: auto;
-  height: min(100dvh, 177.7778vw);
+  top: 50%;
+  left: 50%;
 
-  max-width: 100vw;
-  max-height: 100dvh;
+  width: 100vw;
+  height: 177.7777777778vw;
+
+  max-width: none;
+  max-height: none;
+
+  transform: translate(-50%, -50%);
 
   aspect-ratio: 9 / 16;
 
-  object-fit: contain;
+  object-fit: cover;
 
   background: #000000;
 
+  border: 0;
+  outline: 0;
+
   pointer-events: none;
+
+  user-select: none;
+  -webkit-user-select: none;
+
+  -webkit-touch-callout: none;
 }
 
 
-/* =========================
+/*
+  Quando a janela for mais alta do que 9:16,
+  a largura define o enquadramento.
+
+  Quando a janela for mais larga,
+  a altura define o enquadramento.
+*/
+
+@media (min-aspect-ratio: 9/16) {
+  .scene-video {
+    width: 100vw;
+    height: 177.7777777778vw;
+  }
+}
+
+@media (max-aspect-ratio: 9/16) {
+  .scene-video {
+    width: 56.25dvh;
+    height: 100dvh;
+  }
+}
+
+
+/* =========================================================
    LOGIN
-========================= */
+========================================================= */
 
 .login-panel {
   position: absolute;
@@ -121,39 +192,37 @@ input {
 
   width: min(68vw, 420px);
 
+  z-index: 100;
+
   display: flex;
   flex-direction: column;
 
   gap: 8px;
 
-  z-index: 100;
-
   pointer-events: auto;
 
   transition:
-    opacity 350ms ease;
+    opacity 350ms ease,
+    visibility 350ms ease;
 }
 
 
-/*
-  Depois que a senha estiver correta,
-  o painel desaparece.
-*/
-
 .login-panel.hidden {
   opacity: 0;
+  visibility: hidden;
 
   pointer-events: none;
 }
 
 
-/* =========================
-   CAMPOS E BOTÕES DO LOGIN
-========================= */
+/* =========================================================
+   CAMPO E BOTÃO DE LOGIN
+========================================================= */
 
 .ui-box {
   width: 100%;
-  height: 48px;
+
+  height: 50px;
 
   padding: 0 16px;
 
@@ -167,15 +236,32 @@ input {
 
   outline: none;
 
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  font-family: "Poppins", sans-serif;
+
+  /*
+    16px é deliberado:
+    evita o zoom automático do Safari no iPhone
+    ao tocar no campo.
+  */
+  font-size: 16px;
+  line-height: 1;
+
+  font-weight: 400;
+
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
 
   pointer-events: auto;
+
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 
 .ui-box::placeholder {
   color: rgba(255, 255, 255, 0.90);
+
+  opacity: 1;
 }
 
 
@@ -183,21 +269,28 @@ input {
   border-color: rgba(255, 255, 255, 0.45);
 
   background: rgba(255, 255, 255, 0.13);
+
+  outline: none;
+
+  box-shadow: none;
 }
 
 
-/* =========================
-   BOTÃO ENTRAR
-========================= */
+/* =========================================================
+   ENTRAR
+========================================================= */
 
 .ui-button {
   cursor: pointer;
 
   text-align: center;
 
+  touch-action: manipulation;
+
   transition:
     background 250ms ease,
-    border-color 250ms ease;
+    border-color 250ms ease,
+    transform 180ms ease;
 }
 
 
@@ -210,17 +303,19 @@ input {
 
 .ui-button:active {
   background: rgba(255, 255, 255, 0.20);
+
+  transform: scale(0.985);
 }
 
 
-/* =========================
+/* =========================================================
    ERRO DE SENHA
-========================= */
+========================================================= */
 
 .password-error {
-  min-height: 20px;
+  min-height: 18px;
 
-  margin-top: 3px;
+  margin-top: 2px;
 
   color: #ffffff;
 
@@ -232,8 +327,7 @@ input {
 
   opacity: 0;
 
-  transition:
-    opacity 250ms ease;
+  transition: opacity 250ms ease;
 }
 
 
@@ -242,91 +336,206 @@ input {
 }
 
 
-/* =========================
+/* =========================================================
+   FRAME FINAL
+   O JS usa esta camada para capturar o estado visual
+   e aplicar o desfoque antes do preto.
+========================================================= */
+
+.end-frame {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 10;
+
+  background: #000000;
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  pointer-events: none;
+
+  transform: scale(1);
+
+  filter: blur(0px);
+
+  transition:
+    opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1100ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 900ms;
+}
+
+
+.scene.finishing .end-frame {
+  opacity: 1;
+
+  visibility: visible;
+
+  filter: blur(18px);
+
+  transform: scale(1.03);
+
+  transition:
+    opacity 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 900ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1100ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0s;
+}
+
+
+/* =========================================================
+   TRANSIÇÃO FINAL PARA PRETO
+========================================================= */
+
+.black-transition {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 300;
+
+  background: #000000;
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  pointer-events: none;
+
+  transition:
+    opacity 850ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 850ms;
+}
+
+
+.black-transition.active {
+  opacity: 1;
+
+  visibility: visible;
+
+  transition:
+    opacity 850ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0s;
+}
+
+
+/* =========================================================
    NAVEGAÇÃO
-========================= */
+========================================================= */
 
 .navigation {
   position: fixed;
 
-  left: 0;
-  right: 0;
+  left: 50%;
 
-  bottom: max(22px, env(safe-area-inset-bottom));
+  /*
+    Agora os botões ficam no centro,
+    levemente abaixo do centro geométrico.
+  */
+  top: 58%;
 
-  z-index: 200;
+  transform: translate(-50%, -50%);
+
+  z-index: 250;
 
   display: flex;
 
-  justify-content: space-between;
-
   align-items: center;
+  justify-content: center;
 
-  padding:
-    0
-    max(22px, env(safe-area-inset-right))
-    0
-    max(22px, env(safe-area-inset-left));
+  gap: 14px;
+
+  width: auto;
 
   pointer-events: none;
 
   opacity: 0;
 
+  visibility: hidden;
+
   transition:
-    opacity 700ms ease;
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 700ms;
 }
 
 
 .navigation.visible {
   opacity: 1;
-}
 
-
-/* =========================
-   BOTÕES DE NAVEGAÇÃO
-========================= */
-
-.nav-button {
-  min-width: 112px;
-
-  height: 42px;
-
-  padding: 0 18px;
-
-  border: 1px solid rgba(255, 255, 255, 0.20);
-
-  border-radius: 7px;
-
-  background: rgba(255, 255, 255, 0.10);
-
-  color: #ffffff;
-
-  font-size: 13px;
-
-  line-height: 1;
-
-  cursor: pointer;
-
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  visibility: visible;
 
   pointer-events: auto;
 
   transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0s;
+}
+
+
+/* =========================================================
+   BOTÕES
+========================================================= */
+
+.nav-button {
+  min-width: 135px;
+
+  height: 52px;
+
+  padding: 0 22px;
+
+  border: 1px solid rgba(255, 255, 255, 0.24);
+
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.11);
+
+  color: #ffffff;
+
+  font-family: "Poppins", sans-serif;
+
+  font-size: 14px;
+
+  line-height: 1;
+
+  font-weight: 400;
+
+  text-align: center;
+
+  cursor: pointer;
+
+  outline: none;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  pointer-events: auto;
+
+  touch-action: manipulation;
+
+  -webkit-appearance: none;
+  appearance: none;
+
+  transition:
     background 250ms ease,
-    border-color 250ms ease;
+    border-color 250ms ease,
+    transform 180ms ease;
 }
 
 
 .nav-button:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.17);
 
-  border-color: rgba(255, 255, 255, 0.30);
+  border-color: rgba(255, 255, 255, 0.34);
 }
 
 
 .nav-button:active {
   background: rgba(255, 255, 255, 0.20);
+
+  transform: scale(0.975);
 }
 
 
@@ -335,11 +544,17 @@ input {
 }
 
 
-/* =========================
+/* =========================================================
    CELULAR
-========================= */
+========================================================= */
 
 @media (max-width: 600px) {
+
+  .experience {
+    width: 100vw;
+    height: 100dvh;
+  }
+
 
   .login-panel {
     width: min(76vw, 340px);
@@ -348,59 +563,131 @@ input {
   }
 
 
-  .ui-box {
-    height: 46px;
+  /*
+    Mantemos 16px para impedir o zoom
+    automático do Safari.
+  */
 
-    font-size: 13px;
+  .ui-box {
+    height: 48px;
+
+    font-size: 16px;
+  }
+
+
+  .navigation {
+    top: 58%;
+
+    gap: 10px;
   }
 
 
   .nav-button {
-    min-width: 100px;
+    min-width: 116px;
 
-    height: 40px;
+    height: 48px;
 
-    padding: 0 14px;
+    padding: 0 16px;
+
+    font-size: 13px;
+
+    border-radius: 8px;
+  }
+
+}
+
+
+/* =========================================================
+   CELULAR MUITO PEQUENO
+========================================================= */
+
+@media (max-width: 380px) {
+
+  .navigation {
+    gap: 7px;
+  }
+
+
+  .nav-button {
+    min-width: 104px;
+
+    height: 46px;
+
+    padding: 0 12px;
 
     font-size: 12px;
   }
 
 
-  .navigation {
-    bottom: max(18px, env(safe-area-inset-bottom));
-
-    padding-left:
-      max(16px, env(safe-area-inset-left));
-
-    padding-right:
-      max(16px, env(safe-area-inset-right));
+  .login-panel {
+    width: 78vw;
   }
+
 }
 
 
-/* =========================
-   COMPUTADOR
-========================= */
+/* =========================================================
+   DESKTOP
+========================================================= */
 
 @media (min-width: 601px) {
 
-  .scene-video {
-    height: min(100dvh, 177.7778vw);
+  .login-panel {
+    width: min(32vw, 420px);
+  }
 
-    max-height: 100dvh;
-    max-width: 100vw;
+
+  .navigation {
+    top: 58%;
+  }
+
+
+  .nav-button {
+    min-width: 145px;
+
+    height: 54px;
+
+    font-size: 14px;
   }
 
 }
 
 
-/* =========================
-   ACESSIBILIDADE
-========================= */
+/* =========================================================
+   ACESSIBILIDADE / FOCO
+========================================================= */
 
 button:focus-visible,
 input:focus-visible {
-  outline: 1px solid rgba(255, 255, 255, 0.65);
+  outline: 1px solid rgba(255, 255, 255, 0.55);
 
   outline-offset: 2px;
+}
+
+
+/* =========================================================
+   EVITAR SELEÇÃO / ARRASTO NO IOS
+========================================================= */
+
+img,
+video,
+button,
+.scene,
+.experience {
+  -webkit-user-drag: none;
+}
+
+
+video::-webkit-media-controls {
+  display: none !important;
+}
+
+
+video::-webkit-media-controls-enclosure {
+  display: none !important;
+}
+
+
+video::-webkit-media-controls-panel {
+  display: none !important;
 }
