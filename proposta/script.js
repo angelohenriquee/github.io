@@ -180,22 +180,6 @@ function updateProgress() {
   }
 
 
-  const currentFill =
-    progressFills[
-      currentScene - 1
-    ];
-
-
-  if (
-    !currentFill
-  ) {
-
-    stopProgress();
-
-    return;
-  }
-
-
   /*
     Barras anteriores = completas.
   */
@@ -231,11 +215,18 @@ function updateProgress() {
     Barra atual acompanha o vídeo.
   */
 
+  const currentFill =
+    progressFills[
+      currentScene - 1
+    ];
+
+
   const video =
     videos[currentScene];
 
 
   if (
+    currentFill &&
     video &&
     Number.isFinite(
       video.duration
@@ -326,6 +317,56 @@ function stopVideo(
     // Ignorar
 
   }
+
+}
+
+
+/* =========================================================
+   SILENCIAR E PARAR TODOS OS VÍDEOS
+========================================================= */
+
+function stopAllVideosExcept(
+  activeIndex
+) {
+
+  videos.forEach(
+    (video, index) => {
+
+      if (!video) {
+        return;
+      }
+
+
+      /*
+        Todo vídeo que não seja o atual:
+        - pausa
+        - silencia
+        - volta ao primeiro frame
+      */
+
+      if (
+        index !== activeIndex
+      ) {
+
+        video.pause();
+
+        video.muted = true;
+
+
+        try {
+
+          video.currentTime = 0;
+
+        } catch (error) {
+
+          // Ignorar
+
+        }
+
+      }
+
+    }
+  );
 
 }
 
@@ -434,7 +475,32 @@ function startStory(
 
 
   /*
-    Atualiza as cenas instantaneamente.
+    PRIMEIRO:
+    pausa e silencia TODOS os vídeos.
+
+    Isso resolve o áudio residual
+    no computador.
+  */
+
+  videos.forEach(
+    videoItem => {
+
+      if (!videoItem) {
+        return;
+      }
+
+
+      videoItem.pause();
+
+      videoItem.muted = true;
+
+    }
+  );
+
+
+  /*
+    Atualiza as cenas
+    instantaneamente.
   */
 
   scenes.forEach(
@@ -450,14 +516,25 @@ function startStory(
 
 
   /*
-    Para o vídeo anterior
-    e começa este do zero.
+    Começa o vídeo atual
+    sempre do início.
   */
 
-  stopVideo(
-    video
-  );
+  try {
 
+    video.currentTime = 0;
+
+  } catch (error) {
+
+    // Ignorar
+
+  }
+
+
+  /*
+    SOMENTE o vídeo atual
+    terá áudio.
+  */
 
   video.muted = false;
 
@@ -476,15 +553,27 @@ function startStory(
   );
 
 
+  /*
+    Agora reproduzimos o vídeo atual.
+  */
+
   playVideo(
     video
   );
 
 
+  /*
+    Pré-carrega o seguinte.
+  */
+
   preloadNext(
     index
   );
 
+
+  /*
+    Reinicia a barra de progresso.
+  */
 
   startProgress();
 
@@ -579,7 +668,7 @@ function nextStory() {
 
 
 /* =========================================================
-   FINAL DO STORY
+   FINAL DO VÍDEO
 ========================================================= */
 
 function handleStoryEnd() {
@@ -611,6 +700,11 @@ function handleStoryEnd() {
     return;
   }
 
+
+  /*
+    Avança automaticamente
+    para o próximo Story.
+  */
 
   nextStory();
 
@@ -657,6 +751,41 @@ function resumeCurrentStory() {
 
     return;
   }
+
+
+  /*
+    Garante novamente que
+    somente a cena atual tenha áudio.
+  */
+
+  videos.forEach(
+    (videoItem, index) => {
+
+      if (
+        !videoItem
+      ) {
+
+        return;
+
+      }
+
+
+      if (
+        index !==
+        currentScene
+      ) {
+
+        videoItem.pause();
+
+        videoItem.muted = true;
+
+      }
+
+    }
+  );
+
+
+  video.muted = false;
 
 
   playVideo(
@@ -883,13 +1012,14 @@ progressSegments.forEach(
 
 
         /*
-          index 0 = Story 1
-          index 1 = Story 2
-          ...
+          Barra 0 = Story 1
+          Barra 1 = Story 2
+          etc.
         */
 
         const targetStory =
-          index + FIRST_STORY;
+          index +
+          FIRST_STORY;
 
 
         goToStory(
@@ -961,13 +1091,14 @@ function unlockExperience() {
 
     loginVideo.pause();
 
+    loginVideo.muted = true;
+
   }
 
 
   /*
-    Agora sim aparecem:
-    - as 8 barras
-    - as áreas de toque
+    Ativa as barras e áreas
+    de interação.
   */
 
   activateStories();
@@ -1053,8 +1184,8 @@ videos.forEach(
       () => {
 
         /*
-          Login não participa
-          da sequência.
+          Login não pertence
+          à sequência.
         */
 
         if (
@@ -1211,6 +1342,49 @@ function initialize() {
         "active",
         index === 0
       );
+
+    }
+  );
+
+
+  /*
+    Garante que todos os vídeos
+    estejam inicialmente parados
+    e sem áudio, exceto o login.
+  */
+
+  videos.forEach(
+    (
+      video,
+      index
+    ) => {
+
+      if (!video) {
+        return;
+      }
+
+
+      video.pause();
+
+      video.muted = true;
+
+
+      if (
+        index !== 0
+      ) {
+
+        try {
+
+          video.currentTime =
+            0;
+
+        } catch (error) {
+
+          // Ignorar
+
+        }
+
+      }
 
     }
   );
