@@ -57,8 +57,6 @@ let holdPointerId = null;
 
 let sceneFinished = false;
 
-let finishingTimer = null;
-
 let blackTimer = null;
 
 let navigationTimer = null;
@@ -70,25 +68,25 @@ let navigationTimer = null;
 
 const BUTTON_DELAY = 700;
 
-const FINISH_DURATION = 850;
-
-const BLACK_DURATION = 900;
-
 const TRANSITION_DURATION = 900;
 
 
 /* =========================================================
-   UTILITÁRIOS
+   LIMPEZA
 ========================================================= */
 
 function clearTimers() {
 
-  window.clearTimeout(finishingTimer);
   window.clearTimeout(blackTimer);
+
   window.clearTimeout(navigationTimer);
 
 }
 
+
+/* =========================================================
+   ESCONDER NAVEGAÇÃO
+========================================================= */
 
 function hideNavigation() {
 
@@ -101,6 +99,10 @@ function hideNavigation() {
   nextButton.hidden = true;
 }
 
+
+/* =========================================================
+   RESET DO FINAL
+========================================================= */
 
 function resetFinishingState(scene) {
 
@@ -115,11 +117,13 @@ function resetFinishingState(scene) {
 
     endFrame.style.backgroundImage = "";
 
-    endFrame.style.opacity = "";
-
   }
 }
 
+
+/* =========================================================
+   RESET DO VÍDEO
+========================================================= */
 
 function resetVideo(video) {
 
@@ -128,32 +132,37 @@ function resetVideo(video) {
   video.pause();
 
   try {
+
     video.currentTime = 0;
+
   } catch (error) {
-    // Alguns navegadores podem bloquear currentTime
-    // enquanto o vídeo ainda não foi carregado.
+
+    // Ignorar
+
   }
-}
-
-
-/* =========================================================
-   ENQUADRAMENTO
-========================================================= */
-
-function forceVideoPosition(video) {
-
-  if (!video) return;
-
-  video.style.position = "absolute";
 
 }
 
 
 /* =========================================================
-   NAVEGAÇÃO
+   ETIQUETAS DOS BOTÕES
 ========================================================= */
 
 function updateNavigationLabels() {
+
+  /*
+    O botão Avançar precisa SEMPRE
+    voltar a ficar disponível quando
+    a navegação for mostrada.
+  */
+
+  nextButton.hidden = false;
+
+
+  /*
+    Na primeira tela da experiência,
+    não existe botão Voltar.
+  */
 
   if (currentScene === 1) {
 
@@ -166,7 +175,14 @@ function updateNavigationLabels() {
   }
 
 
-  if (currentScene === scenes.length - 1) {
+  /*
+    Última tela.
+  */
+
+  if (
+    currentScene ===
+    scenes.length - 1
+  ) {
 
     nextButton.textContent =
       "Quero essa experiência";
@@ -181,9 +197,13 @@ function updateNavigationLabels() {
 }
 
 
+/* =========================================================
+   MOSTRAR NAVEGAÇÃO
+========================================================= */
+
 function showNavigation() {
 
-  clearTimeout(navigationTimer);
+  window.clearTimeout(navigationTimer);
 
   navigationTimer = window.setTimeout(() => {
 
@@ -191,34 +211,37 @@ function showNavigation() {
 
     updateNavigationLabels();
 
-    navigation.classList.add("visible");
+    navigation.classList.add(
+      "visible"
+    );
 
   }, BUTTON_DELAY);
+
 }
 
 
 /* =========================================================
-   CAPTURA DO ÚLTIMO FRAME
+   CAPTURAR ÚLTIMO FRAME
 ========================================================= */
 
-function captureLastFrame(scene, video) {
+function captureLastFrame(
+  scene,
+  video
+) {
 
   if (!scene || !video) {
     return;
   }
 
+
   const endFrame =
     scene.querySelector(".end-frame");
+
 
   if (!endFrame) {
     return;
   }
 
-  /*
-    O vídeo já chegou ao fim.
-    Tentamos capturar exatamente o quadro final
-    em um canvas invisível.
-  */
 
   try {
 
@@ -228,15 +251,21 @@ function captureLastFrame(scene, video) {
     const videoHeight =
       video.videoHeight || 1920;
 
+
     const canvas =
       document.createElement("canvas");
 
-    canvas.width = videoWidth;
 
-    canvas.height = videoHeight;
+    canvas.width =
+      videoWidth;
+
+    canvas.height =
+      videoHeight;
+
 
     const context =
       canvas.getContext("2d");
+
 
     context.drawImage(
       video,
@@ -246,11 +275,17 @@ function captureLastFrame(scene, video) {
       videoHeight
     );
 
+
     const frame =
-      canvas.toDataURL("image/jpeg", 0.90);
+      canvas.toDataURL(
+        "image/jpeg",
+        0.90
+      );
+
 
     endFrame.style.backgroundImage =
       `url("${frame}")`;
+
 
     endFrame.style.backgroundSize =
       "cover";
@@ -261,14 +296,16 @@ function captureLastFrame(scene, video) {
     endFrame.style.backgroundRepeat =
       "no-repeat";
 
+
   } catch (error) {
 
     /*
-      Se o navegador impedir a captura,
-      a camada preta ainda fará a transição.
+      Mesmo se a captura falhar,
+      o dissolve para preto continua.
     */
 
-    endFrame.style.backgroundImage = "";
+    endFrame.style.backgroundImage =
+      "";
 
   }
 
@@ -276,122 +313,144 @@ function captureLastFrame(scene, video) {
 
 
 /* =========================================================
-   FINAL DO VÍDEO
+   FINAL DA CENA
 ========================================================= */
 
 function finishScene(index) {
 
-  const scene = scenes[index];
+  const scene =
+    scenes[index];
 
-  const video = videos[index];
+  const video =
+    videos[index];
+
 
   if (!scene || !video) {
     return;
   }
+
 
   if (sceneFinished) {
     return;
   }
 
+
   sceneFinished = true;
 
+
   /*
-    Mantém o vídeo exatamente no último frame.
+    Mantém o vídeo no último frame.
   */
 
   try {
-    video.currentTime = video.duration;
+
+    video.currentTime =
+      video.duration;
+
   } catch (error) {
+
     // Ignorar
+
   }
 
 
   /*
-    Captura o quadro final antes da camada
-    começar a desfocar.
+    Captura o último frame.
   */
 
-  captureLastFrame(scene, video);
+  captureLastFrame(
+    scene,
+    video
+  );
 
 
   /*
-    Começa:
-    último frame → blur → preto.
+    Começa o desfoque
+    do último frame.
   */
 
-  scene.classList.add("finishing");
+  scene.classList.add(
+    "finishing"
+  );
 
 
   /*
-    Depois da primeira parte do dissolve,
-    entra a camada preta.
+    Depois começa a dissolução
+    para preto.
   */
 
-  blackTimer = window.setTimeout(() => {
+  blackTimer =
+    window.setTimeout(() => {
 
-    blackTransition.classList.add("active");
+      blackTransition.classList.add(
+        "active"
+      );
 
-  }, 250);
+    }, 250);
 
 
   /*
-    Quando a transição estiver praticamente preta,
-    aparecem os botões.
+    Depois do preto,
+    libera os botões.
   */
 
-  navigationTimer = window.setTimeout(() => {
+  navigationTimer =
+    window.setTimeout(() => {
 
-    if (!unlocked) return;
-
-    updateNavigationLabels();
-
-    navigation.classList.add("visible");
-
-  }, FINISH_DURATION);
+      if (!unlocked) {
+        return;
+      }
 
 
-  /*
-    Mantemos a tela preta enquanto a pessoa
-    aguarda a próxima interação.
-  */
+      updateNavigationLabels();
+
+
+      navigation.classList.add(
+        "visible"
+      );
+
+    }, 850);
 
 }
 
 
 /* =========================================================
-   REPRODUÇÃO
+   REPRODUZIR CENA
 ========================================================= */
 
 function playScene(index) {
 
-  const scene = scenes[index];
+  const scene =
+    scenes[index];
 
-  const video = videos[index];
+  const video =
+    videos[index];
+
 
   if (!scene || !video) {
     return;
   }
 
+
   sceneFinished = false;
 
-  clearTimeout(finishingTimer);
-  clearTimeout(blackTimer);
-  clearTimeout(navigationTimer);
+  clearTimers();
 
-  resetFinishingState(scene);
+  resetFinishingState(
+    scene
+  );
 
-  blackTransition.classList.remove("active");
+  blackTransition.classList.remove(
+    "active"
+  );
 
   hideNavigation();
-
-
-  forceVideoPosition(video);
 
   resetVideo(video);
 
 
   /*
-    A tela de login fica sempre sem áudio.
+    Login sem áudio.
   */
 
   if (index === 0) {
@@ -400,32 +459,28 @@ function playScene(index) {
 
   } else {
 
-    /*
-      Depois do clique em Entrar,
-      tentamos reproduzir com áudio.
-    */
-
     video.muted = false;
 
   }
 
 
   /*
-    Quando o navegador já tiver dados suficientes,
-    reproduz o vídeo.
+    Reprodução.
   */
 
   const playVideo = () => {
 
-    const promise = video.play();
+    const promise =
+      video.play();
+
 
     if (promise) {
 
       promise.catch(() => {
 
         /*
-          Em caso de bloqueio de áudio,
-          tentamos uma segunda vez sem áudio.
+          Fallback sem áudio
+          caso o navegador bloqueie.
         */
 
         if (index !== 0) {
@@ -452,30 +507,31 @@ function playScene(index) {
     video.addEventListener(
       "canplay",
       playVideo,
-      { once: true }
+      {
+        once: true
+      }
     );
 
   }
 
 
   /*
-    O login não usa o comportamento de
-    "segurar para pausar".
+    Pressionar para pausar:
+    somente telas 2–9.
   */
 
   if (index !== 0) {
 
-    attachHoldPause(scene, video);
+    attachHoldPause(
+      scene,
+      video
+    );
 
   }
 
 
   /*
-    Quando o vídeo termina:
-    capturamos o último frame,
-    aplicamos blur,
-    dissolvemos para preto
-    e mostramos os botões.
+    Final.
   */
 
   video.onended = () => {
@@ -486,7 +542,7 @@ function playScene(index) {
 
 
   /*
-    Pré-carrega a próxima cena.
+    Pré-carrega a próxima tela.
   */
 
   preloadNext(index);
@@ -500,39 +556,61 @@ function playScene(index) {
 
 function preloadNext(index) {
 
-  const nextIndex = index + 1;
+  const nextIndex =
+    index + 1;
 
-  if (nextIndex >= videos.length) {
+
+  if (
+    nextIndex >=
+    videos.length
+  ) {
+
     return;
+
   }
+
 
   const nextVideo =
     videos[nextIndex];
+
 
   if (!nextVideo) {
     return;
   }
 
-  nextVideo.preload = "auto";
+
+  nextVideo.preload =
+    "auto";
+
 
   try {
+
     nextVideo.load();
+
   } catch (error) {
+
     // Ignorar
+
   }
 
 }
 
 
 /* =========================================================
-   SEGURAR = PAUSAR
+   PAUSAR
 ========================================================= */
 
 function pauseVideo(video) {
 
-  if (!video) return;
+  if (!video) {
+    return;
+  }
 
-  if (!video.paused && !video.ended) {
+
+  if (
+    !video.paused &&
+    !video.ended
+  ) {
 
     video.pause();
 
@@ -541,16 +619,25 @@ function pauseVideo(video) {
 }
 
 
+/* =========================================================
+   CONTINUAR
+========================================================= */
+
 function resumeVideo(video) {
 
-  if (!video) return;
+  if (!video) {
+    return;
+  }
+
 
   if (video.ended) {
     return;
   }
 
+
   const promise =
     video.play();
+
 
   if (promise) {
 
@@ -561,50 +648,51 @@ function resumeVideo(video) {
 }
 
 
-function attachHoldPause(scene, video) {
+/* =========================================================
+   SEGURAR PARA PAUSAR
+========================================================= */
 
-  /*
-    Evita registrar o mesmo conjunto
-    de eventos repetidas vezes.
-  */
+function attachHoldPause(
+  scene,
+  video
+) {
 
-  if (scene.dataset.holdBound === "true") {
+  if (
+    scene.dataset.holdBound ===
+    "true"
+  ) {
+
     return;
+
   }
 
-  scene.dataset.holdBound = "true";
 
+  scene.dataset.holdBound =
+    "true";
 
-  /*
-    TOUCH / POINTER
-  */
 
   scene.addEventListener(
     "pointerdown",
     event => {
 
-      /*
-        Só reagimos ao ponteiro principal.
-      */
-
       if (
         event.pointerType === "mouse" &&
         event.button !== 0
       ) {
+
         return;
+
       }
 
 
-      /*
-        Se o usuário estiver pressionando um
-        elemento de navegação, não pausamos o vídeo.
-      */
-
       if (
-        event.target.closest(".navigation") ||
-        event.target.closest(".login-panel")
+        event.target.closest(
+          ".navigation"
+        )
       ) {
+
         return;
+
       }
 
 
@@ -612,7 +700,9 @@ function attachHoldPause(scene, video) {
         sceneFinished ||
         video.ended
       ) {
+
         return;
+
       }
 
 
@@ -637,9 +727,12 @@ function attachHoldPause(scene, video) {
 
       if (
         holdPointerId !== null &&
-        event.pointerId !== holdPointerId
+        event.pointerId !==
+          holdPointerId
       ) {
+
         return;
+
       }
 
 
@@ -675,51 +768,12 @@ function attachHoldPause(scene, video) {
 
       if (
         holdPointerId !== null &&
-        event.pointerId !== holdPointerId
-      ) {
-        return;
-      }
-
-
-      isHolding = false;
-
-      holdPointerId = null;
-
-
-      if (
-        !sceneFinished &&
-        !video.ended
+        event.pointerId !==
+          holdPointerId
       ) {
 
-        resumeVideo(video);
-
-      }
-
-    },
-    {
-      passive: true
-    }
-  );
-
-
-  scene.addEventListener(
-    "pointerleave",
-    event => {
-
-      /*
-        No mouse, sair da área encerra
-        o comportamento de pressão.
-      */
-
-      if (
-        event.pointerType !== "mouse"
-      ) {
         return;
-      }
 
-
-      if (!isHolding) {
-        return;
       }
 
 
@@ -747,7 +801,7 @@ function attachHoldPause(scene, video) {
 
 
 /* =========================================================
-   TROCA DE CENA
+   TROCAR CENA
 ========================================================= */
 
 function goToScene(index) {
@@ -756,7 +810,9 @@ function goToScene(index) {
     index < 1 ||
     index >= scenes.length
   ) {
+
     return;
+
   }
 
 
@@ -766,12 +822,12 @@ function goToScene(index) {
   const nextScene =
     scenes[index];
 
-
   const previousVideo =
     videos[currentScene];
 
 
   clearTimers();
+
 
   isHolding = false;
 
@@ -782,59 +838,57 @@ function goToScene(index) {
 
   hideNavigation();
 
-  blackTransition.classList.remove("active");
+
+  blackTransition.classList.remove(
+    "active"
+  );
 
 
-  /*
-    Remove o estado visual da cena anterior.
-  */
-
-  resetFinishingState(previousScene);
+  resetFinishingState(
+    previousScene
+  );
 
 
-  /*
-    Ativa a nova cena.
-  */
+  nextScene.classList.add(
+    "active"
+  );
 
-  nextScene.classList.add("active");
-
-
-  /*
-    Dissolve da cena anterior.
-  */
 
   window.setTimeout(() => {
 
-    previousScene.classList.remove("active");
+    previousScene.classList.remove(
+      "active"
+    );
 
   }, TRANSITION_DURATION);
 
-
-  /*
-    Para o vídeo anterior.
-  */
 
   if (previousVideo) {
 
     previousVideo.pause();
 
+
     try {
-      previousVideo.currentTime = 0;
+
+      previousVideo.currentTime =
+        0;
+
     } catch (error) {
+
       // Ignorar
+
     }
 
   }
 
 
-  currentScene = index;
+  currentScene =
+    index;
 
 
-  /*
-    Começa a nova cena do primeiro frame.
-  */
-
-  playScene(currentScene);
+  playScene(
+    currentScene
+  );
 
 }
 
@@ -850,7 +904,8 @@ function unlockExperience() {
 
 
   if (
-    enteredPassword !== CONFIG.password
+    enteredPassword !==
+    CONFIG.password
   ) {
 
     passwordError.classList.add(
@@ -860,6 +915,7 @@ function unlockExperience() {
     passwordInput.focus();
 
     return;
+
   }
 
 
@@ -871,19 +927,10 @@ function unlockExperience() {
   unlocked = true;
 
 
-  /*
-    Esconde o login.
-  */
-
   loginPanel.classList.add(
     "hidden"
   );
 
-
-  /*
-    Pequena pausa para a transição
-    parecer parte da experiência.
-  */
 
   window.setTimeout(() => {
 
@@ -900,7 +947,7 @@ function unlockExperience() {
 
 
 /* =========================================================
-   LOGIN — BOTÃO
+   BOTÃO ENTRAR
 ========================================================= */
 
 enterButton.addEventListener(
@@ -910,14 +957,16 @@ enterButton.addEventListener(
 
 
 /* =========================================================
-   LOGIN — ENTER
+   ENTER NO CAMPO DE SENHA
 ========================================================= */
 
 passwordInput.addEventListener(
   "keydown",
   event => {
 
-    if (event.key === "Enter") {
+    if (
+      event.key === "Enter"
+    ) {
 
       event.preventDefault();
 
@@ -958,8 +1007,12 @@ backButton.addEventListener(
     event.stopPropagation();
 
 
-    if (currentScene <= 1) {
+    if (
+      currentScene <= 1
+    ) {
+
       return;
+
     }
 
 
@@ -984,19 +1037,16 @@ nextButton.addEventListener(
     event.stopPropagation();
 
 
-    /*
-      Última tela:
-      abre WhatsApp.
-    */
-
     if (
       currentScene ===
       scenes.length - 1
     ) {
 
       const phone =
-        CONFIG.whatsappNumber
-          .replace(/\D/g, "");
+        CONFIG.whatsappNumber.replace(
+          /\D/g,
+          ""
+        );
 
 
       const message =
@@ -1006,16 +1056,16 @@ nextButton.addEventListener(
 
 
       if (!phone) {
-
         return;
-
       }
 
 
       window.location.href =
         `https://wa.me/${phone}?text=${message}`;
 
+
       return;
+
     }
 
 
@@ -1028,7 +1078,7 @@ nextButton.addEventListener(
 
 
 /* =========================================================
-   LOGIN — INICIALIZAÇÃO
+   LOGIN
 ========================================================= */
 
 const loginVideo =
@@ -1041,10 +1091,12 @@ if (loginVideo) {
 
   loginVideo.playsInline = true;
 
+
   loginVideo.setAttribute(
     "playsinline",
     ""
   );
+
 
   loginVideo.setAttribute(
     "webkit-playsinline",
@@ -1056,7 +1108,9 @@ if (loginVideo) {
     "canplay",
     () => {
 
-      loginVideo.play().catch(() => {});
+      loginVideo.play().catch(
+        () => {}
+      );
 
     },
     {
@@ -1068,19 +1122,17 @@ if (loginVideo) {
 
 
 /* =========================================================
-   BLOQUEIOS EXTRAS
+   BLOQUEIO DE MENU DE CONTEXTO
 ========================================================= */
 
 document.addEventListener(
   "contextmenu",
   event => {
 
-    /*
-      Evita menu de contexto sobre os vídeos.
-    */
-
     if (
-      event.target.closest(".scene")
+      event.target.closest(
+        ".scene"
+      )
     ) {
 
       event.preventDefault();
@@ -1091,11 +1143,9 @@ document.addEventListener(
 );
 
 
-/*
-  Impede o gesto de zoom da página
-  em navegadores que ainda respeitam
-  este tipo de evento.
-*/
+/* =========================================================
+   BLOQUEIO DE GESTOS DE ZOOM
+========================================================= */
 
 document.addEventListener(
   "gesturestart",
@@ -1144,18 +1194,15 @@ window.addEventListener(
   "load",
   () => {
 
-    /*
-      Garante que a primeira cena esteja
-      sempre no começo.
-    */
-
     currentScene = 0;
 
     unlocked = false;
 
     sceneFinished = false;
 
+
     hideNavigation();
+
 
     blackTransition.classList.remove(
       "active"
@@ -1184,12 +1231,18 @@ window.addEventListener(
 
     if (videos[1]) {
 
-      videos[1].preload = "auto";
+      videos[1].preload =
+        "auto";
+
 
       try {
+
         videos[1].load();
+
       } catch (error) {
+
         // Ignorar
+
       }
 
     }
