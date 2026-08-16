@@ -18,8 +18,6 @@
   <title>Experiência Fotográfica</title>
 
 
-  <!-- Poppins -->
-
   <link
     rel="preconnect"
     href="https://fonts.googleapis.com"
@@ -36,9 +34,6 @@
     rel="stylesheet"
   >
 
-
-  <!-- CSS -->
-
   <link
     rel="stylesheet"
     href="style.css"
@@ -49,27 +44,16 @@
 
 <body>
 
-
-  <!-- =====================================================
-       EXPERIÊNCIA
-  ====================================================== -->
-
   <main
     id="experience"
     class="experience"
-    aria-label="Experiência fotográfica"
   >
 
 
-    <!-- ===================================================
-         BARRAS DE PROGRESSO
-
-         9 barras = 9 vídeos
-
-         A barra do vídeo atual mostra o progresso.
-         As anteriores ficam completas.
-         As próximas ficam vazias.
-    ==================================================== -->
+    <!-- ==================================================
+         BARRAS DOS STORIES
+         Ficam ocultas durante o login.
+    =================================================== -->
 
     <div
       id="storyProgress"
@@ -143,14 +127,10 @@
     </div>
 
 
-    <!-- ===================================================
-         ÁREA PRINCIPAL DOS STORIES
 
-         A navegação lateral será invisível:
-         esquerda = anterior
-         direita = próxima
-         centro = segurar para pausar
-    ==================================================== -->
+    <!-- ==================================================
+         ÁREA VERTICAL
+    =================================================== -->
 
     <div
       id="storyStage"
@@ -159,9 +139,7 @@
 
 
       <!-- =================================================
-           TELA 0 — LOGIN
-           
-           Não participa do comportamento de segurar.
+           LOGIN
       ================================================== -->
 
       <section
@@ -175,6 +153,7 @@
           class="scene-video"
           autoplay
           muted
+          loop
           playsinline
           webkit-playsinline
           preload="auto"
@@ -190,11 +169,8 @@
         </video>
 
 
-        <!-- Login -->
-
         <div
           class="login-panel"
-          aria-label="Acesso à proposta"
         >
 
           <input
@@ -222,8 +198,6 @@
           <div
             id="passwordError"
             class="password-error"
-            role="alert"
-            aria-live="polite"
           >
             Senha incorreta.
           </div>
@@ -241,7 +215,6 @@
       <section
         class="scene story-scene"
         data-scene="1"
-        data-story="1"
       >
 
         <video
@@ -271,7 +244,6 @@
       <section
         class="scene story-scene"
         data-scene="2"
-        data-story="2"
       >
 
         <video
@@ -295,13 +267,12 @@
 
 
       <!-- =================================================
-           STORY 3 — CLARIDADE
+           STORY 3
       ================================================== -->
 
       <section
         class="scene story-scene"
         data-scene="3"
-        data-story="3"
       >
 
         <video
@@ -325,13 +296,12 @@
 
 
       <!-- =================================================
-           STORY 4 — CONTRASTE
+           STORY 4
       ================================================== -->
 
       <section
         class="scene story-scene"
         data-scene="4"
-        data-story="4"
       >
 
         <video
@@ -355,13 +325,12 @@
 
 
       <!-- =================================================
-           STORY 5 — CONTROLE
+           STORY 5
       ================================================== -->
 
       <section
         class="scene story-scene"
         data-scene="5"
-        data-story="5"
       >
 
         <video
@@ -385,13 +354,12 @@
 
 
       <!-- =================================================
-           STORY 6 — INCLUÍDO
+           STORY 6
       ================================================== -->
 
       <section
         class="scene story-scene"
         data-scene="6"
-        data-story="6"
       >
 
         <video
@@ -415,13 +383,12 @@
 
 
       <!-- =================================================
-           STORY 7 — INVESTIMENTO
+           STORY 7
       ================================================== -->
 
       <section
         class="scene story-scene"
         data-scene="7"
-        data-story="7"
       >
 
         <video
@@ -445,13 +412,12 @@
 
 
       <!-- =================================================
-           STORY 8 — ENCERRAMENTO
+           STORY 8
       ================================================== -->
 
       <section
         class="scene story-scene"
         data-scene="8"
-        data-story="8"
       >
 
         <video
@@ -476,23 +442,11 @@
     </div>
 
 
-    <!-- =====================================================
-         ÁREAS DE TOQUE
 
-         São invisíveis.
-
-         ESQUERDA:
-         volta
-
-         DIREITA:
-         avança
-
-         CENTRO:
-         segurar = pausa
-
-         O centro ocupa a maior área para reproduzir
-         naturalmente o comportamento dos Stories.
-    ====================================================== -->
+    <!-- ==================================================
+         ÁREAS DE INTERAÇÃO
+         Só ficam ativas depois do login.
+    =================================================== -->
 
     <div
       id="storyControls"
@@ -505,12 +459,10 @@
         class="story-hit-area story-prev"
       ></div>
 
-
       <div
         id="storyPause"
         class="story-hit-area story-pause"
       ></div>
-
 
       <div
         id="storyNext"
@@ -520,9 +472,10 @@
     </div>
 
 
-    <!-- =====================================================
-         TRANSIÇÃO PARA PRETO
-    ====================================================== -->
+
+    <!-- ==================================================
+         TRANSIÇÃO
+    =================================================== -->
 
     <div
       id="blackTransition"
@@ -534,14 +487,7 @@
   </main>
 
 
-  <!-- =====================================================
-       JAVASCRIPT
-  ====================================================== -->
-
-  <script
-    src="script.js"
-  ></script>
-
+  <script src="script.js"></script>
 
 </body>
 
