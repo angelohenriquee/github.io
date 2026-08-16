@@ -12,11 +12,13 @@ const CONFIG = {
    ELEMENTOS
 ========================================================= */
 
-const scenes = [...document.querySelectorAll(".scene")];
+const scenes =
+  [...document.querySelectorAll(".scene")];
 
-const videos = scenes.map(scene =>
-  scene.querySelector(".scene-video")
-);
+const videos =
+  scenes.map(scene =>
+    scene.querySelector(".scene-video")
+  );
 
 const navigation =
   document.getElementById("navigation");
@@ -40,7 +42,9 @@ const passwordError =
   document.getElementById("passwordError");
 
 const blackTransition =
-  document.getElementById("blackTransition");
+  document.getElementById(
+    "blackTransition"
+  );
 
 
 /* =========================================================
@@ -57,16 +61,18 @@ let holdPointerId = null;
 
 let sceneFinished = false;
 
-let blackTimer = null;
-
 let navigationTimer = null;
+
+let blackTimer = null;
 
 
 /* =========================================================
    TEMPOS
 ========================================================= */
 
-const BUTTON_DELAY = 700;
+const BUTTON_DELAY = 650;
+
+const BLACK_DELAY = 250;
 
 const TRANSITION_DURATION = 900;
 
@@ -77,22 +83,30 @@ const TRANSITION_DURATION = 900;
 
 function clearTimers() {
 
-  window.clearTimeout(blackTimer);
+  window.clearTimeout(
+    navigationTimer
+  );
 
-  window.clearTimeout(navigationTimer);
+  window.clearTimeout(
+    blackTimer
+  );
 
 }
 
 
 /* =========================================================
-   ESCONDER NAVEGAÇÃO
+   NAVEGAÇÃO
 ========================================================= */
 
 function hideNavigation() {
 
-  window.clearTimeout(navigationTimer);
+  window.clearTimeout(
+    navigationTimer
+  );
 
-  navigation.classList.remove("visible");
+  navigation.classList.remove(
+    "visible"
+  );
 
   backButton.hidden = true;
 
@@ -100,68 +114,18 @@ function hideNavigation() {
 }
 
 
-/* =========================================================
-   RESET DO FINAL
-========================================================= */
-
-function resetFinishingState(scene) {
-
-  if (!scene) return;
-
-  scene.classList.remove("finishing");
-
-  const endFrame =
-    scene.querySelector(".end-frame");
-
-  if (endFrame) {
-
-    endFrame.style.backgroundImage = "";
-
-  }
-}
-
-
-/* =========================================================
-   RESET DO VÍDEO
-========================================================= */
-
-function resetVideo(video) {
-
-  if (!video) return;
-
-  video.pause();
-
-  try {
-
-    video.currentTime = 0;
-
-  } catch (error) {
-
-    // Ignorar
-
-  }
-
-}
-
-
-/* =========================================================
-   ETIQUETAS DOS BOTÕES
-========================================================= */
-
-function updateNavigationLabels() {
+function updateNavigation() {
 
   /*
-    O botão Avançar precisa SEMPRE
-    voltar a ficar disponível quando
-    a navegação for mostrada.
+    O botão Avançar fica sempre disponível.
   */
 
   nextButton.hidden = false;
 
 
   /*
-    Na primeira tela da experiência,
-    não existe botão Voltar.
+    Primeira cena da experiência:
+    não existe Voltar.
   */
 
   if (currentScene === 1) {
@@ -197,117 +161,66 @@ function updateNavigationLabels() {
 }
 
 
-/* =========================================================
-   MOSTRAR NAVEGAÇÃO
-========================================================= */
-
 function showNavigation() {
 
-  window.clearTimeout(navigationTimer);
+  window.clearTimeout(
+    navigationTimer
+  );
 
-  navigationTimer = window.setTimeout(() => {
 
-    if (!unlocked) return;
+  navigationTimer =
+    window.setTimeout(() => {
 
-    updateNavigationLabels();
+      if (!unlocked) {
+        return;
+      }
 
-    navigation.classList.add(
-      "visible"
-    );
+      updateNavigation();
 
-  }, BUTTON_DELAY);
+      navigation.classList.add(
+        "visible"
+      );
+
+    }, BUTTON_DELAY);
 
 }
 
 
 /* =========================================================
-   CAPTURAR ÚLTIMO FRAME
+   RESET
 ========================================================= */
 
-function captureLastFrame(
-  scene,
-  video
-) {
+function resetVideo(video) {
 
-  if (!scene || !video) {
+  if (!video) {
     return;
   }
 
-
-  const endFrame =
-    scene.querySelector(".end-frame");
-
-
-  if (!endFrame) {
-    return;
-  }
+  video.pause();
 
 
   try {
 
-    const videoWidth =
-      video.videoWidth || 1080;
-
-    const videoHeight =
-      video.videoHeight || 1920;
-
-
-    const canvas =
-      document.createElement("canvas");
-
-
-    canvas.width =
-      videoWidth;
-
-    canvas.height =
-      videoHeight;
-
-
-    const context =
-      canvas.getContext("2d");
-
-
-    context.drawImage(
-      video,
-      0,
-      0,
-      videoWidth,
-      videoHeight
-    );
-
-
-    const frame =
-      canvas.toDataURL(
-        "image/jpeg",
-        0.90
-      );
-
-
-    endFrame.style.backgroundImage =
-      `url("${frame}")`;
-
-
-    endFrame.style.backgroundSize =
-      "cover";
-
-    endFrame.style.backgroundPosition =
-      "center";
-
-    endFrame.style.backgroundRepeat =
-      "no-repeat";
-
+    video.currentTime = 0;
 
   } catch (error) {
 
-    /*
-      Mesmo se a captura falhar,
-      o dissolve para preto continua.
-    */
-
-    endFrame.style.backgroundImage =
-      "";
+    // Ignorar
 
   }
+
+}
+
+
+function resetFinishing(scene) {
+
+  if (!scene) {
+    return;
+  }
+
+  scene.classList.remove(
+    "finishing"
+  );
 
 }
 
@@ -339,13 +252,37 @@ function finishScene(index) {
 
 
   /*
-    Mantém o vídeo no último frame.
+    O próprio elemento <video>
+    já está parado no último frame.
+
+    Não usamos canvas.
+    Isso é deliberado para melhorar
+    a compatibilidade com Safari/iPhone.
+  */
+
+  video.pause();
+
+
+  /*
+    Garante que estamos próximos do último
+    frame sem forçar uma nova busca.
   */
 
   try {
 
-    video.currentTime =
-      video.duration;
+    if (
+      Number.isFinite(
+        video.duration
+      )
+    ) {
+
+      video.currentTime =
+        Math.max(
+          0,
+          video.duration - 0.01
+        );
+
+    }
 
   } catch (error) {
 
@@ -355,18 +292,8 @@ function finishScene(index) {
 
 
   /*
-    Captura o último frame.
-  */
-
-  captureLastFrame(
-    scene,
-    video
-  );
-
-
-  /*
-    Começa o desfoque
-    do último frame.
+    Primeiro:
+    último frame + blur.
   */
 
   scene.classList.add(
@@ -375,8 +302,8 @@ function finishScene(index) {
 
 
   /*
-    Depois começa a dissolução
-    para preto.
+    Depois:
+    atenuar para preto.
   */
 
   blackTimer =
@@ -386,12 +313,12 @@ function finishScene(index) {
         "active"
       );
 
-    }, 250);
+    }, BLACK_DELAY);
 
 
   /*
     Depois do preto,
-    libera os botões.
+    aparecem os botões.
   */
 
   navigationTimer =
@@ -401,21 +328,107 @@ function finishScene(index) {
         return;
       }
 
-
-      updateNavigationLabels();
-
+      updateNavigation();
 
       navigation.classList.add(
         "visible"
       );
 
-    }, 850);
+    }, BUTTON_DELAY + BLACK_DELAY);
 
 }
 
 
 /* =========================================================
-   REPRODUZIR CENA
+   FALLBACK PARA IOS
+========================================================= */
+
+/*
+  Alguns navegadores móveis podem ser discretos
+  com o evento "ended". Por isso também observamos
+  o progresso do vídeo e tratamos o momento final.
+*/
+
+function attachEndDetection(
+  scene,
+  video
+) {
+
+  if (
+    scene.dataset.endBound ===
+    "true"
+  ) {
+
+    return;
+
+  }
+
+
+  scene.dataset.endBound =
+    "true";
+
+
+  video.addEventListener(
+    "ended",
+    () => {
+
+      finishScene(
+        currentScene
+      );
+
+    }
+  );
+
+
+  video.addEventListener(
+    "timeupdate",
+    () => {
+
+      if (
+        sceneFinished ||
+        video.readyState < 2
+      ) {
+
+        return;
+
+      }
+
+
+      if (
+        !Number.isFinite(
+          video.duration
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      /*
+        50 ms antes do final.
+      */
+
+      if (
+        video.duration -
+          video.currentTime <=
+        0.05
+      ) {
+
+        finishScene(
+          currentScene
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   REPRODUÇÃO
 ========================================================= */
 
 function playScene(index) {
@@ -432,25 +445,34 @@ function playScene(index) {
   }
 
 
-  sceneFinished = false;
-
   clearTimers();
 
-  resetFinishingState(
+
+  sceneFinished = false;
+
+  isHolding = false;
+
+  holdPointerId = null;
+
+
+  resetFinishing(
     scene
   );
+
 
   blackTransition.classList.remove(
     "active"
   );
 
+
   hideNavigation();
+
 
   resetVideo(video);
 
 
   /*
-    Login sem áudio.
+    Login sempre mudo.
   */
 
   if (index === 0) {
@@ -464,55 +486,29 @@ function playScene(index) {
   }
 
 
+  video.playsInline = true;
+
+
+  video.setAttribute(
+    "playsinline",
+    ""
+  );
+
+
+  video.setAttribute(
+    "webkit-playsinline",
+    ""
+  );
+
+
   /*
-    Reprodução.
+    Evento de finalização.
   */
 
-  const playVideo = () => {
-
-    const promise =
-      video.play();
-
-
-    if (promise) {
-
-      promise.catch(() => {
-
-        /*
-          Fallback sem áudio
-          caso o navegador bloqueie.
-        */
-
-        if (index !== 0) {
-
-          video.muted = true;
-
-          video.play().catch(() => {});
-
-        }
-
-      });
-
-    }
-
-  };
-
-
-  if (video.readyState >= 3) {
-
-    playVideo();
-
-  } else {
-
-    video.addEventListener(
-      "canplay",
-      playVideo,
-      {
-        once: true
-      }
-    );
-
-  }
+  attachEndDetection(
+    scene,
+    video
+  );
 
 
   /*
@@ -531,21 +527,61 @@ function playScene(index) {
 
 
   /*
-    Final.
+    Reprodução.
   */
 
-  video.onended = () => {
+  function startPlayback() {
 
-    finishScene(index);
+    const promise =
+      video.play();
 
-  };
+
+    if (promise) {
+
+      promise.catch(() => {
+
+        /*
+          Fallback silencioso.
+        */
+
+        if (index !== 0) {
+
+          video.muted = true;
+
+          video.play()
+            .catch(() => {});
+
+        }
+
+      });
+
+    }
+
+  }
 
 
-  /*
-    Pré-carrega a próxima tela.
-  */
+  if (
+    video.readyState >= 3
+  ) {
 
-  preloadNext(index);
+    startPlayback();
+
+  } else {
+
+    video.addEventListener(
+      "canplay",
+      startPlayback,
+      {
+        once: true
+      }
+    );
+
+  }
+
+
+  preloadNext(
+    index
+  );
 
 }
 
@@ -641,7 +677,9 @@ function resumeVideo(video) {
 
   if (promise) {
 
-    promise.catch(() => {});
+    promise.catch(
+      () => {}
+    );
 
   }
 
@@ -676,7 +714,8 @@ function attachHoldPause(
     event => {
 
       if (
-        event.pointerType === "mouse" &&
+        event.pointerType ===
+          "mouse" &&
         event.button !== 0
       ) {
 
@@ -712,7 +751,9 @@ function attachHoldPause(
         event.pointerId;
 
 
-      pauseVideo(video);
+      pauseVideo(
+        video
+      );
 
     },
     {
@@ -751,7 +792,9 @@ function attachHoldPause(
         !video.ended
       ) {
 
-        resumeVideo(video);
+        resumeVideo(
+          video
+        );
 
       }
 
@@ -787,7 +830,9 @@ function attachHoldPause(
         !video.ended
       ) {
 
-        resumeVideo(video);
+        resumeVideo(
+          video
+        );
 
       }
 
@@ -801,7 +846,7 @@ function attachHoldPause(
 
 
 /* =========================================================
-   TROCAR CENA
+   TROCA DE CENA
 ========================================================= */
 
 function goToScene(index) {
@@ -816,6 +861,9 @@ function goToScene(index) {
   }
 
 
+  clearTimers();
+
+
   const previousScene =
     scenes[currentScene];
 
@@ -826,14 +874,11 @@ function goToScene(index) {
     videos[currentScene];
 
 
-  clearTimers();
-
+  sceneFinished = false;
 
   isHolding = false;
 
   holdPointerId = null;
-
-  sceneFinished = false;
 
 
   hideNavigation();
@@ -844,7 +889,7 @@ function goToScene(index) {
   );
 
 
-  resetFinishingState(
+  resetFinishing(
     previousScene
   );
 
@@ -939,7 +984,9 @@ function unlockExperience() {
     );
 
 
-    goToScene(1);
+    goToScene(
+      1
+    );
 
   }, 350);
 
@@ -947,7 +994,7 @@ function unlockExperience() {
 
 
 /* =========================================================
-   BOTÃO ENTRAR
+   LOGIN
 ========================================================= */
 
 enterButton.addEventListener(
@@ -956,16 +1003,13 @@ enterButton.addEventListener(
 );
 
 
-/* =========================================================
-   ENTER NO CAMPO DE SENHA
-========================================================= */
-
 passwordInput.addEventListener(
   "keydown",
   event => {
 
     if (
-      event.key === "Enter"
+      event.key ===
+      "Enter"
     ) {
 
       event.preventDefault();
@@ -977,10 +1021,6 @@ passwordInput.addEventListener(
   }
 );
 
-
-/* =========================================================
-   LIMPAR ERRO
-========================================================= */
 
 passwordInput.addEventListener(
   "input",
@@ -1078,7 +1118,7 @@ nextButton.addEventListener(
 
 
 /* =========================================================
-   LOGIN
+   LOGIN VIDEO
 ========================================================= */
 
 const loginVideo =
@@ -1092,25 +1132,13 @@ if (loginVideo) {
   loginVideo.playsInline = true;
 
 
-  loginVideo.setAttribute(
-    "playsinline",
-    ""
-  );
-
-
-  loginVideo.setAttribute(
-    "webkit-playsinline",
-    ""
-  );
-
-
   loginVideo.addEventListener(
     "canplay",
     () => {
 
-      loginVideo.play().catch(
-        () => {}
-      );
+      loginVideo
+        .play()
+        .catch(() => {});
 
     },
     {
@@ -1122,7 +1150,7 @@ if (loginVideo) {
 
 
 /* =========================================================
-   BLOQUEIO DE MENU DE CONTEXTO
+   MENU DE CONTEXTO
 ========================================================= */
 
 document.addEventListener(
@@ -1144,7 +1172,7 @@ document.addEventListener(
 
 
 /* =========================================================
-   BLOQUEIO DE GESTOS DE ZOOM
+   ZOOM IOS
 ========================================================= */
 
 document.addEventListener(
@@ -1209,19 +1237,22 @@ window.addEventListener(
     );
 
 
-    scenes.forEach(scene => {
+    scenes.forEach(
+      scene => {
 
-      if (
-        scene.dataset.scene !== "0"
-      ) {
+        if (
+          scene.dataset.scene !==
+          "0"
+        ) {
 
-        scene.classList.remove(
-          "active"
-        );
+          scene.classList.remove(
+            "active"
+          );
+
+        }
 
       }
-
-    });
+    );
 
 
     scenes[0].classList.add(
