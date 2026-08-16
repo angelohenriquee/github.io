@@ -8,125 +8,495 @@ const CONFIG = {
 };
 
 
+/* =========================================================
+   ELEMENTOS
+========================================================= */
+
 const scenes = [...document.querySelectorAll(".scene")];
-const videos = scenes.map(scene => scene.querySelector("video"));
 
-const navigation = document.querySelector(".navigation");
-const backButton = document.getElementById("backButton");
-const nextButton = document.getElementById("nextButton");
+const videos = scenes.map(scene =>
+  scene.querySelector(".scene-video")
+);
 
-const passwordInput = document.getElementById("password");
-const enterButton = document.getElementById("enterButton");
-const loginPanel = document.querySelector(".login-panel");
-const passwordError = document.getElementById("passwordError");
+const navigation =
+  document.getElementById("navigation");
+
+const backButton =
+  document.getElementById("backButton");
+
+const nextButton =
+  document.getElementById("nextButton");
+
+const passwordInput =
+  document.getElementById("password");
+
+const enterButton =
+  document.getElementById("enterButton");
+
+const loginPanel =
+  document.querySelector(".login-panel");
+
+const passwordError =
+  document.getElementById("passwordError");
+
+const blackTransition =
+  document.getElementById("blackTransition");
+
+
+/* =========================================================
+   ESTADO
+========================================================= */
 
 let currentScene = 0;
+
 let unlocked = false;
 
-const BUTTON_DELAY = 750;
-const TRANSITION_TIME = 900;
+let isHolding = false;
+
+let holdPointerId = null;
+
+let sceneFinished = false;
+
+let finishingTimer = null;
+
+let blackTimer = null;
+
+let navigationTimer = null;
 
 
-/* =========================
-   NAVEGAÇÃO
-========================= */
+/* =========================================================
+   TEMPOS
+========================================================= */
+
+const BUTTON_DELAY = 700;
+
+const FINISH_DURATION = 850;
+
+const BLACK_DURATION = 900;
+
+const TRANSITION_DURATION = 900;
+
+
+/* =========================================================
+   UTILITÁRIOS
+========================================================= */
+
+function clearTimers() {
+
+  window.clearTimeout(finishingTimer);
+  window.clearTimeout(blackTimer);
+  window.clearTimeout(navigationTimer);
+
+}
+
 
 function hideNavigation() {
+
+  window.clearTimeout(navigationTimer);
+
   navigation.classList.remove("visible");
 
   backButton.hidden = true;
+
   nextButton.hidden = true;
 }
 
 
-function showNavigation() {
-  window.setTimeout(() => {
+function resetFinishingState(scene) {
 
-    if (!unlocked) return;
+  if (!scene) return;
 
-    navigation.classList.add("visible");
+  scene.classList.remove("finishing");
 
-    if (currentScene === 1) {
-      backButton.hidden = true;
-    } else {
-      backButton.hidden = false;
-    }
+  const endFrame =
+    scene.querySelector(".end-frame");
 
-    if (currentScene === scenes.length - 1) {
-      nextButton.textContent = "Quero essa experiência";
-    } else {
-      nextButton.textContent = "Avançar";
-    }
+  if (endFrame) {
 
-    nextButton.hidden = false;
+    endFrame.style.backgroundImage = "";
 
-  }, BUTTON_DELAY);
+    endFrame.style.opacity = "";
+
+  }
 }
 
-
-/* =========================
-   VÍDEOS
-========================= */
 
 function resetVideo(video) {
 
   if (!video) return;
 
   video.pause();
-  video.currentTime = 0;
+
+  try {
+    video.currentTime = 0;
+  } catch (error) {
+    // Alguns navegadores podem bloquear currentTime
+    // enquanto o vídeo ainda não foi carregado.
+  }
 }
 
 
-function playScene(index) {
+/* =========================================================
+   ENQUADRAMENTO
+========================================================= */
 
-  const video = videos[index];
+function forceVideoPosition(video) {
 
-  if (!video) {
-    showNavigation();
+  if (!video) return;
+
+  video.style.position = "absolute";
+
+}
+
+
+/* =========================================================
+   NAVEGAÇÃO
+========================================================= */
+
+function updateNavigationLabels() {
+
+  if (currentScene === 1) {
+
+    backButton.hidden = true;
+
+  } else {
+
+    backButton.hidden = false;
+
+  }
+
+
+  if (currentScene === scenes.length - 1) {
+
+    nextButton.textContent =
+      "Quero essa experiência";
+
+  } else {
+
+    nextButton.textContent =
+      "Avançar";
+
+  }
+
+}
+
+
+function showNavigation() {
+
+  clearTimeout(navigationTimer);
+
+  navigationTimer = window.setTimeout(() => {
+
+    if (!unlocked) return;
+
+    updateNavigationLabels();
+
+    navigation.classList.add("visible");
+
+  }, BUTTON_DELAY);
+}
+
+
+/* =========================================================
+   CAPTURA DO ÚLTIMO FRAME
+========================================================= */
+
+function captureLastFrame(scene, video) {
+
+  if (!scene || !video) {
     return;
   }
 
-  resetVideo(video);
+  const endFrame =
+    scene.querySelector(".end-frame");
+
+  if (!endFrame) {
+    return;
+  }
 
   /*
-    Depois que a pessoa interage com a senha,
-    tentamos reproduzir o vídeo com áudio.
+    O vídeo já chegou ao fim.
+    Tentamos capturar exatamente o quadro final
+    em um canvas invisível.
   */
 
-  video.muted = false;
+  try {
 
-  const playPromise = video.play();
+    const videoWidth =
+      video.videoWidth || 1080;
 
-  if (playPromise) {
+    const videoHeight =
+      video.videoHeight || 1920;
 
-    playPromise.catch(() => {
+    const canvas =
+      document.createElement("canvas");
 
-      /*
-        Caso o navegador bloqueie o áudio,
-        o vídeo permanece disponível.
-      */
+    canvas.width = videoWidth;
 
-    });
+    canvas.height = videoHeight;
+
+    const context =
+      canvas.getContext("2d");
+
+    context.drawImage(
+      video,
+      0,
+      0,
+      videoWidth,
+      videoHeight
+    );
+
+    const frame =
+      canvas.toDataURL("image/jpeg", 0.90);
+
+    endFrame.style.backgroundImage =
+      `url("${frame}")`;
+
+    endFrame.style.backgroundSize =
+      "cover";
+
+    endFrame.style.backgroundPosition =
+      "center";
+
+    endFrame.style.backgroundRepeat =
+      "no-repeat";
+
+  } catch (error) {
+
+    /*
+      Se o navegador impedir a captura,
+      a camada preta ainda fará a transição.
+    */
+
+    endFrame.style.backgroundImage = "";
+
+  }
+
+}
+
+
+/* =========================================================
+   FINAL DO VÍDEO
+========================================================= */
+
+function finishScene(index) {
+
+  const scene = scenes[index];
+
+  const video = videos[index];
+
+  if (!scene || !video) {
+    return;
+  }
+
+  if (sceneFinished) {
+    return;
+  }
+
+  sceneFinished = true;
+
+  /*
+    Mantém o vídeo exatamente no último frame.
+  */
+
+  try {
+    video.currentTime = video.duration;
+  } catch (error) {
+    // Ignorar
+  }
+
+
+  /*
+    Captura o quadro final antes da camada
+    começar a desfocar.
+  */
+
+  captureLastFrame(scene, video);
+
+
+  /*
+    Começa:
+    último frame → blur → preto.
+  */
+
+  scene.classList.add("finishing");
+
+
+  /*
+    Depois da primeira parte do dissolve,
+    entra a camada preta.
+  */
+
+  blackTimer = window.setTimeout(() => {
+
+    blackTransition.classList.add("active");
+
+  }, 250);
+
+
+  /*
+    Quando a transição estiver praticamente preta,
+    aparecem os botões.
+  */
+
+  navigationTimer = window.setTimeout(() => {
+
+    if (!unlocked) return;
+
+    updateNavigationLabels();
+
+    navigation.classList.add("visible");
+
+  }, FINISH_DURATION);
+
+
+  /*
+    Mantemos a tela preta enquanto a pessoa
+    aguarda a próxima interação.
+  */
+
+}
+
+
+/* =========================================================
+   REPRODUÇÃO
+========================================================= */
+
+function playScene(index) {
+
+  const scene = scenes[index];
+
+  const video = videos[index];
+
+  if (!scene || !video) {
+    return;
+  }
+
+  sceneFinished = false;
+
+  clearTimeout(finishingTimer);
+  clearTimeout(blackTimer);
+  clearTimeout(navigationTimer);
+
+  resetFinishingState(scene);
+
+  blackTransition.classList.remove("active");
+
+  hideNavigation();
+
+
+  forceVideoPosition(video);
+
+  resetVideo(video);
+
+
+  /*
+    A tela de login fica sempre sem áudio.
+  */
+
+  if (index === 0) {
+
+    video.muted = true;
+
+  } else {
+
+    /*
+      Depois do clique em Entrar,
+      tentamos reproduzir com áudio.
+    */
+
+    video.muted = false;
 
   }
 
 
   /*
-    Quando o vídeo termina,
-    ele permanece parado no último frame.
+    Quando o navegador já tiver dados suficientes,
+    reproduz o vídeo.
+  */
+
+  const playVideo = () => {
+
+    const promise = video.play();
+
+    if (promise) {
+
+      promise.catch(() => {
+
+        /*
+          Em caso de bloqueio de áudio,
+          tentamos uma segunda vez sem áudio.
+        */
+
+        if (index !== 0) {
+
+          video.muted = true;
+
+          video.play().catch(() => {});
+
+        }
+
+      });
+
+    }
+
+  };
+
+
+  if (video.readyState >= 3) {
+
+    playVideo();
+
+  } else {
+
+    video.addEventListener(
+      "canplay",
+      playVideo,
+      { once: true }
+    );
+
+  }
+
+
+  /*
+    O login não usa o comportamento de
+    "segurar para pausar".
+  */
+
+  if (index !== 0) {
+
+    attachHoldPause(scene, video);
+
+  }
+
+
+  /*
+    Quando o vídeo termina:
+    capturamos o último frame,
+    aplicamos blur,
+    dissolvemos para preto
+    e mostramos os botões.
   */
 
   video.onended = () => {
 
-    showNavigation();
+    finishScene(index);
 
   };
+
+
+  /*
+    Pré-carrega a próxima cena.
+  */
+
+  preloadNext(index);
+
 }
 
 
-/* =========================
-   PRÉ-CARREGAR PRÓXIMO VÍDEO
-========================= */
+/* =========================================================
+   PRÉ-CARREGAMENTO
+========================================================= */
 
 function preloadNext(index) {
 
@@ -136,85 +506,356 @@ function preloadNext(index) {
     return;
   }
 
-  const nextVideo = videos[nextIndex];
+  const nextVideo =
+    videos[nextIndex];
 
   if (!nextVideo) {
     return;
   }
 
   nextVideo.preload = "auto";
-  nextVideo.load();
+
+  try {
+    nextVideo.load();
+  } catch (error) {
+    // Ignorar
+  }
+
 }
 
 
-/* =========================
-   TROCA DE CENA
-========================= */
+/* =========================================================
+   SEGURAR = PAUSAR
+========================================================= */
 
-function goToScene(index) {
+function pauseVideo(video) {
 
-  if (index < 1 || index >= scenes.length) {
+  if (!video) return;
+
+  if (!video.paused && !video.ended) {
+
+    video.pause();
+
+  }
+
+}
+
+
+function resumeVideo(video) {
+
+  if (!video) return;
+
+  if (video.ended) {
     return;
   }
 
-  hideNavigation();
+  const promise =
+    video.play();
 
-  const previousScene = scenes[currentScene];
-  const nextScene = scenes[index];
+  if (promise) {
+
+    promise.catch(() => {});
+
+  }
+
+}
+
+
+function attachHoldPause(scene, video) {
+
+  /*
+    Evita registrar o mesmo conjunto
+    de eventos repetidas vezes.
+  */
+
+  if (scene.dataset.holdBound === "true") {
+    return;
+  }
+
+  scene.dataset.holdBound = "true";
 
 
   /*
-    A nova cena entra por dissolve.
+    TOUCH / POINTER
+  */
+
+  scene.addEventListener(
+    "pointerdown",
+    event => {
+
+      /*
+        Só reagimos ao ponteiro principal.
+      */
+
+      if (
+        event.pointerType === "mouse" &&
+        event.button !== 0
+      ) {
+        return;
+      }
+
+
+      /*
+        Se o usuário estiver pressionando um
+        elemento de navegação, não pausamos o vídeo.
+      */
+
+      if (
+        event.target.closest(".navigation") ||
+        event.target.closest(".login-panel")
+      ) {
+        return;
+      }
+
+
+      if (
+        sceneFinished ||
+        video.ended
+      ) {
+        return;
+      }
+
+
+      isHolding = true;
+
+      holdPointerId =
+        event.pointerId;
+
+
+      pauseVideo(video);
+
+    },
+    {
+      passive: true
+    }
+  );
+
+
+  scene.addEventListener(
+    "pointerup",
+    event => {
+
+      if (
+        holdPointerId !== null &&
+        event.pointerId !== holdPointerId
+      ) {
+        return;
+      }
+
+
+      if (!isHolding) {
+        return;
+      }
+
+
+      isHolding = false;
+
+      holdPointerId = null;
+
+
+      if (
+        !sceneFinished &&
+        !video.ended
+      ) {
+
+        resumeVideo(video);
+
+      }
+
+    },
+    {
+      passive: true
+    }
+  );
+
+
+  scene.addEventListener(
+    "pointercancel",
+    event => {
+
+      if (
+        holdPointerId !== null &&
+        event.pointerId !== holdPointerId
+      ) {
+        return;
+      }
+
+
+      isHolding = false;
+
+      holdPointerId = null;
+
+
+      if (
+        !sceneFinished &&
+        !video.ended
+      ) {
+
+        resumeVideo(video);
+
+      }
+
+    },
+    {
+      passive: true
+    }
+  );
+
+
+  scene.addEventListener(
+    "pointerleave",
+    event => {
+
+      /*
+        No mouse, sair da área encerra
+        o comportamento de pressão.
+      */
+
+      if (
+        event.pointerType !== "mouse"
+      ) {
+        return;
+      }
+
+
+      if (!isHolding) {
+        return;
+      }
+
+
+      isHolding = false;
+
+      holdPointerId = null;
+
+
+      if (
+        !sceneFinished &&
+        !video.ended
+      ) {
+
+        resumeVideo(video);
+
+      }
+
+    },
+    {
+      passive: true
+    }
+  );
+
+}
+
+
+/* =========================================================
+   TROCA DE CENA
+========================================================= */
+
+function goToScene(index) {
+
+  if (
+    index < 1 ||
+    index >= scenes.length
+  ) {
+    return;
+  }
+
+
+  const previousScene =
+    scenes[currentScene];
+
+  const nextScene =
+    scenes[index];
+
+
+  const previousVideo =
+    videos[currentScene];
+
+
+  clearTimers();
+
+  isHolding = false;
+
+  holdPointerId = null;
+
+  sceneFinished = false;
+
+
+  hideNavigation();
+
+  blackTransition.classList.remove("active");
+
+
+  /*
+    Remove o estado visual da cena anterior.
+  */
+
+  resetFinishingState(previousScene);
+
+
+  /*
+    Ativa a nova cena.
   */
 
   nextScene.classList.add("active");
 
 
+  /*
+    Dissolve da cena anterior.
+  */
+
   window.setTimeout(() => {
 
     previousScene.classList.remove("active");
 
-  }, TRANSITION_TIME);
+  }, TRANSITION_DURATION);
 
 
   /*
     Para o vídeo anterior.
   */
 
-  resetVideo(videos[currentScene]);
+  if (previousVideo) {
+
+    previousVideo.pause();
+
+    try {
+      previousVideo.currentTime = 0;
+    } catch (error) {
+      // Ignorar
+    }
+
+  }
 
 
   currentScene = index;
 
 
   /*
-    Toda cena começa novamente do início.
-    Isso também acontece ao voltar.
+    Começa a nova cena do primeiro frame.
   */
 
   playScene(currentScene);
 
-
-  /*
-    Pré-carrega a próxima cena.
-  */
-
-  preloadNext(currentScene);
 }
 
 
-/* =========================
+/* =========================================================
    LOGIN
-========================= */
+========================================================= */
 
 function unlockExperience() {
 
-  const enteredPassword = passwordInput.value;
+  const enteredPassword =
+    passwordInput.value;
 
 
-  if (enteredPassword !== CONFIG.password) {
+  if (
+    enteredPassword !== CONFIG.password
+  ) {
 
-    passwordError.classList.add("visible");
+    passwordError.classList.add(
+      "visible"
+    );
 
     passwordInput.focus();
 
@@ -222,140 +863,336 @@ function unlockExperience() {
   }
 
 
-  passwordError.classList.remove("visible");
+  passwordError.classList.remove(
+    "visible"
+  );
+
 
   unlocked = true;
 
 
   /*
-    Esconde senha e botão Entrar.
+    Esconde o login.
   */
 
-  loginPanel.classList.add("hidden");
+  loginPanel.classList.add(
+    "hidden"
+  );
 
 
   /*
-    Dissolve da logo para a primeira cena
-    da experiência.
+    Pequena pausa para a transição
+    parecer parte da experiência.
   */
 
   window.setTimeout(() => {
 
-    scenes[0].classList.remove("active");
+    scenes[0].classList.remove(
+      "active"
+    );
+
 
     goToScene(1);
 
   }, 350);
+
 }
 
 
-/* =========================
-   BOTÃO ENTRAR
-========================= */
+/* =========================================================
+   LOGIN — BOTÃO
+========================================================= */
 
-enterButton.addEventListener("click", unlockExperience);
+enterButton.addEventListener(
+  "click",
+  unlockExperience
+);
 
 
-passwordInput.addEventListener("keydown", event => {
+/* =========================================================
+   LOGIN — ENTER
+========================================================= */
 
-  if (event.key === "Enter") {
+passwordInput.addEventListener(
+  "keydown",
+  event => {
 
-    unlockExperience();
+    if (event.key === "Enter") {
+
+      event.preventDefault();
+
+      unlockExperience();
+
+    }
 
   }
-
-});
-
-
-passwordInput.addEventListener("input", () => {
-
-  passwordError.classList.remove("visible");
-
-});
+);
 
 
-/* =========================
-   BOTÃO VOLTAR
-========================= */
+/* =========================================================
+   LIMPAR ERRO
+========================================================= */
 
-backButton.addEventListener("click", () => {
+passwordInput.addEventListener(
+  "input",
+  () => {
 
-  if (currentScene <= 1) {
-    return;
+    passwordError.classList.remove(
+      "visible"
+    );
+
   }
-
-  goToScene(currentScene - 1);
-
-});
+);
 
 
-/* =========================
-   BOTÃO AVANÇAR
-========================= */
+/* =========================================================
+   VOLTAR
+========================================================= */
 
-nextButton.addEventListener("click", () => {
+backButton.addEventListener(
+  "click",
+  event => {
 
+    event.preventDefault();
 
-  /*
-    Na última tela,
-    abre o WhatsApp.
-  */
-
-  if (currentScene === scenes.length - 1) {
-
-    const phone =
-      CONFIG.whatsappNumber.replace(/\D/g, "");
-
-    const message =
-      encodeURIComponent(CONFIG.whatsappMessage);
+    event.stopPropagation();
 
 
-    window.location.href =
-      `https://wa.me/${phone}?text=${message}`;
+    if (currentScene <= 1) {
+      return;
+    }
 
-    return;
+
+    goToScene(
+      currentScene - 1
+    );
+
   }
+);
 
 
-  goToScene(currentScene + 1);
+/* =========================================================
+   AVANÇAR
+========================================================= */
 
-});
+nextButton.addEventListener(
+  "click",
+  event => {
+
+    event.preventDefault();
+
+    event.stopPropagation();
 
 
-/* =========================
-   VÍDEO DA LOGO
-========================= */
+    /*
+      Última tela:
+      abre WhatsApp.
+    */
 
-const loginVideo = videos[0];
+    if (
+      currentScene ===
+      scenes.length - 1
+    ) {
+
+      const phone =
+        CONFIG.whatsappNumber
+          .replace(/\D/g, "");
+
+
+      const message =
+        encodeURIComponent(
+          CONFIG.whatsappMessage
+        );
+
+
+      if (!phone) {
+
+        return;
+
+      }
+
+
+      window.location.href =
+        `https://wa.me/${phone}?text=${message}`;
+
+      return;
+    }
+
+
+    goToScene(
+      currentScene + 1
+    );
+
+  }
+);
+
+
+/* =========================================================
+   LOGIN — INICIALIZAÇÃO
+========================================================= */
+
+const loginVideo =
+  videos[0];
 
 
 if (loginVideo) {
 
+  loginVideo.muted = true;
+
+  loginVideo.playsInline = true;
+
+  loginVideo.setAttribute(
+    "playsinline",
+    ""
+  );
+
+  loginVideo.setAttribute(
+    "webkit-playsinline",
+    ""
+  );
+
+
   loginVideo.addEventListener(
-    "canplaythrough",
+    "canplay",
     () => {
 
       loginVideo.play().catch(() => {});
 
     },
-    { once: true }
+    {
+      once: true
+    }
   );
 
 }
 
 
-/* =========================
-   PRÉ-CARREGAMENTO INICIAL
-========================= */
+/* =========================================================
+   BLOQUEIOS EXTRAS
+========================================================= */
 
-window.addEventListener("load", () => {
+document.addEventListener(
+  "contextmenu",
+  event => {
 
-  if (videos[1]) {
+    /*
+      Evita menu de contexto sobre os vídeos.
+    */
 
-    videos[1].preload = "auto";
+    if (
+      event.target.closest(".scene")
+    ) {
 
-    videos[1].load();
+      event.preventDefault();
+
+    }
 
   }
+);
 
-});
+
+/*
+  Impede o gesto de zoom da página
+  em navegadores que ainda respeitam
+  este tipo de evento.
+*/
+
+document.addEventListener(
+  "gesturestart",
+  event => {
+
+    event.preventDefault();
+
+  },
+  {
+    passive: false
+  }
+);
+
+
+document.addEventListener(
+  "gesturechange",
+  event => {
+
+    event.preventDefault();
+
+  },
+  {
+    passive: false
+  }
+);
+
+
+document.addEventListener(
+  "gestureend",
+  event => {
+
+    event.preventDefault();
+
+  },
+  {
+    passive: false
+  }
+);
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
+
+window.addEventListener(
+  "load",
+  () => {
+
+    /*
+      Garante que a primeira cena esteja
+      sempre no começo.
+    */
+
+    currentScene = 0;
+
+    unlocked = false;
+
+    sceneFinished = false;
+
+    hideNavigation();
+
+    blackTransition.classList.remove(
+      "active"
+    );
+
+
+    scenes.forEach(scene => {
+
+      if (
+        scene.dataset.scene !== "0"
+      ) {
+
+        scene.classList.remove(
+          "active"
+        );
+
+      }
+
+    });
+
+
+    scenes[0].classList.add(
+      "active"
+    );
+
+
+    if (videos[1]) {
+
+      videos[1].preload = "auto";
+
+      try {
+        videos[1].load();
+      } catch (error) {
+        // Ignorar
+      }
+
+    }
+
+  }
+);
