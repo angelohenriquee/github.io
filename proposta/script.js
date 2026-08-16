@@ -12,34 +12,92 @@ const CONFIG = {
    ELEMENTOS
 ========================================================= */
 
+const experience =
+  document.getElementById("experience");
+
+const storyStage =
+  document.getElementById("storyStage");
+
+const storyProgress =
+  document.getElementById("storyProgress");
+
+const progressSegments =
+  [
+    ...document.querySelectorAll(
+      ".story-segment"
+    )
+  ];
+
+const progressFills =
+  [
+    ...document.querySelectorAll(
+      ".story-fill"
+    )
+  ];
+
 const scenes =
-  [...document.querySelectorAll(".scene")];
+  [
+    ...document.querySelectorAll(
+      ".scene"
+    )
+  ];
 
 const videos =
   scenes.map(scene =>
-    scene.querySelector(".scene-video")
+    scene.querySelector(
+      ".scene-video"
+    )
   );
 
-const navigation =
-  document.getElementById("navigation");
 
-const backButton =
-  document.getElementById("backButton");
-
-const nextButton =
-  document.getElementById("nextButton");
+/* =========================================================
+   LOGIN
+========================================================= */
 
 const passwordInput =
-  document.getElementById("password");
+  document.getElementById(
+    "password"
+  );
 
 const enterButton =
-  document.getElementById("enterButton");
-
-const loginPanel =
-  document.querySelector(".login-panel");
+  document.getElementById(
+    "enterButton"
+  );
 
 const passwordError =
-  document.getElementById("passwordError");
+  document.getElementById(
+    "passwordError"
+  );
+
+const loginPanel =
+  document.querySelector(
+    ".login-panel"
+  );
+
+
+/* =========================================================
+   ÁREAS DE TOQUE
+========================================================= */
+
+const storyPrev =
+  document.getElementById(
+    "storyPrev"
+  );
+
+const storyPause =
+  document.getElementById(
+    "storyPause"
+  );
+
+const storyNext =
+  document.getElementById(
+    "storyNext"
+  );
+
+
+/* =========================================================
+   TRANSIÇÃO
+========================================================= */
 
 const blackTransition =
   document.getElementById(
@@ -51,143 +109,84 @@ const blackTransition =
    ESTADO
 ========================================================= */
 
+/*
+  0 = login
+  1 = primeiro vídeo da proposta
+  ...
+  8 = último vídeo
+*/
+
 let currentScene = 0;
 
 let unlocked = false;
 
 let isHolding = false;
 
-let holdPointerId = null;
+let activePointerId = null;
 
-let sceneFinished = false;
+let pointerStartX = 0;
 
-let navigationTimer = null;
+let pointerStartY = 0;
 
-let blackTimer = null;
+let pointerStartTime = 0;
 
+let holdActivated = false;
 
-/* =========================================================
-   TEMPOS
-========================================================= */
+let pauseWasManual = false;
 
-const BUTTON_DELAY = 650;
+let changingScene = false;
 
-const BLACK_DELAY = 250;
+let transitionTimer = null;
 
-const TRANSITION_DURATION = 900;
-
-
-/* =========================================================
-   LIMPEZA
-========================================================= */
-
-function clearTimers() {
-
-  window.clearTimeout(
-    navigationTimer
-  );
-
-  window.clearTimeout(
-    blackTimer
-  );
-
-}
+let progressFrame = null;
 
 
 /* =========================================================
-   NAVEGAÇÃO
+   CONSTANTES
 ========================================================= */
 
-function hideNavigation() {
+const SCENE_COUNT =
+  scenes.length;
 
-  window.clearTimeout(
-    navigationTimer
-  );
+const HOLD_THRESHOLD = 180;
 
-  navigation.classList.remove(
-    "visible"
-  );
+const SWIPE_THRESHOLD = 45;
 
-  backButton.hidden = true;
-
-  nextButton.hidden = true;
-}
+const TRANSITION_DURATION = 450;
 
 
-function updateNavigation() {
+/* =========================================================
+   FUNÇÕES GERAIS
+========================================================= */
 
-  /*
-    O botão Avançar fica sempre disponível.
-  */
-
-  nextButton.hidden = false;
-
-
-  /*
-    Primeira cena da experiência:
-    não existe Voltar.
-  */
-
-  if (currentScene === 1) {
-
-    backButton.hidden = true;
-
-  } else {
-
-    backButton.hidden = false;
-
-  }
-
-
-  /*
-    Última tela.
-  */
+function clearProgressFrame() {
 
   if (
-    currentScene ===
-    scenes.length - 1
+    progressFrame !== null
   ) {
 
-    nextButton.textContent =
-      "Quero essa experiência";
+    cancelAnimationFrame(
+      progressFrame
+    );
 
-  } else {
-
-    nextButton.textContent =
-      "Avançar";
+    progressFrame = null;
 
   }
 
 }
 
 
-function showNavigation() {
+function clearTransitionTimer() {
 
-  window.clearTimeout(
-    navigationTimer
+  clearTimeout(
+    transitionTimer
   );
-
-
-  navigationTimer =
-    window.setTimeout(() => {
-
-      if (!unlocked) {
-        return;
-      }
-
-      updateNavigation();
-
-      navigation.classList.add(
-        "visible"
-      );
-
-    }, BUTTON_DELAY);
 
 }
 
 
 /* =========================================================
-   RESET
+   VÍDEO
 ========================================================= */
 
 function resetVideo(video) {
@@ -195,6 +194,7 @@ function resetVideo(video) {
   if (!video) {
     return;
   }
+
 
   video.pause();
 
@@ -212,211 +212,216 @@ function resetVideo(video) {
 }
 
 
-function resetFinishing(scene) {
+function playVideo(video) {
 
-  if (!scene) {
-    return;
-  }
-
-  scene.classList.remove(
-    "finishing"
-  );
-
-}
-
-
-/* =========================================================
-   FINAL DA CENA
-========================================================= */
-
-function finishScene(index) {
-
-  const scene =
-    scenes[index];
-
-  const video =
-    videos[index];
-
-
-  if (!scene || !video) {
+  if (!video) {
     return;
   }
 
 
-  if (sceneFinished) {
-    return;
-  }
+  const promise =
+    video.play();
 
-
-  sceneFinished = true;
-
-
-  /*
-    O próprio elemento <video>
-    já está parado no último frame.
-
-    Não usamos canvas.
-    Isso é deliberado para melhorar
-    a compatibilidade com Safari/iPhone.
-  */
-
-  video.pause();
-
-
-  /*
-    Garante que estamos próximos do último
-    frame sem forçar uma nova busca.
-  */
-
-  try {
-
-    if (
-      Number.isFinite(
-        video.duration
-      )
-    ) {
-
-      video.currentTime =
-        Math.max(
-          0,
-          video.duration - 0.01
-        );
-
-    }
-
-  } catch (error) {
-
-    // Ignorar
-
-  }
-
-
-  /*
-    Primeiro:
-    último frame + blur.
-  */
-
-  scene.classList.add(
-    "finishing"
-  );
-
-
-  /*
-    Depois:
-    atenuar para preto.
-  */
-
-  blackTimer =
-    window.setTimeout(() => {
-
-      blackTransition.classList.add(
-        "active"
-      );
-
-    }, BLACK_DELAY);
-
-
-  /*
-    Depois do preto,
-    aparecem os botões.
-  */
-
-  navigationTimer =
-    window.setTimeout(() => {
-
-      if (!unlocked) {
-        return;
-      }
-
-      updateNavigation();
-
-      navigation.classList.add(
-        "visible"
-      );
-
-    }, BUTTON_DELAY + BLACK_DELAY);
-
-}
-
-
-/* =========================================================
-   FALLBACK PARA IOS
-========================================================= */
-
-/*
-  Alguns navegadores móveis podem ser discretos
-  com o evento "ended". Por isso também observamos
-  o progresso do vídeo e tratamos o momento final.
-*/
-
-function attachEndDetection(
-  scene,
-  video
-) {
 
   if (
-    scene.dataset.endBound ===
-    "true"
+    promise &&
+    typeof promise.catch ===
+      "function"
   ) {
+
+    promise.catch(() => {
+
+      /*
+        Caso o navegador bloqueie
+        reprodução com áudio,
+        tentamos silenciosamente.
+      */
+
+      if (!video.muted) {
+
+        video.muted = true;
+
+        video.play()
+          .catch(() => {});
+
+      }
+
+    });
+
+  }
+
+}
+
+
+/* =========================================================
+   PROGRESSO
+========================================================= */
+
+function resetProgressBars() {
+
+  progressFills.forEach(
+    (fill, index) => {
+
+      fill.style.width = "0%";
+
+      progressSegments[index]
+        .classList.remove(
+          "is-complete",
+          "is-upcoming"
+        );
+
+    }
+  );
+
+}
+
+
+function updateProgressBars() {
+
+  progressFills.forEach(
+    (fill, index) => {
+
+      if (
+        index < currentScene
+      ) {
+
+        fill.style.width =
+          "100%";
+
+        progressSegments[index]
+          .classList.add(
+            "is-complete"
+          );
+
+        progressSegments[index]
+          .classList.remove(
+            "is-upcoming"
+          );
+
+      }
+
+      else if (
+        index > currentScene
+      ) {
+
+        fill.style.width =
+          "0%";
+
+        progressSegments[index]
+          .classList.add(
+            "is-upcoming"
+          );
+
+        progressSegments[index]
+          .classList.remove(
+            "is-complete"
+          );
+
+      }
+
+      else {
+
+        progressSegments[index]
+          .classList.remove(
+            "is-complete",
+            "is-upcoming"
+          );
+
+      }
+
+    }
+  );
+
+}
+
+
+function animateProgress() {
+
+  const video =
+    videos[currentScene];
+
+  const fill =
+    progressFills[currentScene];
+
+
+  if (
+    !video ||
+    !fill
+  ) {
+
+    progressFrame = null;
 
     return;
 
   }
 
 
-  scene.dataset.endBound =
-    "true";
+  /*
+    Barra da cena atual.
+  */
 
+  if (
+    Number.isFinite(
+      video.duration
+    ) &&
+    video.duration > 0
+  ) {
 
-  video.addEventListener(
-    "ended",
-    () => {
-
-      finishScene(
-        currentScene
+    const ratio =
+      Math.min(
+        1,
+        Math.max(
+          0,
+          video.currentTime /
+            video.duration
+        )
       );
 
-    }
-  );
+
+    fill.style.width =
+      `${ratio * 100}%`;
+
+  }
 
 
-  video.addEventListener(
-    "timeupdate",
-    () => {
+  progressFrame =
+    requestAnimationFrame(
+      animateProgress
+    );
+
+}
+
+
+function startProgressAnimation() {
+
+  clearProgressFrame();
+
+  animateProgress();
+
+}
+
+
+/* =========================================================
+   CENAS
+========================================================= */
+
+function updateScenesVisibility() {
+
+  scenes.forEach(
+    (scene, index) => {
 
       if (
-        sceneFinished ||
-        video.readyState < 2
+        index === currentScene
       ) {
 
-        return;
+        scene.classList.add(
+          "active"
+        );
 
-      }
+      } else {
 
-
-      if (
-        !Number.isFinite(
-          video.duration
-        )
-      ) {
-
-        return;
-
-      }
-
-
-      /*
-        50 ms antes do final.
-      */
-
-      if (
-        video.duration -
-          video.currentTime <=
-        0.05
-      ) {
-
-        finishScene(
-          currentScene
+        scene.classList.remove(
+          "active"
         );
 
       }
@@ -428,51 +433,117 @@ function attachEndDetection(
 
 
 /* =========================================================
-   REPRODUÇÃO
+   TRANSIÇÃO
 ========================================================= */
 
-function playScene(index) {
-
-  const scene =
-    scenes[index];
-
-  const video =
-    videos[index];
-
-
-  if (!scene || !video) {
-    return;
-  }
-
-
-  clearTimers();
-
-
-  sceneFinished = false;
-
-  isHolding = false;
-
-  holdPointerId = null;
-
-
-  resetFinishing(
-    scene
-  );
-
+function resetBlackTransition() {
 
   blackTransition.classList.remove(
     "active"
   );
 
+}
 
-  hideNavigation();
 
+function fadeToBlack() {
+
+  blackTransition.classList.add(
+    "active"
+  );
+
+}
+
+
+/* =========================================================
+   PREPARAÇÃO DA CENA
+========================================================= */
+
+function prepareScene(index) {
+
+  const video =
+    videos[index];
+
+  if (!video) {
+    return;
+  }
+
+
+  video.playsInline = true;
+
+  video.setAttribute(
+    "playsinline",
+    ""
+  );
+
+  video.setAttribute(
+    "webkit-playsinline",
+    ""
+  );
+
+  video.removeAttribute(
+    "controls"
+  );
+
+
+  /*
+    Login sempre silencioso.
+  */
+
+  if (index === 0) {
+
+    video.muted = true;
+
+  }
+
+
+  resetVideo(video);
+
+}
+
+
+/* =========================================================
+   INICIAR CENA
+========================================================= */
+
+function startScene(index) {
+
+  const video =
+    videos[index];
+
+
+  if (!video) {
+    return;
+  }
+
+
+  changingScene = false;
+
+  clearTransitionTimer();
+
+  resetBlackTransition();
+
+  resetProgressBars();
+
+  updateProgressBars();
+
+  updateScenesVisibility();
+
+
+  /*
+    O vídeo da cena atual começa
+    sempre do primeiro frame.
+  */
 
   resetVideo(video);
 
 
   /*
-    Login sempre mudo.
+    Login:
+    autoplay silencioso.
+
+    Demais cenas:
+    reprodução normal após
+    interação do usuário.
   */
 
   if (index === 0) {
@@ -486,108 +557,237 @@ function playScene(index) {
   }
 
 
-  video.playsInline = true;
+  playVideo(video);
 
-
-  video.setAttribute(
-    "playsinline",
-    ""
-  );
-
-
-  video.setAttribute(
-    "webkit-playsinline",
-    ""
-  );
+  startProgressAnimation();
 
 
   /*
-    Evento de finalização.
+    Pré-carrega o vídeo seguinte.
   */
 
-  attachEndDetection(
-    scene,
-    video
-  );
+  preloadNext(index);
+
+}
 
 
-  /*
-    Pressionar para pausar:
-    somente telas 2–9.
-  */
+/* =========================================================
+   IR PARA CENA
+========================================================= */
 
-  if (index !== 0) {
+function goToScene(
+  index,
+  options = {}
+) {
 
-    attachHoldPause(
-      scene,
-      video
-    );
-
-  }
-
-
-  /*
-    Reprodução.
-  */
-
-  function startPlayback() {
-
-    const promise =
-      video.play();
+  const {
+    fade = true
+  } = options;
 
 
-    if (promise) {
+  if (
+    index < 0 ||
+    index >= SCENE_COUNT
+  ) {
 
-      promise.catch(() => {
-
-        /*
-          Fallback silencioso.
-        */
-
-        if (index !== 0) {
-
-          video.muted = true;
-
-          video.play()
-            .catch(() => {});
-
-        }
-
-      });
-
-    }
+    return;
 
   }
 
 
   if (
-    video.readyState >= 3
+    changingScene
   ) {
 
-    startPlayback();
-
-  } else {
-
-    video.addEventListener(
-      "canplay",
-      startPlayback,
-      {
-        once: true
-      }
-    );
+    return;
 
   }
 
 
-  preloadNext(
-    index
+  if (
+    !unlocked &&
+    index !== 0
+  ) {
+
+    return;
+
+  }
+
+
+  /*
+    Não faz nada se já estamos
+    na cena solicitada.
+  */
+
+  if (
+    index === currentScene
+  ) {
+
+    return;
+
+  }
+
+
+  changingScene = true;
+
+
+  const previousVideo =
+    videos[currentScene];
+
+
+  if (fade) {
+
+    fadeToBlack();
+
+  }
+
+
+  clearProgressFrame();
+
+
+  /*
+    Para completamente a cena anterior.
+  */
+
+  if (previousVideo) {
+
+    previousVideo.pause();
+
+  }
+
+
+  clearTransitionTimer();
+
+
+  transitionTimer =
+    window.setTimeout(
+      () => {
+
+        currentScene =
+          index;
+
+
+        isHolding = false;
+
+        holdActivated = false;
+
+        activePointerId = null;
+
+        pauseWasManual = false;
+
+
+        startScene(
+          currentScene
+        );
+
+
+      },
+      fade
+        ? TRANSITION_DURATION
+        : 0
+    );
+
+}
+
+
+/* =========================================================
+   PRÓXIMA CENA
+========================================================= */
+
+function nextScene() {
+
+  if (
+    currentScene >=
+    SCENE_COUNT - 1
+  ) {
+
+    /*
+      Último Story.
+      Não há próximo vídeo.
+      Aqui deixamos o último
+      Story permanecer na tela.
+
+      O CTA poderá ser adicionado
+      posteriormente sem alterar
+      a navegação.
+    */
+
+    return;
+
+  }
+
+
+  goToScene(
+    currentScene + 1
   );
 
 }
 
 
 /* =========================================================
-   PRÉ-CARREGAMENTO
+   CENA ANTERIOR
+========================================================= */
+
+function previousScene() {
+
+  if (
+    currentScene <= 1
+  ) {
+
+    /*
+      Na primeira tela da proposta,
+      não voltamos para o login.
+    */
+
+    return;
+
+  }
+
+
+  goToScene(
+    currentScene - 1
+  );
+
+}
+
+
+/* =========================================================
+   FINAL DO VÍDEO
+========================================================= */
+
+function handleVideoEnd() {
+
+  if (
+    currentScene >=
+    SCENE_COUNT - 1
+  ) {
+
+    /*
+      Último Story:
+      completa a barra e permanece
+      nele.
+    */
+
+    progressFills[currentScene]
+      .style.width = "100%";
+
+    return;
+
+  }
+
+
+  /*
+    Ao terminar um Story,
+    avançamos automaticamente.
+  */
+
+  nextScene();
+
+}
+
+
+/* =========================================================
+   PRELOAD
 ========================================================= */
 
 function preloadNext(index) {
@@ -598,7 +798,7 @@ function preloadNext(index) {
 
   if (
     nextIndex >=
-    videos.length
+    SCENE_COUNT
   ) {
 
     return;
@@ -636,7 +836,11 @@ function preloadNext(index) {
    PAUSAR
 ========================================================= */
 
-function pauseVideo(video) {
+function pauseCurrentVideo() {
+
+  const video =
+    videos[currentScene];
+
 
   if (!video) {
     return;
@@ -644,13 +848,18 @@ function pauseVideo(video) {
 
 
   if (
-    !video.paused &&
-    !video.ended
+    video.paused ||
+    video.ended
   ) {
 
-    video.pause();
+    return;
 
   }
+
+
+  video.pause();
+
+  pauseWasManual = true;
 
 }
 
@@ -659,281 +868,406 @@ function pauseVideo(video) {
    CONTINUAR
 ========================================================= */
 
-function resumeVideo(video) {
+function resumeCurrentVideo() {
 
-  if (!video) {
-    return;
-  }
-
-
-  if (video.ended) {
-    return;
-  }
-
-
-  const promise =
-    video.play();
-
-
-  if (promise) {
-
-    promise.catch(
-      () => {}
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   SEGURAR PARA PAUSAR
-========================================================= */
-
-function attachHoldPause(
-  scene,
-  video
-) {
-
-  if (
-    scene.dataset.holdBound ===
-    "true"
-  ) {
-
-    return;
-
-  }
-
-
-  scene.dataset.holdBound =
-    "true";
-
-
-  scene.addEventListener(
-    "pointerdown",
-    event => {
-
-      if (
-        event.pointerType ===
-          "mouse" &&
-        event.button !== 0
-      ) {
-
-        return;
-
-      }
-
-
-      if (
-        event.target.closest(
-          ".navigation"
-        )
-      ) {
-
-        return;
-
-      }
-
-
-      if (
-        sceneFinished ||
-        video.ended
-      ) {
-
-        return;
-
-      }
-
-
-      isHolding = true;
-
-      holdPointerId =
-        event.pointerId;
-
-
-      pauseVideo(
-        video
-      );
-
-    },
-    {
-      passive: true
-    }
-  );
-
-
-  scene.addEventListener(
-    "pointerup",
-    event => {
-
-      if (
-        holdPointerId !== null &&
-        event.pointerId !==
-          holdPointerId
-      ) {
-
-        return;
-
-      }
-
-
-      if (!isHolding) {
-        return;
-      }
-
-
-      isHolding = false;
-
-      holdPointerId = null;
-
-
-      if (
-        !sceneFinished &&
-        !video.ended
-      ) {
-
-        resumeVideo(
-          video
-        );
-
-      }
-
-    },
-    {
-      passive: true
-    }
-  );
-
-
-  scene.addEventListener(
-    "pointercancel",
-    event => {
-
-      if (
-        holdPointerId !== null &&
-        event.pointerId !==
-          holdPointerId
-      ) {
-
-        return;
-
-      }
-
-
-      isHolding = false;
-
-      holdPointerId = null;
-
-
-      if (
-        !sceneFinished &&
-        !video.ended
-      ) {
-
-        resumeVideo(
-          video
-        );
-
-      }
-
-    },
-    {
-      passive: true
-    }
-  );
-
-}
-
-
-/* =========================================================
-   TROCA DE CENA
-========================================================= */
-
-function goToScene(index) {
-
-  if (
-    index < 1 ||
-    index >= scenes.length
-  ) {
-
-    return;
-
-  }
-
-
-  clearTimers();
-
-
-  const previousScene =
-    scenes[currentScene];
-
-  const nextScene =
-    scenes[index];
-
-  const previousVideo =
+  const video =
     videos[currentScene];
 
 
-  sceneFinished = false;
+  if (!video) {
+    return;
+
+  }
+
+
+  if (
+    video.ended
+  ) {
+
+    return;
+
+  }
+
+
+  playVideo(
+    video
+  );
+
+  pauseWasManual = false;
+
+}
+
+
+/* =========================================================
+   POINTER DOWN
+========================================================= */
+
+function handlePointerDown(
+  event
+) {
+
+  if (
+    !unlocked ||
+    currentScene === 0
+  ) {
+
+    return;
+
+  }
+
+
+  /*
+    Ignora segundo dedo.
+  */
+
+  if (
+    activePointerId !== null
+  ) {
+
+    return;
+
+  }
+
+
+  activePointerId =
+    event.pointerId;
+
+
+  pointerStartX =
+    event.clientX;
+
+
+  pointerStartY =
+    event.clientY;
+
+
+  pointerStartTime =
+    performance.now();
+
+
+  isHolding = true;
+
+  holdActivated = false;
+
+
+  /*
+    Só a área central pausa.
+  */
+
+  if (
+    event.currentTarget ===
+    storyPause
+  ) {
+
+    pauseCurrentVideo();
+
+
+    /*
+      Não usamos ícone visual.
+    */
+
+    holdActivated = true;
+
+  }
+
+
+  try {
+
+    event.currentTarget
+      .setPointerCapture(
+        event.pointerId
+      );
+
+  } catch (error) {
+
+    // Ignorar
+
+  }
+
+
+  event.preventDefault();
+
+}
+
+
+/* =========================================================
+   POINTER UP — CENTRO
+========================================================= */
+
+function handlePausePointerUp(
+  event
+) {
+
+  if (
+    event.pointerId !==
+    activePointerId
+  ) {
+
+    return;
+
+  }
+
+
+  const elapsed =
+    performance.now() -
+    pointerStartTime;
+
+
+  /*
+    Se estava segurando:
+    continua ao soltar.
+  */
+
+  if (
+    holdActivated
+  ) {
+
+    resumeCurrentVideo();
+
+  }
+
 
   isHolding = false;
 
-  holdPointerId = null;
+  holdActivated = false;
+
+  activePointerId = null;
 
 
-  hideNavigation();
+  /*
+    Uma pressão muito curta
+    no centro não faz nada além
+    de pausar e continuar.
+  */
+
+  void elapsed;
 
 
-  blackTransition.classList.remove(
-    "active"
-  );
+  event.preventDefault();
+
+}
 
 
-  resetFinishing(
-    previousScene
-  );
+/* =========================================================
+   POINTER UP — ESQUERDA / DIREITA
+========================================================= */
+
+function handleSidePointerUp(
+  event,
+  direction
+) {
+
+  if (
+    event.pointerId !==
+    activePointerId
+  ) {
+
+    return;
+
+  }
 
 
-  nextScene.classList.add(
-    "active"
-  );
+  const deltaX =
+    event.clientX -
+    pointerStartX;
 
 
-  window.setTimeout(() => {
-
-    previousScene.classList.remove(
-      "active"
-    );
-
-  }, TRANSITION_DURATION);
+  const deltaY =
+    event.clientY -
+    pointerStartY;
 
 
-  if (previousVideo) {
+  const elapsed =
+    performance.now() -
+    pointerStartTime;
 
-    previousVideo.pause();
+
+  isHolding = false;
+
+  activePointerId = null;
 
 
-    try {
+  /*
+    Se houve um movimento horizontal
+    muito grande, ainda interpretamos
+    pela direção.
+  */
 
-      previousVideo.currentTime =
-        0;
+  if (
+    Math.abs(deltaX) >
+    Math.abs(deltaY) &&
+    Math.abs(deltaX) >
+    SWIPE_THRESHOLD
+  ) {
 
-    } catch (error) {
+    if (deltaX < 0) {
 
-      // Ignorar
+      nextScene();
+
+    } else {
+
+      previousScene();
+
+    }
+
+
+    event.preventDefault();
+
+    return;
+
+  }
+
+
+  /*
+    Toque simples:
+    executa a ação lateral.
+  */
+
+  if (
+    elapsed <
+    1000
+  ) {
+
+    if (
+      direction === "previous"
+    ) {
+
+      previousScene();
+
+    } else {
+
+      nextScene();
 
     }
 
   }
 
 
-  currentScene =
-    index;
+  event.preventDefault();
+
+}
 
 
-  playScene(
-    currentScene
+/* =========================================================
+   POINTER CANCEL
+========================================================= */
+
+function handlePointerCancel(
+  event
+) {
+
+  if (
+    event.pointerId !==
+    activePointerId
+  ) {
+
+    return;
+
+  }
+
+
+  if (
+    holdActivated
+  ) {
+
+    resumeCurrentVideo();
+
+  }
+
+
+  isHolding = false;
+
+  holdActivated = false;
+
+  activePointerId = null;
+
+
+  event.preventDefault();
+
+}
+
+
+/* =========================================================
+   PROGRESS BAR — CLIQUE
+========================================================= */
+
+function handleProgressClick(
+  event
+) {
+
+  if (
+    !unlocked
+  ) {
+
+    return;
+
+  }
+
+
+  const segment =
+    event.currentTarget;
+
+
+  const index =
+    Number(
+      segment.dataset.segment
+    );
+
+
+  if (
+    !Number.isInteger(index)
+  ) {
+
+    return;
+
+  }
+
+
+  /*
+    Tocar na barra 0 significa
+    apenas voltar ao login se o
+    usuário estiver desbloqueado?
+    
+    Não permitimos.
+  */
+
+  if (
+    index === 0
+  ) {
+
+    /*
+      O login não faz parte da
+      navegação depois da entrada.
+    */
+
+    return;
+
+  }
+
+
+  if (
+    index === currentScene
+  ) {
+
+    /*
+      Se clicar na barra atual,
+      não reiniciamos.
+    */
+
+    return;
+
+  }
+
+
+  goToScene(
+    index,
+    {
+      fade: true
+    }
   );
+
+
+  event.preventDefault();
 
 }
 
@@ -977,24 +1311,43 @@ function unlockExperience() {
   );
 
 
-  window.setTimeout(() => {
+  /*
+    Depois do login, a barra 1
+    passa a ser a primeira barra
+    efetiva da experiência.
 
-    scenes[0].classList.remove(
-      "active"
-    );
+    A barra do login fica completa.
+  */
+
+  if (
+    progressFills[0]
+  ) {
+
+    progressFills[0]
+      .style.width = "100%";
+
+  }
 
 
-    goToScene(
-      1
-    );
+  window.setTimeout(
+    () => {
 
-  }, 350);
+      goToScene(
+        1,
+        {
+          fade: true
+        }
+      );
+
+    },
+    300
+  );
 
 }
 
 
 /* =========================================================
-   LOGIN
+   LOGIN — BOTÃO
 ========================================================= */
 
 enterButton.addEventListener(
@@ -1003,13 +1356,16 @@ enterButton.addEventListener(
 );
 
 
+/* =========================================================
+   LOGIN — ENTER
+========================================================= */
+
 passwordInput.addEventListener(
   "keydown",
   event => {
 
     if (
-      event.key ===
-      "Enter"
+      event.key === "Enter"
     ) {
 
       event.preventDefault();
@@ -1021,6 +1377,10 @@ passwordInput.addEventListener(
   }
 );
 
+
+/* =========================================================
+   LOGIN — LIMPAR ERRO
+========================================================= */
 
 passwordInput.addEventListener(
   "input",
@@ -1035,29 +1395,121 @@ passwordInput.addEventListener(
 
 
 /* =========================================================
-   VOLTAR
+   CONTROLES LATERAIS
 ========================================================= */
 
-backButton.addEventListener(
-  "click",
+storyPrev.addEventListener(
+  "pointerdown",
+  handlePointerDown,
+  {
+    passive: false
+  }
+);
+
+
+storyPrev.addEventListener(
+  "pointerup",
   event => {
 
-    event.preventDefault();
+    handleSidePointerUp(
+      event,
+      "previous"
+    );
 
-    event.stopPropagation();
-
-
-    if (
-      currentScene <= 1
-    ) {
-
-      return;
-
-    }
+  },
+  {
+    passive: false
+  }
+);
 
 
-    goToScene(
-      currentScene - 1
+storyPrev.addEventListener(
+  "pointercancel",
+  handlePointerCancel,
+  {
+    passive: false
+  }
+);
+
+
+storyNext.addEventListener(
+  "pointerdown",
+  handlePointerDown,
+  {
+    passive: false
+  }
+);
+
+
+storyNext.addEventListener(
+  "pointerup",
+  event => {
+
+    handleSidePointerUp(
+      event,
+      "next"
+    );
+
+  },
+  {
+    passive: false
+  }
+);
+
+
+storyNext.addEventListener(
+  "pointercancel",
+  handlePointerCancel,
+  {
+    passive: false
+  }
+);
+
+
+/* =========================================================
+   CONTROLE CENTRAL
+========================================================= */
+
+storyPause.addEventListener(
+  "pointerdown",
+  handlePointerDown,
+  {
+    passive: false
+  }
+);
+
+
+storyPause.addEventListener(
+  "pointerup",
+  handlePausePointerUp,
+  {
+    passive: false
+  }
+);
+
+
+storyPause.addEventListener(
+  "pointercancel",
+  handlePointerCancel,
+  {
+    passive: false
+  }
+);
+
+
+/* =========================================================
+   BARRAS
+========================================================= */
+
+progressSegments.forEach(
+  segment => {
+
+    segment.addEventListener(
+      "pointerup",
+      handleProgressClick,
+      {
+        passive: false
+      }
     );
 
   }
@@ -1065,52 +1517,59 @@ backButton.addEventListener(
 
 
 /* =========================================================
-   AVANÇAR
+   VÍDEOS
 ========================================================= */
 
-nextButton.addEventListener(
-  "click",
-  event => {
+videos.forEach(
+  (video, index) => {
 
-    event.preventDefault();
-
-    event.stopPropagation();
-
-
-    if (
-      currentScene ===
-      scenes.length - 1
-    ) {
-
-      const phone =
-        CONFIG.whatsappNumber.replace(
-          /\D/g,
-          ""
-        );
-
-
-      const message =
-        encodeURIComponent(
-          CONFIG.whatsappMessage
-        );
-
-
-      if (!phone) {
-        return;
-      }
-
-
-      window.location.href =
-        `https://wa.me/${phone}?text=${message}`;
-
-
+    if (!video) {
       return;
-
     }
 
 
-    goToScene(
-      currentScene + 1
+    video.addEventListener(
+      "ended",
+      () => {
+
+        /*
+          Só reagimos ao vídeo
+          que está realmente ativo.
+        */
+
+        if (
+          index !== currentScene
+        ) {
+
+          return;
+
+        }
+
+
+        handleVideoEnd();
+
+      }
+    );
+
+
+    video.addEventListener(
+      "loadedmetadata",
+      () => {
+
+        /*
+          Garante que o navegador
+          conheça a duração do vídeo.
+        */
+
+        if (
+          index === currentScene
+        ) {
+
+          updateProgressBars();
+
+        }
+
+      }
     );
 
   }
@@ -1122,7 +1581,9 @@ nextButton.addEventListener(
 ========================================================= */
 
 const loginVideo =
-  videos[0];
+  document.getElementById(
+    "loginVideo"
+  );
 
 
 if (loginVideo) {
@@ -1130,6 +1591,16 @@ if (loginVideo) {
   loginVideo.muted = true;
 
   loginVideo.playsInline = true;
+
+  loginVideo.setAttribute(
+    "playsinline",
+    ""
+  );
+
+  loginVideo.setAttribute(
+    "webkit-playsinline",
+    ""
+  );
 
 
   loginVideo.addEventListener(
@@ -1150,7 +1621,7 @@ if (loginVideo) {
 
 
 /* =========================================================
-   MENU DE CONTEXTO
+   CONTEXTO
 ========================================================= */
 
 document.addEventListener(
@@ -1159,7 +1630,10 @@ document.addEventListener(
 
     if (
       event.target.closest(
-        ".scene"
+        ".story-stage"
+      ) ||
+      event.target.closest(
+        ".story-controls"
       )
     ) {
 
@@ -1172,7 +1646,7 @@ document.addEventListener(
 
 
 /* =========================================================
-   ZOOM IOS
+   GESTOS DE ZOOM — IOS
 ========================================================= */
 
 document.addEventListener(
@@ -1218,65 +1692,59 @@ document.addEventListener(
    INICIALIZAÇÃO
 ========================================================= */
 
-window.addEventListener(
-  "load",
-  () => {
+function initialize() {
 
-    currentScene = 0;
+  resetProgressBars();
 
-    unlocked = false;
+  updateProgressBars();
 
-    sceneFinished = false;
+  prepareScene(0);
 
+  prepareScene(1);
 
-    hideNavigation();
+  currentScene = 0;
 
+  unlocked = false;
 
-    blackTransition.classList.remove(
-      "active"
-    );
+  updateScenesVisibility();
 
+  resetBlackTransition();
 
-    scenes.forEach(
-      scene => {
-
-        if (
-          scene.dataset.scene !==
-          "0"
-        ) {
-
-          scene.classList.remove(
-            "active"
-          );
-
-        }
-
-      }
-    );
+  hideNavigation();
 
 
-    scenes[0].classList.add(
-      "active"
-    );
+  /*
+    Pré-carrega o primeiro Story
+    além do login.
+  */
+
+  preloadNext(0);
 
 
-    if (videos[1]) {
+  /*
+    Inicia o login.
+  */
 
-      videos[1].preload =
-        "auto";
+  const login =
+    videos[0];
 
 
-      try {
+  if (login) {
 
-        videos[1].load();
+    login.muted = true;
 
-      } catch (error) {
+    resetVideo(login);
 
-        // Ignorar
+    playVideo(login);
 
-      }
-
-    }
+    startProgressAnimation();
 
   }
+
+}
+
+
+window.addEventListener(
+  "load",
+  initialize
 );
