@@ -37,8 +37,6 @@ body {
   width: 100vw;
   height: 100dvh;
 
-  margin: 0;
-
   font-family:
     "Poppins",
     sans-serif;
@@ -52,7 +50,6 @@ body {
   overflow: hidden;
 
   -webkit-font-smoothing: antialiased;
-
   text-rendering: optimizeLegibility;
 }
 
@@ -82,7 +79,7 @@ body {
 
 
 /* =========================================================
-   QUADRO VERTICAL
+   QUADRO VERTICAL 9:16
 ========================================================= */
 
 .story-stage {
@@ -104,7 +101,10 @@ body {
     );
 
   transform:
-    translate(-50%, -50%);
+    translate(
+      -50%,
+      -50%
+    );
 
   overflow: hidden;
 
@@ -132,6 +132,7 @@ body {
   background: #000000;
 
   opacity: 0;
+
   visibility: hidden;
 
   pointer-events: none;
@@ -140,6 +141,7 @@ body {
 
 .scene.active {
   opacity: 1;
+
   visibility: visible;
 
   pointer-events: auto;
@@ -147,7 +149,7 @@ body {
 
 
 /* =========================================================
-   VÍDEO
+   VÍDEOS
 ========================================================= */
 
 .scene-video {
@@ -173,6 +175,47 @@ body {
   -webkit-user-drag: none;
 
   -webkit-touch-callout: none;
+}
+
+
+/* =========================================================
+   TELA COMEÇAR
+========================================================= */
+
+.start-screen {
+  background: #000000;
+
+  z-index: 20;
+}
+
+
+.start-panel {
+  position: absolute;
+
+  left: 50%;
+  top: 50%;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+
+  width: 68%;
+
+  max-width: 420px;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+}
+
+
+.start-button {
+  width: 100%;
+
+  cursor: pointer;
 }
 
 
@@ -211,10 +254,8 @@ body {
   pointer-events: none;
 
   opacity: 0;
-  visibility: hidden;
 
-  transition:
-    opacity 180ms ease;
+  visibility: hidden;
 }
 
 
@@ -307,6 +348,7 @@ body {
 
 .login-panel.hidden {
   opacity: 0;
+
   visibility: hidden;
 
   pointer-events: none;
@@ -314,7 +356,7 @@ body {
 
 
 /* =========================================================
-   LOGIN INPUT
+   CAMPOS
 ========================================================= */
 
 .ui-box {
@@ -353,8 +395,9 @@ body {
     sans-serif;
 
   /*
-    16px é importante para evitar
-    o zoom automático do Safari.
+    Mantemos 16 px para
+    impedir o zoom automático
+    do Safari.
   */
 
   font-size: 16px;
@@ -410,7 +453,7 @@ body {
 
 
 /* =========================================================
-   BOTÃO ENTRAR
+   BOTÕES DE ENTRADA / COMEÇAR
 ========================================================= */
 
 .ui-button {
@@ -426,9 +469,22 @@ body {
 }
 
 
+.ui-button:hover {
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.16
+    );
+}
+
+
 .ui-button:active {
   transform:
-    scale(0.985);
+    scale(
+      0.985
+    );
 }
 
 
@@ -459,8 +515,7 @@ body {
 
 
 /* =========================================================
-   ÁREAS DE TOQUE
-   DESLIGADAS NO LOGIN
+   ÁREAS DE TOQUE DOS STORIES
 ========================================================= */
 
 .story-controls {
@@ -588,6 +643,7 @@ body {
 
   .story-stage {
     width: 100vw;
+
     height: 100dvh;
   }
 
@@ -613,12 +669,20 @@ body {
   }
 
 
+  .start-panel {
+    width: 76%;
+
+    max-width: 340px;
+  }
+
+
   .ui-box {
     height: 48px;
 
     /*
       Não reduzir.
-      Mantém o iPhone sem zoom automático.
+      Mantém o iPhone sem
+      zoom automático.
     */
 
     font-size: 16px;
@@ -671,7 +735,7 @@ body {
 
 
 /* =========================================================
-   CONTROLES NATIVOS
+   CONTROLES NATIVOS DO VÍDEO
 ========================================================= */
 
 video::-webkit-media-controls {
