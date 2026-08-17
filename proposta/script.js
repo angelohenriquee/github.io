@@ -81,7 +81,17 @@ const enterButton =
 
 
 /* =========================================================
-   ÁREAS DE TOQUE
+   TELA COMEÇAR
+========================================================= */
+
+const startButton =
+  document.getElementById(
+    "startButton"
+  );
+
+
+/* =========================================================
+   CONTROLES DOS STORIES
 ========================================================= */
 
 const storyPrev =
@@ -103,34 +113,47 @@ const storyNext =
 
 
 /* =========================================================
-   ESTADO
+   ÍNDICES
 
    0 = LOGIN
-   1 = STORY 1
-   2 = STORY 2
-   ...
-   8 = STORY 8
+   1 = COMEÇAR
+   2 = STORY 1
+   3 = STORY 2
+   4 = STORY 3
+   5 = STORY 4
+   6 = STORY 5
+   7 = STORY 6
+   8 = STORY 7
+   9 = STORY 8
 ========================================================= */
 
-let currentScene = 0;
+const LOGIN_SCENE = 0;
 
-let unlocked = false;
+const START_SCENE = 1;
 
-let activePointerId = null;
-
-let isHolding = false;
-
-let progressFrame = null;
-
-
-/* =========================================================
-   CONSTANTES
-========================================================= */
-
-const FIRST_STORY = 1;
+const FIRST_STORY = 2;
 
 const LAST_STORY =
   scenes.length - 1;
+
+
+/* =========================================================
+   ESTADO
+========================================================= */
+
+let currentScene =
+  LOGIN_SCENE;
+
+let unlocked = false;
+
+let activePointerId =
+  null;
+
+let isHolding =
+  false;
+
+let progressFrame =
+  null;
 
 
 /* =========================================================
@@ -148,6 +171,7 @@ function stopProgress() {
     );
 
     progressFrame = null;
+
   }
 
 }
@@ -171,25 +195,35 @@ function updateProgress() {
 
   if (
     !unlocked ||
-    currentScene < FIRST_STORY
+    currentScene <
+      FIRST_STORY
   ) {
 
     stopProgress();
 
     return;
+
   }
 
 
+  const storyIndex =
+    currentScene -
+    FIRST_STORY;
+
+
   /*
-    Barras anteriores = completas.
+    Barras anteriores.
   */
 
   progressFills.forEach(
-    (fill, index) => {
+    (
+      fill,
+      index
+    ) => {
 
       if (
         index <
-        currentScene - 1
+        storyIndex
       ) {
 
         fill.style.width =
@@ -199,7 +233,7 @@ function updateProgress() {
 
       else if (
         index >
-        currentScene - 1
+        storyIndex
       ) {
 
         fill.style.width =
@@ -212,12 +246,12 @@ function updateProgress() {
 
 
   /*
-    Barra atual acompanha o vídeo.
+    Barra atual.
   */
 
   const currentFill =
     progressFills[
-      currentScene - 1
+      storyIndex
     ];
 
 
@@ -271,7 +305,7 @@ function startProgress() {
 
 
 /* =========================================================
-   VISIBILIDADE
+   INTERFACE DOS STORIES
 ========================================================= */
 
 function activateStories() {
@@ -310,7 +344,8 @@ function stopVideo(
 
   try {
 
-    video.currentTime = 0;
+    video.currentTime =
+      0;
 
   } catch (error) {
 
@@ -322,48 +357,21 @@ function stopVideo(
 
 
 /* =========================================================
-   SILENCIAR E PARAR TODOS OS VÍDEOS
+   PARAR E SILENCIAR TODOS
 ========================================================= */
 
-function stopAllVideosExcept(
-  activeIndex
-) {
+function stopAllVideos() {
 
   videos.forEach(
-    (video, index) => {
+    video => {
 
       if (!video) {
         return;
       }
 
+      video.pause();
 
-      /*
-        Todo vídeo que não seja o atual:
-        - pausa
-        - silencia
-        - volta ao primeiro frame
-      */
-
-      if (
-        index !== activeIndex
-      ) {
-
-        video.pause();
-
-        video.muted = true;
-
-
-        try {
-
-          video.currentTime = 0;
-
-        } catch (error) {
-
-          // Ignorar
-
-        }
-
-      }
+      video.muted = true;
 
     }
   );
@@ -372,7 +380,7 @@ function stopAllVideosExcept(
 
 
 /* =========================================================
-   REPRODUZIR VÍDEO
+   REPRODUZIR
 ========================================================= */
 
 function playVideo(
@@ -404,7 +412,7 @@ function playVideo(
 
 
 /* =========================================================
-   PRÓXIMO VÍDEO
+   PRELOAD
 ========================================================= */
 
 function preloadNext(
@@ -421,6 +429,7 @@ function preloadNext(
   ) {
 
     return;
+
   }
 
 
@@ -451,7 +460,32 @@ function preloadNext(
 
 
 /* =========================================================
-   COMEÇAR STORY
+   ATIVAR UMA CENA
+========================================================= */
+
+function showScene(
+  index
+) {
+
+  scenes.forEach(
+    (
+      scene,
+      sceneIndex
+    ) => {
+
+      scene.classList.toggle(
+        "active",
+        sceneIndex === index
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   COMEÇAR UM STORY
 ========================================================= */
 
 function startStory(
@@ -475,54 +509,31 @@ function startStory(
 
 
   /*
-    PRIMEIRO:
-    pausa e silencia TODOS os vídeos.
-
-    Isso resolve o áudio residual
-    no computador.
+    Todos os vídeos são
+    imediatamente pausados
+    e silenciados.
   */
 
-  videos.forEach(
-    videoItem => {
-
-      if (!videoItem) {
-        return;
-      }
+  stopAllVideos();
 
 
-      videoItem.pause();
+  /*
+    Troca visual instantânea.
+  */
 
-      videoItem.muted = true;
-
-    }
+  showScene(
+    index
   );
 
 
   /*
-    Atualiza as cenas
-    instantaneamente.
-  */
-
-  scenes.forEach(
-    (scene, sceneIndex) => {
-
-      scene.classList.toggle(
-        "active",
-        sceneIndex === index
-      );
-
-    }
-  );
-
-
-  /*
-    Começa o vídeo atual
-    sempre do início.
+    Começa sempre do início.
   */
 
   try {
 
-    video.currentTime = 0;
+    video.currentTime =
+      0;
 
   } catch (error) {
 
@@ -532,8 +543,8 @@ function startStory(
 
 
   /*
-    SOMENTE o vídeo atual
-    terá áudio.
+    Somente o Story atual
+    recebe áudio.
   */
 
   video.muted = false;
@@ -554,7 +565,7 @@ function startStory(
 
 
   /*
-    Agora reproduzimos o vídeo atual.
+    Reproduz imediatamente.
   */
 
   playVideo(
@@ -563,17 +574,13 @@ function startStory(
 
 
   /*
-    Pré-carrega o seguinte.
+    Prepara a próxima tela.
   */
 
   preloadNext(
     index
   );
 
-
-  /*
-    Reinicia a barra de progresso.
-  */
 
   startProgress();
 
@@ -589,27 +596,22 @@ function goToStory(
 ) {
 
   if (
-    !unlocked
-  ) {
-
-    return;
-  }
-
-
-  if (
     index < FIRST_STORY ||
     index > LAST_STORY
   ) {
 
     return;
+
   }
 
 
   if (
-    index === currentScene
+    index ===
+    currentScene
   ) {
 
     return;
+
   }
 
 
@@ -627,14 +629,17 @@ function goToStory(
 function previousStory() {
 
   /*
-    Story 1 não volta para o login.
+    Story 1 NÃO volta para
+    a tela "Começar".
   */
 
   if (
-    currentScene <= FIRST_STORY
+    currentScene <=
+    FIRST_STORY
   ) {
 
     return;
+
   }
 
 
@@ -646,7 +651,7 @@ function previousStory() {
 
 
 /* =========================================================
-   PRÓXIMO STORY
+   STORY SEGUINTE
 ========================================================= */
 
 function nextStory() {
@@ -657,6 +662,7 @@ function nextStory() {
   ) {
 
     return;
+
   }
 
 
@@ -668,24 +674,29 @@ function nextStory() {
 
 
 /* =========================================================
-   FINAL DO VÍDEO
+   FINAL DO STORY
 ========================================================= */
 
 function handleStoryEnd() {
+
+  /*
+    Último Story:
+    permanece nele.
+  */
 
   if (
     currentScene >=
     LAST_STORY
   ) {
 
-    /*
-      Último Story:
-      deixa a última barra cheia.
-    */
+    const storyIndex =
+      currentScene -
+      FIRST_STORY;
+
 
     const fill =
       progressFills[
-        LAST_STORY - 1
+        storyIndex
       ];
 
 
@@ -698,12 +709,13 @@ function handleStoryEnd() {
 
 
     return;
+
   }
 
 
   /*
-    Avança automaticamente
-    para o próximo Story.
+    Os demais passam
+    imediatamente ao próximo.
   */
 
   nextStory();
@@ -712,7 +724,7 @@ function handleStoryEnd() {
 
 
 /* =========================================================
-   PAUSAR
+   PAUSA
 ========================================================= */
 
 function pauseCurrentStory() {
@@ -721,10 +733,7 @@ function pauseCurrentStory() {
     videos[currentScene];
 
 
-  if (
-    !video
-  ) {
-
+  if (!video) {
     return;
   }
 
@@ -750,16 +759,20 @@ function resumeCurrentStory() {
   ) {
 
     return;
+
   }
 
 
   /*
-    Garante novamente que
-    somente a cena atual tenha áudio.
+    Garante que nenhum outro
+    vídeo tenha áudio.
   */
 
   videos.forEach(
-    (videoItem, index) => {
+    (
+      videoItem,
+      index
+    ) => {
 
       if (
         !videoItem
@@ -777,7 +790,8 @@ function resumeCurrentStory() {
 
         videoItem.pause();
 
-        videoItem.muted = true;
+        videoItem.muted =
+          true;
 
       }
 
@@ -796,7 +810,7 @@ function resumeCurrentStory() {
 
 
 /* =========================================================
-   PRESSÃO — CENTRO
+   PRESSÃO NO CENTRO
 ========================================================= */
 
 storyPause.addEventListener(
@@ -810,14 +824,17 @@ storyPause.addEventListener(
     ) {
 
       return;
+
     }
 
 
     if (
-      activePointerId !== null
+      activePointerId !==
+      null
     ) {
 
       return;
+
     }
 
 
@@ -825,7 +842,8 @@ storyPause.addEventListener(
       event.pointerId;
 
 
-    isHolding = true;
+    isHolding =
+      true;
 
 
     pauseCurrentStory();
@@ -854,7 +872,7 @@ storyPause.addEventListener(
 
 
 /* =========================================================
-   SOLTAR — CENTRO
+   SOLTAR NO CENTRO
 ========================================================= */
 
 storyPause.addEventListener(
@@ -867,6 +885,7 @@ storyPause.addEventListener(
     ) {
 
       return;
+
     }
 
 
@@ -879,9 +898,11 @@ storyPause.addEventListener(
     }
 
 
-    isHolding = false;
+    isHolding =
+      false;
 
-    activePointerId = null;
+    activePointerId =
+      null;
 
 
     event.preventDefault();
@@ -894,7 +915,7 @@ storyPause.addEventListener(
 
 
 /* =========================================================
-   CANCELAR — CENTRO
+   CANCELAR CENTRO
 ========================================================= */
 
 storyPause.addEventListener(
@@ -907,6 +928,7 @@ storyPause.addEventListener(
     ) {
 
       return;
+
     }
 
 
@@ -919,9 +941,11 @@ storyPause.addEventListener(
     }
 
 
-    isHolding = false;
+    isHolding =
+      false;
 
-    activePointerId = null;
+    activePointerId =
+      null;
 
 
     event.preventDefault();
@@ -942,10 +966,13 @@ storyPrev.addEventListener(
   event => {
 
     if (
-      !unlocked
+      !unlocked ||
+      currentScene <
+        FIRST_STORY
     ) {
 
       return;
+
     }
 
 
@@ -970,10 +997,13 @@ storyNext.addEventListener(
   event => {
 
     if (
-      !unlocked
+      !unlocked ||
+      currentScene <
+        FIRST_STORY
     ) {
 
       return;
+
     }
 
 
@@ -1008,22 +1038,24 @@ progressSegments.forEach(
         ) {
 
           return;
+
         }
 
 
         /*
           Barra 0 = Story 1
           Barra 1 = Story 2
-          etc.
+          ...
+          Barra 7 = Story 8
         */
 
-        const targetStory =
-          index +
-          FIRST_STORY;
+        const targetScene =
+          FIRST_STORY +
+          index;
 
 
         goToStory(
-          targetStory
+          targetScene
         );
 
 
@@ -1061,6 +1093,7 @@ function unlockExperience() {
     passwordInput.focus();
 
     return;
+
   }
 
 
@@ -1069,7 +1102,24 @@ function unlockExperience() {
   );
 
 
-  unlocked = true;
+  unlocked =
+    true;
+
+
+  /*
+    Para o vídeo de login.
+  */
+
+  if (
+    loginVideo
+  ) {
+
+    loginVideo.pause();
+
+    loginVideo.muted =
+      true;
+
+  }
 
 
   /*
@@ -1082,35 +1132,27 @@ function unlockExperience() {
 
 
   /*
-    Para o loop do login.
+    Mostra a tela "Começar".
   */
 
-  if (
-    loginVideo
-  ) {
-
-    loginVideo.pause();
-
-    loginVideo.muted = true;
-
-  }
-
-
-  /*
-    Ativa as barras e áreas
-    de interação.
-  */
-
-  activateStories();
-
-
-  /*
-    Entra diretamente no Story 1.
-  */
-
-  startStory(
-    FIRST_STORY
+  showScene(
+    START_SCENE
   );
+
+
+  /*
+    As barras ainda NÃO aparecem.
+  */
+
+  deactivateStories();
+
+
+  /*
+    Nenhum vídeo dos Stories
+    começa nesta etapa.
+  */
+
+  stopAllVideos();
 
 }
 
@@ -1165,6 +1207,43 @@ passwordInput.addEventListener(
 
 
 /* =========================================================
+   BOTÃO COMEÇAR
+========================================================= */
+
+startButton.addEventListener(
+  "click",
+  () => {
+
+    if (
+      !unlocked
+    ) {
+
+      return;
+
+    }
+
+
+    /*
+      Agora a interface dos Stories
+      passa a existir.
+    */
+
+    activateStories();
+
+
+    /*
+      Entra imediatamente no Story 1.
+    */
+
+    startStory(
+      FIRST_STORY
+    );
+
+  }
+);
+
+
+/* =========================================================
    VÍDEOS
 ========================================================= */
 
@@ -1184,17 +1263,38 @@ videos.forEach(
       () => {
 
         /*
-          Login não pertence
-          à sequência.
+          Login não participa.
         */
 
         if (
-          index === 0
+          index ===
+          LOGIN_SCENE
         ) {
 
           return;
+
         }
 
+
+        /*
+          A tela "Começar"
+          não possui vídeo.
+        */
+
+        if (
+          index ===
+          START_SCENE
+        ) {
+
+          return;
+
+        }
+
+
+        /*
+          Só o Story atual
+          pode disparar a mudança.
+        */
 
         if (
           index !==
@@ -1202,6 +1302,7 @@ videos.forEach(
         ) {
 
           return;
+
         }
 
 
@@ -1215,25 +1316,27 @@ videos.forEach(
 
 
 /* =========================================================
-   LOGIN
+   LOGIN EM LOOP
 ========================================================= */
 
 if (
   loginVideo
 ) {
 
-  loginVideo.loop = true;
+  loginVideo.loop =
+    true;
 
-  loginVideo.muted = true;
+  loginVideo.muted =
+    true;
 
-  loginVideo.playsInline = true;
+  loginVideo.playsInline =
+    true;
 
 
   loginVideo.setAttribute(
     "playsinline",
     ""
   );
-
 
   loginVideo.setAttribute(
     "webkit-playsinline",
@@ -1317,9 +1420,11 @@ document.addEventListener(
 
 function initialize() {
 
-  unlocked = false;
+  unlocked =
+    false;
 
-  currentScene = 0;
+  currentScene =
+    LOGIN_SCENE;
 
 
   deactivateStories();
@@ -1329,7 +1434,7 @@ function initialize() {
 
 
   /*
-    Somente o login fica ativo.
+    Apenas o Login fica visível.
   */
 
   scenes.forEach(
@@ -1340,7 +1445,8 @@ function initialize() {
 
       scene.classList.toggle(
         "active",
-        index === 0
+        index ===
+          LOGIN_SCENE
       );
 
     }
@@ -1348,9 +1454,8 @@ function initialize() {
 
 
   /*
-    Garante que todos os vídeos
-    estejam inicialmente parados
-    e sem áudio, exceto o login.
+    Todos os vídeos começam
+    pausados e sem áudio.
   */
 
   videos.forEach(
@@ -1366,11 +1471,13 @@ function initialize() {
 
       video.pause();
 
-      video.muted = true;
+      video.muted =
+        true;
 
 
       if (
-        index !== 0
+        index !==
+        LOGIN_SCENE
       ) {
 
         try {
@@ -1391,16 +1498,18 @@ function initialize() {
 
 
   /*
-    Login em looping.
+    Login em loop.
   */
 
   if (
     loginVideo
   ) {
 
-    loginVideo.loop = true;
+    loginVideo.loop =
+      true;
 
-    loginVideo.muted = true;
+    loginVideo.muted =
+      true;
 
 
     loginVideo.play()
@@ -1412,10 +1521,15 @@ function initialize() {
 
 
   /*
-    Pré-carrega Story 1.
+    Pré-carrega o primeiro
+    Story real.
+
+    O Story 1 está no índice 2.
   */
 
-  preloadNext(0);
+  preloadNext(
+    START_SCENE
+  );
 
 }
 
