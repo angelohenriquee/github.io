@@ -18,7 +18,7 @@
   <title>Experiência Fotográfica</title>
 
 
-  <!-- Poppins -->
+  <!-- Poppins Regular -->
 
   <link
     rel="preconnect"
@@ -36,6 +36,8 @@
     rel="stylesheet"
   >
 
+
+  <!-- CSS -->
 
   <link
     rel="stylesheet"
@@ -56,9 +58,9 @@
     <!-- =====================================================
          BARRAS DOS STORIES
 
-         8 barras = 8 telas da experiência.
+         SOMENTE os 8 Stories possuem barras.
 
-         O LOGIN NÃO FAZ PARTE DELAS.
+         Login e tela "Começar" ficam fora delas.
     ====================================================== -->
 
     <div
@@ -74,14 +76,12 @@
         <span class="story-fill"></span>
       </div>
 
-
       <div
         class="story-segment"
         data-segment="1"
       >
         <span class="story-fill"></span>
       </div>
-
 
       <div
         class="story-segment"
@@ -90,14 +90,12 @@
         <span class="story-fill"></span>
       </div>
 
-
       <div
         class="story-segment"
         data-segment="3"
       >
         <span class="story-fill"></span>
       </div>
-
 
       <div
         class="story-segment"
@@ -106,7 +104,6 @@
         <span class="story-fill"></span>
       </div>
 
-
       <div
         class="story-segment"
         data-segment="5"
@@ -114,14 +111,12 @@
         <span class="story-fill"></span>
       </div>
 
-
       <div
         class="story-segment"
         data-segment="6"
       >
         <span class="story-fill"></span>
       </div>
-
 
       <div
         class="story-segment"
@@ -133,9 +128,8 @@
     </div>
 
 
-
     <!-- =====================================================
-         QUADRO VERTICAL
+         QUADRO PRINCIPAL 9:16
     ====================================================== -->
 
     <div
@@ -145,17 +139,17 @@
 
 
       <!-- ===================================================
-           LOGIN
-           
-           Único.
-           Não participa das barras.
-           Não participa da navegação dos Stories.
+           TELA 0 — LOGIN
+
+           Vídeo em loop.
+           Sem barras.
+           Sem interação de Stories.
       ==================================================== -->
 
       <section
         class="scene scene-login active"
         data-scene="0"
-        data-login="true"
+        data-type="login"
       >
 
         <video
@@ -221,12 +215,48 @@
 
 
       <!-- ===================================================
-           STORY 1
+           TELA 1 — COMEÇAR
+
+           Tela preta.
+           Sem barras.
+           Sem Stories.
+
+           O botão usa exatamente a mesma
+           linguagem visual do "Entrar".
+      ==================================================== -->
+
+      <section
+        class="scene start-screen"
+        data-scene="1"
+        data-type="start"
+      >
+
+        <div
+          class="start-panel"
+        >
+
+          <button
+            id="startButton"
+            class="ui-box ui-button start-button"
+            type="button"
+          >
+            Começar
+          </button>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ===================================================
+           TELA 2 — STORY 1
       ==================================================== -->
 
       <section
         class="scene story-scene"
-        data-scene="1"
+        data-scene="2"
+        data-story="1"
       >
 
         <video
@@ -250,12 +280,13 @@
 
 
       <!-- ===================================================
-           STORY 2
+           TELA 3 — STORY 2
       ==================================================== -->
 
       <section
         class="scene story-scene"
-        data-scene="2"
+        data-scene="3"
+        data-story="2"
       >
 
         <video
@@ -279,12 +310,13 @@
 
 
       <!-- ===================================================
-           STORY 3
+           TELA 4 — STORY 3
       ==================================================== -->
 
       <section
         class="scene story-scene"
-        data-scene="3"
+        data-scene="4"
+        data-story="3"
       >
 
         <video
@@ -308,12 +340,13 @@
 
 
       <!-- ===================================================
-           STORY 4
+           TELA 5 — STORY 4
       ==================================================== -->
 
       <section
         class="scene story-scene"
-        data-scene="4"
+        data-scene="5"
+        data-story="4"
       >
 
         <video
@@ -337,12 +370,13 @@
 
 
       <!-- ===================================================
-           STORY 5
+           TELA 6 — STORY 5
       ==================================================== -->
 
       <section
         class="scene story-scene"
-        data-scene="5"
+        data-scene="6"
+        data-story="5"
       >
 
         <video
@@ -366,12 +400,13 @@
 
 
       <!-- ===================================================
-           STORY 6
+           TELA 7 — STORY 6
       ==================================================== -->
 
       <section
         class="scene story-scene"
-        data-scene="6"
+        data-scene="7"
+        data-story="6"
       >
 
         <video
@@ -395,12 +430,13 @@
 
 
       <!-- ===================================================
-           STORY 7
+           TELA 8 — STORY 7
       ==================================================== -->
 
       <section
         class="scene story-scene"
-        data-scene="7"
+        data-scene="8"
+        data-story="7"
       >
 
         <video
@@ -424,12 +460,13 @@
 
 
       <!-- ===================================================
-           STORY 8
+           TELA 9 — STORY 8
       ==================================================== -->
 
       <section
         class="scene story-scene"
-        data-scene="8"
+        data-scene="9"
+        data-story="8"
       >
 
         <video
@@ -456,9 +493,10 @@
 
 
     <!-- =====================================================
-         ÁREAS INVISÍVEIS DE INTERAÇÃO
+         ÁREAS INVISÍVEIS DOS STORIES
 
-         Só ficam ativas depois do login.
+         Só ficam ativas quando a pessoa
+         já estiver dentro do primeiro Story.
     ====================================================== -->
 
     <div
@@ -490,7 +528,9 @@
   </main>
 
 
-  <script src="script.js"></script>
+  <script
+    src="script.js"
+  ></script>
 
 </body>
 
