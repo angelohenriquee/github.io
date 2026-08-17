@@ -50,6 +50,7 @@ body {
   overflow: hidden;
 
   -webkit-font-smoothing: antialiased;
+
   text-rendering: optimizeLegibility;
 }
 
@@ -132,14 +133,10 @@ body {
   background: #000000;
 
   opacity: 0;
+
   visibility: hidden;
 
   pointer-events: none;
-
-  /*
-    Sem transição.
-    A troca precisa ser instantânea.
-  */
 
   transition: none;
 }
@@ -147,15 +144,16 @@ body {
 
 .scene.active {
   opacity: 1;
+
   visibility: visible;
 
   pointer-events: auto;
 }
 
 
-/*
-  Cada cena ativa fica acima da anterior.
-*/
+/* =========================================================
+   ORDEM DAS CENAS
+========================================================= */
 
 .scene[data-scene="0"] {
   z-index: 1;
@@ -229,6 +227,24 @@ body {
 
 
 /* =========================================================
+   VÍDEO 3 × C
+========================================================= */
+
+.start-video {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  background: #000000;
+}
+
+
+/* =========================================================
    TELA COMEÇAR
 ========================================================= */
 
@@ -237,11 +253,21 @@ body {
 }
 
 
+/* =========================================================
+   PAINEL DO BOTÃO COMEÇAR
+========================================================= */
+
 .start-panel {
   position: absolute;
 
   left: 50%;
-  top: 50%;
+
+  /*
+    Aproximadamente a posição
+    marcada na referência.
+  */
+
+  top: 60%;
 
   transform:
     translate(
@@ -257,8 +283,37 @@ body {
 
   justify-content: center;
   align-items: center;
+
+  /*
+    O botão começa invisível.
+    Só aparece quando o vídeo termina.
+  */
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  pointer-events: none;
 }
 
+
+/*
+  Estado liberado pelo JavaScript
+*/
+
+.start-screen.ready
+.start-panel {
+  opacity: 1;
+
+  visibility: visible;
+
+  pointer-events: auto;
+}
+
+
+/* =========================================================
+   BOTÃO COMEÇAR
+========================================================= */
 
 .start-button {
   width: 100%;
@@ -715,6 +770,13 @@ body {
     width: 76%;
 
     max-width: 340px;
+
+    /*
+      Mantém a mesma proporção
+      da posição definida acima.
+    */
+
+    top: 60%;
   }
 
 
