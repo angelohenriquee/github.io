@@ -81,8 +81,20 @@ const enterButton =
 
 
 /* =========================================================
-   TELA COMEÇAR
+   ABERTURA 3 × C
 ========================================================= */
+
+const startVideo =
+  document.getElementById(
+    "startVideo"
+  );
+
+
+const startScreen =
+  document.querySelector(
+    ".start-screen"
+  );
+
 
 const startButton =
   document.getElementById(
@@ -116,7 +128,7 @@ const storyNext =
    ÍNDICES
 
    0 = LOGIN
-   1 = COMEÇAR
+   1 = ABERTURA 3 × C
    2 = STORY 1
    3 = STORY 2
    4 = STORY 3
@@ -144,7 +156,8 @@ const LAST_STORY =
 let currentScene =
   LOGIN_SCENE;
 
-let unlocked = false;
+let unlocked =
+  false;
 
 let activePointerId =
   null;
@@ -170,7 +183,8 @@ function stopProgress() {
       progressFrame
     );
 
-    progressFrame = null;
+    progressFrame =
+      null;
 
   }
 
@@ -327,37 +341,7 @@ function deactivateStories() {
 
 
 /* =========================================================
-   PARAR VÍDEO
-========================================================= */
-
-function stopVideo(
-  video
-) {
-
-  if (!video) {
-    return;
-  }
-
-
-  video.pause();
-
-
-  try {
-
-    video.currentTime =
-      0;
-
-  } catch (error) {
-
-    // Ignorar
-
-  }
-
-}
-
-
-/* =========================================================
-   PARAR E SILENCIAR TODOS
+   PARAR TODOS OS VÍDEOS
 ========================================================= */
 
 function stopAllVideos() {
@@ -369,9 +353,11 @@ function stopAllVideos() {
         return;
       }
 
+
       video.pause();
 
-      video.muted = true;
+      video.muted =
+        true;
 
     }
   );
@@ -453,6 +439,123 @@ function showScene(
 
 
 /* =========================================================
+   PREPARAR ABERTURA 3 × C
+========================================================= */
+
+function prepareStartScreen() {
+
+  if (
+    !startVideo
+  ) {
+
+    return;
+
+  }
+
+
+  /*
+    Sempre começa escondido.
+  */
+
+  startScreen.classList.remove(
+    "ready"
+  );
+
+
+  /*
+    O vídeo não tem loop.
+  */
+
+  startVideo.loop =
+    false;
+
+
+  startVideo.muted =
+    true;
+
+
+  startVideo.playsInline =
+    true;
+
+
+  startVideo.setAttribute(
+    "playsinline",
+    ""
+  );
+
+
+  startVideo.setAttribute(
+    "webkit-playsinline",
+    ""
+  );
+
+
+  try {
+
+    startVideo.currentTime =
+      0;
+
+  } catch (error) {
+
+    // Ignorar
+
+  }
+
+
+  /*
+    Começa o vídeo imediatamente.
+    Como está mutado, o navegador
+    pode reproduzi-lo após a interação
+    do botão "Entrar".
+  */
+
+  const promise =
+    startVideo.play();
+
+
+  if (
+    promise &&
+    typeof promise.catch ===
+      "function"
+  ) {
+
+    promise.catch(
+      () => {}
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   FINAL DO VÍDEO 3 × C
+========================================================= */
+
+function revealStartButton() {
+
+  if (
+    !startScreen
+  ) {
+
+    return;
+
+  }
+
+
+  /*
+    O botão aparece somente
+    depois que o vídeo terminou.
+  */
+
+  startScreen.classList.add(
+    "ready"
+  );
+
+}
+
+
+/* =========================================================
    COMEÇAR UM STORY
 ========================================================= */
 
@@ -466,6 +569,7 @@ function startStory(
 
   if (!video) {
     return;
+
   }
 
 
@@ -477,23 +581,17 @@ function startStory(
 
 
   /*
-    Primeiro:
-    todos os vídeos são parados
-    e silenciados.
+    Para e silencia TODOS
+    antes da troca.
   */
 
   stopAllVideos();
 
 
   /*
-    MUITO IMPORTANTE:
-
-    O vídeo de destino volta ao
-    primeiro frame ANTES de sua
-    cena ficar visível.
-
-    Isso elimina o "flash" do
-    último frame anterior.
+    Coloca o vídeo de destino
+    no primeiro frame ANTES
+    de mostrar a cena.
   */
 
   try {
@@ -508,15 +606,12 @@ function startStory(
   }
 
 
-  /*
-    Mantém o vídeo silencioso
-    enquanto ainda está sendo
-    preparado.
-  */
+  video.muted =
+    true;
 
-  video.muted = true;
 
-  video.playsInline = true;
+  video.playsInline =
+    true;
 
 
   video.setAttribute(
@@ -532,7 +627,7 @@ function startStory(
 
 
   /*
-    Agora a cena pode aparecer.
+    Agora mostramos a cena.
   */
 
   showScene(
@@ -541,11 +636,11 @@ function startStory(
 
 
   /*
-    Somente neste momento
-    o áudio é liberado.
+    Agora libera o áudio.
   */
 
-  video.muted = false;
+  video.muted =
+    false;
 
 
   /*
@@ -578,10 +673,6 @@ function startStory(
   );
 
 
-  /*
-    Reinicia a barra.
-  */
-
   startProgress();
 
 }
@@ -596,8 +687,10 @@ function goToStory(
 ) {
 
   if (
-    index < FIRST_STORY ||
-    index > LAST_STORY
+    index <
+      FIRST_STORY ||
+    index >
+      LAST_STORY
   ) {
 
     return;
@@ -630,7 +723,7 @@ function previousStory() {
 
   /*
     Story 1 não volta
-    para "Começar".
+    para a abertura.
   */
 
   if (
@@ -714,7 +807,7 @@ function handleStoryEnd() {
 
 
 /* =========================================================
-   PAUSAR
+   PAUSAR STORY
 ========================================================= */
 
 function pauseCurrentStory() {
@@ -725,6 +818,7 @@ function pauseCurrentStory() {
 
   if (!video) {
     return;
+
   }
 
 
@@ -734,7 +828,7 @@ function pauseCurrentStory() {
 
 
 /* =========================================================
-   CONTINUAR
+   CONTINUAR STORY
 ========================================================= */
 
 function resumeCurrentStory() {
@@ -754,8 +848,8 @@ function resumeCurrentStory() {
 
 
   /*
-    Garante que os outros vídeos
-    permaneçam silenciosos.
+    Mantém todos os demais
+    vídeos parados e mudos.
   */
 
   videos.forEach(
@@ -789,7 +883,8 @@ function resumeCurrentStory() {
   );
 
 
-  video.muted = false;
+  video.muted =
+    false;
 
 
   const promise =
@@ -903,6 +998,7 @@ storyPause.addEventListener(
     isHolding =
       false;
 
+
     activePointerId =
       null;
 
@@ -945,6 +1041,7 @@ storyPause.addEventListener(
 
     isHolding =
       false;
+
 
     activePointerId =
       null;
@@ -1092,7 +1189,9 @@ function unlockExperience() {
       "visible"
     );
 
+
     passwordInput.focus();
+
 
     return;
 
@@ -1134,7 +1233,7 @@ function unlockExperience() {
 
 
   /*
-    Mostra a tela Começar.
+    Mostra a abertura 3 × C.
   */
 
   showScene(
@@ -1143,18 +1242,24 @@ function unlockExperience() {
 
 
   /*
-    Barras continuam escondidas.
+    As barras continuam escondidas.
   */
 
   deactivateStories();
 
 
   /*
-    Nenhum vídeo dos Stories
-    está reproduzindo.
+    Nenhum Story começa ainda.
   */
 
   stopAllVideos();
+
+
+  /*
+    Inicia o vídeo 3 × C.
+  */
+
+  prepareStartScreen();
 
 }
 
@@ -1209,6 +1314,26 @@ passwordInput.addEventListener(
 
 
 /* =========================================================
+   FINAL DO VÍDEO 3 × C
+========================================================= */
+
+if (
+  startVideo
+) {
+
+  startVideo.addEventListener(
+    "ended",
+    () => {
+
+      revealStartButton();
+
+    }
+  );
+
+}
+
+
+/* =========================================================
    BOTÃO COMEÇAR
 ========================================================= */
 
@@ -1226,7 +1351,8 @@ startButton.addEventListener(
 
 
     /*
-      Agora entram as barras.
+      As barras entram
+      somente agora.
     */
 
     activateStories();
@@ -1245,7 +1371,7 @@ startButton.addEventListener(
 
 
 /* =========================================================
-   VÍDEOS
+   VÍDEOS DOS STORIES
 ========================================================= */
 
 videos.forEach(
@@ -1256,6 +1382,7 @@ videos.forEach(
 
     if (!video) {
       return;
+
     }
 
 
@@ -1264,8 +1391,7 @@ videos.forEach(
       () => {
 
         /*
-          Login não pertence
-          à sequência.
+          Login não participa.
         */
 
         if (
@@ -1279,8 +1405,8 @@ videos.forEach(
 
 
         /*
-          A cena Começar não
-          possui vídeo.
+          3 × C não participa da
+          navegação dos Stories.
         */
 
         if (
@@ -1294,7 +1420,7 @@ videos.forEach(
 
 
         /*
-          Só o Story atual
+          Apenas o Story atual
           pode avançar.
         */
 
@@ -1340,7 +1466,40 @@ if (
     ""
   );
 
+
   loginVideo.setAttribute(
+    "webkit-playsinline",
+    ""
+  );
+
+}
+
+
+/* =========================================================
+   VÍDEO 3 × C
+========================================================= */
+
+if (
+  startVideo
+) {
+
+  startVideo.loop =
+    false;
+
+  startVideo.muted =
+    true;
+
+  startVideo.playsInline =
+    true;
+
+
+  startVideo.setAttribute(
+    "playsinline",
+    ""
+  );
+
+
+  startVideo.setAttribute(
     "webkit-playsinline",
     ""
   );
@@ -1425,19 +1584,38 @@ function initialize() {
   unlocked =
     false;
 
+
   currentScene =
     LOGIN_SCENE;
 
 
   deactivateStories();
 
+
   resetProgressBars();
+
 
   stopProgress();
 
 
   /*
-    Somente o login aparece.
+    Esconde o botão Começar
+    inicialmente.
+  */
+
+  if (
+    startScreen
+  ) {
+
+    startScreen.classList.remove(
+      "ready"
+    );
+
+  }
+
+
+  /*
+    Somente o Login aparece.
   */
 
   scenes.forEach(
@@ -1469,6 +1647,7 @@ function initialize() {
 
       if (!video) {
         return;
+
       }
 
 
@@ -1501,7 +1680,7 @@ function initialize() {
 
 
   /*
-    Login em loop.
+    Login começa em loop.
   */
 
   if (
