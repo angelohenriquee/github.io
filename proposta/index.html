@@ -18,7 +18,7 @@
   <title>Experiência Fotográfica</title>
 
 
-  <!-- Poppins Regular -->
+  <!-- Poppins -->
 
   <link
     rel="preconnect"
@@ -57,7 +57,7 @@
          BARRAS DOS STORIES
 
          Somente os 8 Stories possuem barras.
-         Login e Começar ficam fora delas.
+         Login e tela Começar ficam fora delas.
     ====================================================== -->
 
     <div
@@ -209,7 +209,10 @@
 
 
       <!-- ===================================================
-           TELA 1 — COMEÇAR
+           TELA 1 — ABERTURA / COMEÇAR
+
+           O vídeo 3xc fica como fundo.
+           O botão só aparece quando o vídeo termina.
       ==================================================== -->
 
       <section
@@ -217,6 +220,25 @@
         data-scene="1"
         data-type="start"
       >
+
+        <video
+          id="startVideo"
+          class="scene-video start-video"
+          muted
+          playsinline
+          webkit-playsinline
+          preload="auto"
+          disablepictureinpicture
+          controlslist="nodownload nofullscreen noremoteplayback"
+        >
+
+          <source
+            src="3xc.mp4"
+            type="video/mp4"
+          >
+
+        </video>
+
 
         <div
           class="start-panel"
