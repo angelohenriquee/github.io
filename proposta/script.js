@@ -380,38 +380,6 @@ function stopAllVideos() {
 
 
 /* =========================================================
-   REPRODUZIR
-========================================================= */
-
-function playVideo(
-  video
-) {
-
-  if (!video) {
-    return;
-  }
-
-
-  const promise =
-    video.play();
-
-
-  if (
-    promise &&
-    typeof promise.catch ===
-      "function"
-  ) {
-
-    promise.catch(
-      () => {}
-    );
-
-  }
-
-}
-
-
-/* =========================================================
    PRELOAD
 ========================================================= */
 
@@ -460,7 +428,7 @@ function preloadNext(
 
 
 /* =========================================================
-   ATIVAR UMA CENA
+   MOSTRAR CENA
 ========================================================= */
 
 function showScene(
@@ -509,8 +477,8 @@ function startStory(
 
 
   /*
-    Todos os vídeos são
-    imediatamente pausados
+    Primeiro:
+    todos os vídeos são parados
     e silenciados.
   */
 
@@ -518,16 +486,14 @@ function startStory(
 
 
   /*
-    Troca visual instantânea.
-  */
+    MUITO IMPORTANTE:
 
-  showScene(
-    index
-  );
+    O vídeo de destino volta ao
+    primeiro frame ANTES de sua
+    cena ficar visível.
 
-
-  /*
-    Começa sempre do início.
+    Isso elimina o "flash" do
+    último frame anterior.
   */
 
   try {
@@ -543,11 +509,12 @@ function startStory(
 
 
   /*
-    Somente o Story atual
-    recebe áudio.
+    Mantém o vídeo silencioso
+    enquanto ainda está sendo
+    preparado.
   */
 
-  video.muted = false;
+  video.muted = true;
 
   video.playsInline = true;
 
@@ -565,22 +532,55 @@ function startStory(
 
 
   /*
-    Reproduz imediatamente.
+    Agora a cena pode aparecer.
   */
 
-  playVideo(
-    video
+  showScene(
+    index
   );
 
 
   /*
-    Prepara a próxima tela.
+    Somente neste momento
+    o áudio é liberado.
+  */
+
+  video.muted = false;
+
+
+  /*
+    Reprodução imediata.
+  */
+
+  const playPromise =
+    video.play();
+
+
+  if (
+    playPromise &&
+    typeof playPromise.catch ===
+      "function"
+  ) {
+
+    playPromise.catch(
+      () => {}
+    );
+
+  }
+
+
+  /*
+    Pré-carrega o próximo.
   */
 
   preloadNext(
     index
   );
 
+
+  /*
+    Reinicia a barra.
+  */
 
   startProgress();
 
@@ -629,8 +629,8 @@ function goToStory(
 function previousStory() {
 
   /*
-    Story 1 NÃO volta para
-    a tela "Começar".
+    Story 1 não volta
+    para "Começar".
   */
 
   if (
@@ -679,11 +679,6 @@ function nextStory() {
 
 function handleStoryEnd() {
 
-  /*
-    Último Story:
-    permanece nele.
-  */
-
   if (
     currentScene >=
     LAST_STORY
@@ -713,18 +708,13 @@ function handleStoryEnd() {
   }
 
 
-  /*
-    Os demais passam
-    imediatamente ao próximo.
-  */
-
   nextStory();
 
 }
 
 
 /* =========================================================
-   PAUSA
+   PAUSAR
 ========================================================= */
 
 function pauseCurrentStory() {
@@ -764,8 +754,8 @@ function resumeCurrentStory() {
 
 
   /*
-    Garante que nenhum outro
-    vídeo tenha áudio.
+    Garante que os outros vídeos
+    permaneçam silenciosos.
   */
 
   videos.forEach(
@@ -802,9 +792,21 @@ function resumeCurrentStory() {
   video.muted = false;
 
 
-  playVideo(
-    video
-  );
+  const promise =
+    video.play();
+
+
+  if (
+    promise &&
+    typeof promise.catch ===
+      "function"
+  ) {
+
+    promise.catch(
+      () => {}
+    );
+
+  }
 
 }
 
@@ -1107,7 +1109,7 @@ function unlockExperience() {
 
 
   /*
-    Para o vídeo de login.
+    Para o login.
   */
 
   if (
@@ -1123,7 +1125,7 @@ function unlockExperience() {
 
 
   /*
-    Esconde o login.
+    Esconde o painel.
   */
 
   loginPanel.classList.add(
@@ -1132,7 +1134,7 @@ function unlockExperience() {
 
 
   /*
-    Mostra a tela "Começar".
+    Mostra a tela Começar.
   */
 
   showScene(
@@ -1141,7 +1143,7 @@ function unlockExperience() {
 
 
   /*
-    As barras ainda NÃO aparecem.
+    Barras continuam escondidas.
   */
 
   deactivateStories();
@@ -1149,7 +1151,7 @@ function unlockExperience() {
 
   /*
     Nenhum vídeo dos Stories
-    começa nesta etapa.
+    está reproduzindo.
   */
 
   stopAllVideos();
@@ -1224,15 +1226,14 @@ startButton.addEventListener(
 
 
     /*
-      Agora a interface dos Stories
-      passa a existir.
+      Agora entram as barras.
     */
 
     activateStories();
 
 
     /*
-      Entra imediatamente no Story 1.
+      Começa o primeiro Story.
     */
 
     startStory(
@@ -1263,7 +1264,8 @@ videos.forEach(
       () => {
 
         /*
-          Login não participa.
+          Login não pertence
+          à sequência.
         */
 
         if (
@@ -1277,8 +1279,8 @@ videos.forEach(
 
 
         /*
-          A tela "Começar"
-          não possui vídeo.
+          A cena Começar não
+          possui vídeo.
         */
 
         if (
@@ -1293,7 +1295,7 @@ videos.forEach(
 
         /*
           Só o Story atual
-          pode disparar a mudança.
+          pode avançar.
         */
 
         if (
@@ -1347,7 +1349,7 @@ if (
 
 
 /* =========================================================
-   ZOOM IOS
+   BLOQUEIO DE ZOOM IOS
 ========================================================= */
 
 document.addEventListener(
@@ -1429,12 +1431,13 @@ function initialize() {
 
   deactivateStories();
 
-
   resetProgressBars();
+
+  stopProgress();
 
 
   /*
-    Apenas o Login fica visível.
+    Somente o login aparece.
   */
 
   scenes.forEach(
@@ -1455,7 +1458,7 @@ function initialize() {
 
   /*
     Todos os vídeos começam
-    pausados e sem áudio.
+    parados e sem áudio.
   */
 
   videos.forEach(
@@ -1521,10 +1524,7 @@ function initialize() {
 
 
   /*
-    Pré-carrega o primeiro
-    Story real.
-
-    O Story 1 está no índice 2.
+    Pré-carrega o Story 1.
   */
 
   preloadNext(
