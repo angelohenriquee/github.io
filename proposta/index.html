@@ -56,7 +56,8 @@
     <!-- =====================================================
          BARRAS DOS STORIES
 
-         Somente os 8 Stories possuem barras.
+         SOMENTE os 8 Stories possuem barras.
+
          Login e tela Começar ficam fora delas.
     ====================================================== -->
 
@@ -209,10 +210,7 @@
 
 
       <!-- ===================================================
-           TELA 1 — ABERTURA / COMEÇAR
-
-           O vídeo 3xc fica como fundo.
-           O botão só aparece quando o vídeo termina.
+           TELA 1 — ABERTURA 3 × C
       ==================================================== -->
 
       <section
@@ -409,7 +407,7 @@
 
 
       <!-- ===================================================
-           STORY 6
+           STORY 6 — INCLUÍDOS
       ==================================================== -->
 
       <section
@@ -439,7 +437,7 @@
 
 
       <!-- ===================================================
-           STORY 7
+           STORY 7 — INVESTIMENTO
       ==================================================== -->
 
       <section
@@ -469,16 +467,20 @@
 
 
       <!-- ===================================================
-           STORY 8
+           STORY 8 — ÚLTIMO
+
+           O botão de WhatsApp aparece
+           1 segundo após o início.
       ==================================================== -->
 
       <section
-        class="scene story-scene"
+        class="scene story-scene final-story"
         data-scene="9"
         data-story="8"
       >
 
         <video
+          id="finalVideo"
           class="scene-video"
           preload="auto"
           playsinline
@@ -488,11 +490,29 @@
         >
 
           <source
-            src="encerramento.mp4"
+            src="ultimo.mp4"
             type="video/mp4"
           >
 
         </video>
+
+
+        <div
+          id="finalPanel"
+          class="final-panel"
+        >
+
+          <a
+            id="whatsappButton"
+            class="ui-box ui-button final-button"
+            href="https://wa.me/5531972055172?text=Ol%C3%A1%2C%20%C3%82ngelo.%20Conheci%20o%20projeto%203%20%C3%97%20C%20e%20quero%20fazer%20parte.%20Gostaria%20de%20seguir%20com%20a%20contrata%C3%A7%C3%A3o."
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Quero fazer parte
+          </a>
+
+        </div>
 
       </section>
 
