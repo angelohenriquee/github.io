@@ -448,7 +448,7 @@ body {
 
 
 /* =========================================================
-   CAMPOS E BOTÕES
+   CAMPOS
 ========================================================= */
 
 .ui-box {
@@ -549,6 +549,10 @@ input.ui-box {
 }
 
 
+/* =========================================================
+   BOTÕES
+========================================================= */
+
 .ui-button {
   cursor: pointer;
 
@@ -584,7 +588,7 @@ input.ui-box {
 
 
 /* =========================================================
-   ERRO DA SENHA
+   ERRO
 ========================================================= */
 
 .password-error {
@@ -610,17 +614,13 @@ input.ui-box {
 
 
 /* =========================================================
-   CONTROLES INVISÍVEIS DOS STORIES
+   CONTROLES INVISÍVEIS
 ========================================================= */
 
 .story-controls {
   position: fixed;
 
   inset: 0;
-
-  /*
-    Fica abaixo do botão final.
-  */
 
   z-index: 400;
 
@@ -735,13 +735,17 @@ input.ui-box {
 
 
 /*
-   ESTA É A CORREÇÃO PRINCIPAL.
+   A última cena sobe acima dos controles
+   invisíveis dos Stories.
+*/
 
-   O botão pertence ao quadro 9:16.
+.final-story.active {
+  z-index: 450 !important;
+}
 
-   Ele ocupa 50% da largura do quadro,
-   fica exatamente no centro horizontal
-   e fica ACIMA dos controles invisíveis.
+
+/*
+   Painel do botão final.
 */
 
 .final-panel {
@@ -762,14 +766,9 @@ input.ui-box {
   max-width: none;
 
   margin: 0;
-
   padding: 0;
 
   display: block;
-
-  /*
-    Acima de .story-controls.
-  */
 
   z-index: 1001;
 
@@ -792,8 +791,18 @@ input.ui-box {
 }
 
 
+/*
+   O link usa FLEX para que o texto
+   fique exatamente no centro vertical
+   e horizontal.
+*/
+
 .final-button {
-  display: block;
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
 
   width: 100%;
 
@@ -804,7 +813,40 @@ input.ui-box {
   padding:
     0 12px;
 
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.24
+    );
+
+  border-radius: 7px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.10
+    );
+
+  color: #ffffff;
+
+  font-family:
+    "Poppins",
+    sans-serif;
+
+  font-size: 16px;
+
+  line-height: 1.2;
+
+  font-weight: 400;
+
   text-align: center;
+
+  text-decoration: none;
 
   pointer-events: auto;
 
@@ -812,7 +854,32 @@ input.ui-box {
 
   touch-action: manipulation;
 
-  text-decoration: none;
+  backdrop-filter: blur(7px);
+
+  -webkit-backdrop-filter: blur(7px);
+
+  -webkit-appearance: none;
+
+  appearance: none;
+}
+
+
+.final-button:hover {
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.16
+    );
+}
+
+
+.final-button:active {
+  transform:
+    scale(
+      0.985
+    );
 }
 
 
