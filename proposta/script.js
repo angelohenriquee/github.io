@@ -725,11 +725,6 @@ function startStory(
   stopAllVideos();
 
 
-  /*
-    Retorna ao primeiro frame
-    antes de mostrar a cena.
-  */
-
   try {
 
     video.currentTime =
@@ -761,8 +756,7 @@ function startStory(
 
 
   /*
-    O último vídeo é sempre
-    silencioso.
+    O último vídeo é sempre mudo.
   */
 
   if (
@@ -797,10 +791,6 @@ function startStory(
     index
   );
 
-
-  /*
-    Reproduz imediatamente.
-  */
 
   const playPromise =
     video.play();
@@ -1027,10 +1017,6 @@ function resumeCurrentStory() {
   );
 
 
-  /*
-    Último vídeo permanece mudo.
-  */
-
   video.muted =
     currentScene ===
     LAST_STORY;
@@ -1220,15 +1206,18 @@ storyPrev.addEventListener(
     if (
       !unlocked ||
       currentScene <
-        FIRST_STORY ||
-      currentScene ===
-        LAST_STORY
+        FIRST_STORY
     ) {
 
       return;
 
     }
 
+
+    /*
+      Agora também funciona
+      no último Story.
+    */
 
     previousStory();
 
@@ -1298,9 +1287,20 @@ progressSegments.forEach(
         }
 
 
+        /*
+          Agora também é possível
+          clicar nas barras anteriores
+          estando no último Story.
+        */
+
+        const targetScene =
+          FIRST_STORY +
+          index;
+
+
         if (
-          currentScene ===
-          LAST_STORY
+          targetScene >=
+          currentScene
         ) {
 
           return;
@@ -1309,8 +1309,7 @@ progressSegments.forEach(
 
 
         goToStory(
-          FIRST_STORY +
-          index
+          targetScene
         );
 
 
@@ -1507,21 +1506,10 @@ if (
     "click",
     event => {
 
-      /*
-        Bloqueia qualquer comportamento
-        padrão do botão.
-      */
-
       event.preventDefault();
-
 
       event.stopPropagation();
 
-
-      /*
-        Garante que estamos no
-        último Story.
-      */
 
       if (
         currentScene !==
@@ -1532,11 +1520,6 @@ if (
 
       }
 
-
-      /*
-        Redirecionamento direto
-        para o WhatsApp.
-      */
 
       window.location.assign(
         CONFIG.whatsappUrl
@@ -1574,10 +1557,6 @@ videos.forEach(
       "ended",
       () => {
 
-        /*
-          Login não participa.
-        */
-
         if (
           index ===
           LOGIN_SCENE
@@ -1588,10 +1567,6 @@ videos.forEach(
         }
 
 
-        /*
-          3 × C não participa.
-        */
-
         if (
           index ===
           START_SCENE
@@ -1601,11 +1576,6 @@ videos.forEach(
 
         }
 
-
-        /*
-          Apenas a cena ativa
-          pode comandar a navegação.
-        */
 
         if (
           index !==
@@ -1781,7 +1751,7 @@ document.addEventListener(
 
 
 /* =========================================================
-   GESTOS DO SAFARI
+   GESTOS SAFARI
 ========================================================= */
 
 document.addEventListener(
@@ -1839,11 +1809,6 @@ document.addEventListener(
       now -
       lastTouchEnd;
 
-
-    /*
-      Elementos interativos precisam
-      continuar recebendo seu toque.
-    */
 
     const isInteractiveElement =
       event.target.closest(
@@ -1998,10 +1963,6 @@ function initialize() {
   );
 
 
-  /*
-    Login em loop.
-  */
-
   if (
     loginVideo
   ) {
@@ -2022,20 +1983,12 @@ function initialize() {
   }
 
 
-  /*
-    Pré-carrega o Story 1.
-  */
-
   preloadNext(
     START_SCENE
   );
 
 }
 
-
-/* =========================================================
-   INICIAR
-========================================================= */
 
 window.addEventListener(
   "load",
