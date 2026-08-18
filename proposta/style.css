@@ -50,11 +50,6 @@ body {
 
   overflow: hidden;
 
-  /*
-    Evita scroll e gestos de navegação
-    que possam alterar a escala.
-  */
-
   touch-action: none;
 
   -webkit-font-smoothing: antialiased;
@@ -168,7 +163,7 @@ body {
 
 
 /* =========================================================
-   ORDEM
+   ORDEM DAS CENAS
 ========================================================= */
 
 .scene[data-scene="0"] {
@@ -245,7 +240,7 @@ body {
 
 
 /* =========================================================
-   ABERTURA 3 × C
+   VÍDEO 3 × C
 ========================================================= */
 
 .start-video {
@@ -263,7 +258,7 @@ body {
 
 
 /* =========================================================
-   COMEÇAR
+   TELA COMEÇAR
 ========================================================= */
 
 .start-screen {
@@ -299,11 +294,12 @@ body {
   visibility: hidden;
 
   pointer-events: none;
+
+  z-index: 100;
 }
 
 
-.start-screen.ready
-.start-panel {
+.start-screen.ready .start-panel {
   opacity: 1;
 
   visibility: visible;
@@ -318,7 +314,7 @@ body {
 
 
 /* =========================================================
-   BARRAS
+   BARRAS DOS STORIES
 ========================================================= */
 
 .story-progress {
@@ -357,8 +353,7 @@ body {
 }
 
 
-.experience.story-active
-.story-progress {
+.experience.story-active .story-progress {
   opacity: 1;
 
   visibility: visible;
@@ -453,7 +448,7 @@ body {
 
 
 /* =========================================================
-   CAMPOS
+   CAMPOS E BOTÕES
 ========================================================= */
 
 .ui-box {
@@ -554,10 +549,6 @@ input.ui-box {
 }
 
 
-/* =========================================================
-   BOTÕES
-========================================================= */
-
 .ui-button {
   cursor: pointer;
 
@@ -593,7 +584,7 @@ input.ui-box {
 
 
 /* =========================================================
-   ERRO
+   ERRO DA SENHA
 ========================================================= */
 
 .password-error {
@@ -619,13 +610,17 @@ input.ui-box {
 
 
 /* =========================================================
-   CONTROLES INVISÍVEIS
+   CONTROLES INVISÍVEIS DOS STORIES
 ========================================================= */
 
 .story-controls {
   position: fixed;
 
   inset: 0;
+
+  /*
+    Fica abaixo do botão final.
+  */
 
   z-index: 400;
 
@@ -639,8 +634,7 @@ input.ui-box {
 }
 
 
-.experience.story-active
-.story-controls {
+.experience.story-active .story-controls {
   pointer-events: auto;
 
   opacity: 1;
@@ -741,13 +735,13 @@ input.ui-box {
 
 
 /*
-   IMPORTANTE:
+   ESTA É A CORREÇÃO PRINCIPAL.
 
-   O painel pertence ao quadro 9:16.
+   O botão pertence ao quadro 9:16.
 
-   Portanto:
-   50% = exatamente metade da largura
-   do próprio quadro, e não da tela inteira.
+   Ele ocupa 50% da largura do quadro,
+   fica exatamente no centro horizontal
+   e fica ACIMA dos controles invisíveis.
 */
 
 .final-panel {
@@ -773,6 +767,12 @@ input.ui-box {
 
   display: block;
 
+  /*
+    Acima de .story-controls.
+  */
+
+  z-index: 1001;
+
   opacity: 0;
 
   visibility: hidden;
@@ -783,8 +783,7 @@ input.ui-box {
 }
 
 
-.final-story.final-ready
-.final-panel {
+.final-story.final-ready .final-panel {
   opacity: 1;
 
   visibility: visible;
@@ -807,7 +806,13 @@ input.ui-box {
 
   text-align: center;
 
+  pointer-events: auto;
+
+  cursor: pointer;
+
   touch-action: manipulation;
+
+  text-decoration: none;
 }
 
 
@@ -854,18 +859,12 @@ input.ui-box {
   }
 
 
-  /*
-    Exatamente a mesma regra
-    do computador.
-
-    Não aumentamos o botão
-    no celular.
-  */
-
   .final-panel {
     width: 50%;
 
     top: 66%;
+
+    z-index: 1001;
   }
 
 
@@ -929,7 +928,7 @@ input.ui-box {
 
 
 /* =========================================================
-   VÍDEOS
+   CONTROLES NATIVOS DOS VÍDEOS
 ========================================================= */
 
 video::-webkit-media-controls {
