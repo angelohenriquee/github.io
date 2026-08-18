@@ -103,6 +103,28 @@ const startButton =
 
 
 /* =========================================================
+   ÚLTIMO STORY
+========================================================= */
+
+const finalVideo =
+  document.getElementById(
+    "finalVideo"
+  );
+
+
+const finalStory =
+  document.querySelector(
+    ".final-story"
+  );
+
+
+const finalPanel =
+  document.getElementById(
+    "finalPanel"
+  );
+
+
+/* =========================================================
    CONTROLES DOS STORIES
 ========================================================= */
 
@@ -136,7 +158,7 @@ const storyNext =
    6 = STORY 5
    7 = STORY 6
    8 = STORY 7
-   9 = STORY 8
+   9 = STORY 8 / ÚLTIMO
 ========================================================= */
 
 const LOGIN_SCENE = 0;
@@ -166,6 +188,9 @@ let isHolding =
   false;
 
 let progressFrame =
+  null;
+
+let finalButtonTimer =
   null;
 
 
@@ -439,6 +464,80 @@ function showScene(
 
 
 /* =========================================================
+   RESET DO ÚLTIMO BOTÃO
+========================================================= */
+
+function resetFinalButton() {
+
+  if (
+    finalButtonTimer !==
+    null
+  ) {
+
+    clearTimeout(
+      finalButtonTimer
+    );
+
+    finalButtonTimer =
+      null;
+
+  }
+
+
+  if (
+    finalStory
+  ) {
+
+    finalStory.classList.remove(
+      "final-ready"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   REVELAR BOTÃO FINAL
+========================================================= */
+
+function scheduleFinalButton() {
+
+  resetFinalButton();
+
+
+  /*
+    O botão aparece 1 segundo
+    depois da entrada no Story 8.
+  */
+
+  finalButtonTimer =
+    window.setTimeout(
+      () => {
+
+        if (
+          currentScene ===
+          LAST_STORY
+        ) {
+
+          finalStory.classList.add(
+            "final-ready"
+          );
+
+        }
+
+
+        finalButtonTimer =
+          null;
+
+      },
+      1000
+    );
+
+}
+
+
+/* =========================================================
    PREPARAR ABERTURA 3 × C
 ========================================================= */
 
@@ -453,18 +552,10 @@ function prepareStartScreen() {
   }
 
 
-  /*
-    Sempre começa escondido.
-  */
-
   startScreen.classList.remove(
     "ready"
   );
 
-
-  /*
-    O vídeo não tem loop.
-  */
 
   startVideo.loop =
     false;
@@ -502,13 +593,6 @@ function prepareStartScreen() {
   }
 
 
-  /*
-    Começa o vídeo imediatamente.
-    Como está mutado, o navegador
-    pode reproduzi-lo após a interação
-    do botão "Entrar".
-  */
-
   const promise =
     startVideo.play();
 
@@ -529,7 +613,7 @@ function prepareStartScreen() {
 
 
 /* =========================================================
-   FINAL DO VÍDEO 3 × C
+   FINAL DO 3 × C
 ========================================================= */
 
 function revealStartButton() {
@@ -542,11 +626,6 @@ function revealStartButton() {
 
   }
 
-
-  /*
-    O botão aparece somente
-    depois que o vídeo terminou.
-  */
 
   startScreen.classList.add(
     "ready"
@@ -568,6 +647,7 @@ function startStory(
 
 
   if (!video) {
+
     return;
 
   }
@@ -581,7 +661,15 @@ function startStory(
 
 
   /*
-    Para e silencia TODOS
+    Fecha qualquer botão final
+    pendente.
+  */
+
+  resetFinalButton();
+
+
+  /*
+    Para e silencia todos
     antes da troca.
   */
 
@@ -589,9 +677,9 @@ function startStory(
 
 
   /*
-    Coloca o vídeo de destino
-    no primeiro frame ANTES
-    de mostrar a cena.
+    O vídeo de destino volta
+    ao primeiro frame antes
+    de sua cena aparecer.
   */
 
   try {
@@ -627,7 +715,7 @@ function startStory(
 
 
   /*
-    Agora mostramos a cena.
+    Mostra a nova cena.
   */
 
   showScene(
@@ -636,7 +724,8 @@ function startStory(
 
 
   /*
-    Agora libera o áudio.
+    Só o vídeo atual recebe
+    áudio.
   */
 
   video.muted =
@@ -673,7 +762,26 @@ function startStory(
   );
 
 
+  /*
+    Barra começa acompanhando.
+  */
+
   startProgress();
+
+
+  /*
+    Se for o último Story,
+    agenda o botão.
+  */
+
+  if (
+    index ===
+    LAST_STORY
+  ) {
+
+    scheduleFinalButton();
+
+  }
 
 }
 
@@ -796,6 +904,11 @@ function handleStoryEnd() {
     }
 
 
+    /*
+      O botão já apareceu 1 segundo
+      após a entrada e permanece.
+    */
+
     return;
 
   }
@@ -807,7 +920,7 @@ function handleStoryEnd() {
 
 
 /* =========================================================
-   PAUSAR STORY
+   PAUSAR
 ========================================================= */
 
 function pauseCurrentStory() {
@@ -817,6 +930,7 @@ function pauseCurrentStory() {
 
 
   if (!video) {
+
     return;
 
   }
@@ -828,7 +942,7 @@ function pauseCurrentStory() {
 
 
 /* =========================================================
-   CONTINUAR STORY
+   CONTINUAR
 ========================================================= */
 
 function resumeCurrentStory() {
@@ -848,7 +962,7 @@ function resumeCurrentStory() {
 
 
   /*
-    Mantém todos os demais
+    Mantém todos os outros
     vídeos parados e mudos.
   */
 
@@ -1242,14 +1356,14 @@ function unlockExperience() {
 
 
   /*
-    As barras continuam escondidas.
+    Barras ainda escondidas.
   */
 
   deactivateStories();
 
 
   /*
-    Nenhum Story começa ainda.
+    Nenhum Story começa.
   */
 
   stopAllVideos();
@@ -1351,15 +1465,14 @@ startButton.addEventListener(
 
 
     /*
-      As barras entram
-      somente agora.
+      Agora entram as 8 barras.
     */
 
     activateStories();
 
 
     /*
-      Começa o primeiro Story.
+      Começa o Story 1.
     */
 
     startStory(
@@ -1381,6 +1494,7 @@ videos.forEach(
   ) => {
 
     if (!video) {
+
       return;
 
     }
@@ -1405,8 +1519,8 @@ videos.forEach(
 
 
         /*
-          3 × C não participa da
-          navegação dos Stories.
+          3 × C não pertence
+          aos Stories.
         */
 
         if (
@@ -1420,7 +1534,7 @@ videos.forEach(
 
 
         /*
-          Apenas o Story atual
+          Somente o Story atual
           pode avançar.
         */
 
@@ -1500,6 +1614,35 @@ if (
 
 
   startVideo.setAttribute(
+    "webkit-playsinline",
+    ""
+  );
+
+}
+
+
+/* =========================================================
+   ÚLTIMO VÍDEO
+========================================================= */
+
+if (
+  finalVideo
+) {
+
+  finalVideo.loop =
+    false;
+
+  finalVideo.playsInline =
+    true;
+
+
+  finalVideo.setAttribute(
+    "playsinline",
+    ""
+  );
+
+
+  finalVideo.setAttribute(
     "webkit-playsinline",
     ""
   );
@@ -1598,9 +1741,11 @@ function initialize() {
   stopProgress();
 
 
+  resetFinalButton();
+
+
   /*
-    Esconde o botão Começar
-    inicialmente.
+    Esconde o botão Começar.
   */
 
   if (
@@ -1646,6 +1791,7 @@ function initialize() {
     ) => {
 
       if (!video) {
+
         return;
 
       }
