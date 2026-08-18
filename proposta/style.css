@@ -253,19 +253,10 @@ body {
 }
 
 
-/* =========================================================
-   PAINEL DO BOTÃO COMEÇAR
-========================================================= */
-
 .start-panel {
   position: absolute;
 
   left: 50%;
-
-  /*
-    Aproximadamente a posição
-    marcada na referência.
-  */
 
   top: 60%;
 
@@ -284,11 +275,6 @@ body {
   justify-content: center;
   align-items: center;
 
-  /*
-    O botão começa invisível.
-    Só aparece quando o vídeo termina.
-  */
-
   opacity: 0;
 
   visibility: hidden;
@@ -296,10 +282,6 @@ body {
   pointer-events: none;
 }
 
-
-/*
-  Estado liberado pelo JavaScript
-*/
 
 .start-screen.ready
 .start-panel {
@@ -310,10 +292,6 @@ body {
   pointer-events: auto;
 }
 
-
-/* =========================================================
-   BOTÃO COMEÇAR
-========================================================= */
 
 .start-button {
   width: 100%;
@@ -563,6 +541,8 @@ body {
   transition:
     background 160ms ease,
     transform 140ms ease;
+
+  text-decoration: none;
 }
 
 
@@ -733,6 +713,62 @@ body {
 
 
 /* =========================================================
+   ÚLTIMA TELA
+========================================================= */
+
+.final-story {
+  background: #000000;
+}
+
+
+.final-panel {
+  position: absolute;
+
+  left: 50%;
+
+  /*
+    Mesmo eixo visual do botão Começar,
+    ligeiramente abaixo do centro.
+  */
+
+  top: 60%;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+
+  width: 68%;
+
+  max-width: 420px;
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  pointer-events: none;
+}
+
+
+.final-story.final-ready
+.final-panel {
+  opacity: 1;
+
+  visibility: visible;
+
+  pointer-events: auto;
+}
+
+
+.final-button {
+  display: block;
+
+  width: 100%;
+}
+
+
+/* =========================================================
    CELULAR
 ========================================================= */
 
@@ -771,10 +807,14 @@ body {
 
     max-width: 340px;
 
-    /*
-      Mantém a mesma proporção
-      da posição definida acima.
-    */
+    top: 60%;
+  }
+
+
+  .final-panel {
+    width: 76%;
+
+    max-width: 340px;
 
     top: 60%;
   }
@@ -856,7 +896,8 @@ video::-webkit-media-controls-panel {
 ========================================================= */
 
 button:focus-visible,
-input:focus-visible {
+input:focus-visible,
+a:focus-visible {
   outline:
     1px solid
     rgba(
