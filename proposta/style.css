@@ -643,23 +643,46 @@ input.ui-box {
 }
 
 
+/* =========================================================
+   CONTROLES NO ÚLTIMO STORY
+========================================================= */
+
 /*
-   NO ÚLTIMO STORY:
+   No último Story:
 
-   Os controles invisíveis deixam de existir
-   para fins de interação.
-
-   Isso libera completamente o botão final.
+   - o botão final continua acima;
+   - o centro fica livre;
+   - o lado direito fica desativado;
+   - o lado esquerdo continua clicável para voltar.
 */
 
 .story-controls.final-lock {
+  z-index: 460;
+
   pointer-events: none !important;
 
-  opacity: 0 !important;
+  opacity: 1 !important;
 
-  visibility: hidden !important;
+  visibility: visible !important;
 }
 
+
+.story-controls.final-lock .story-prev {
+  pointer-events: auto;
+
+  z-index: 461;
+}
+
+
+.story-controls.final-lock .story-pause,
+.story-controls.final-lock .story-next {
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   ÁREAS DE TOQUE
+========================================================= */
 
 .story-hit-area {
   position: absolute;
@@ -674,6 +697,10 @@ input.ui-box {
   touch-action: none;
 }
 
+
+/* =========================================================
+   ÁREA ESQUERDA
+========================================================= */
 
 .story-prev {
   left:
@@ -700,6 +727,10 @@ input.ui-box {
 }
 
 
+/* =========================================================
+   ÁREA CENTRAL
+========================================================= */
+
 .story-pause {
   left: 50%;
 
@@ -715,6 +746,10 @@ input.ui-box {
     translateX(-50%);
 }
 
+
+/* =========================================================
+   ÁREA DIREITA
+========================================================= */
 
 .story-next {
   right:
@@ -751,10 +786,6 @@ input.ui-box {
   touch-action: none;
 }
 
-
-/*
-   Último Story acima dos controles.
-*/
 
 .final-story.active {
   z-index: 450 !important;
@@ -973,6 +1004,16 @@ input.ui-box {
     width: 40vw;
   }
 
+
+  /*
+     No último Story, reduzimos a área
+     esquerda para não invadir o botão.
+  */
+
+  .story-controls.final-lock .story-prev {
+    width: 22vw;
+  }
+
 }
 
 
@@ -1002,6 +1043,23 @@ input.ui-box {
       min(
         calc(100vw - 24px),
         calc(56.25dvh - 24px)
+      );
+  }
+
+
+  /*
+     No computador também reduzimos
+     a área esquerda no último Story,
+     deixando o botão totalmente livre.
+  */
+
+  .story-controls.final-lock .story-prev {
+    width:
+      calc(
+        min(
+          100vw,
+          56.25dvh
+        ) * 0.22
       );
   }
 
