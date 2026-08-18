@@ -1,5 +1,5 @@
 const CONFIG = {
-  password: "novoeditorial"
+  password: "3xc"
 };
 
 
@@ -375,7 +375,9 @@ function stopAllVideos() {
     video => {
 
       if (!video) {
+
         return;
+
       }
 
 
@@ -417,7 +419,9 @@ function preloadNext(
 
 
   if (!nextVideo) {
+
     return;
+
   }
 
 
@@ -605,6 +609,7 @@ function prepareStartScreen() {
 
     promise.catch(
       () => {}
+
     );
 
   }
@@ -748,6 +753,7 @@ function startStory(
 
     playPromise.catch(
       () => {}
+
     );
 
   }
@@ -905,8 +911,8 @@ function handleStoryEnd() {
 
 
     /*
-      O botão já apareceu 1 segundo
-      após a entrada e permanece.
+      O botão permanece
+      disponível no final.
     */
 
     return;
@@ -920,7 +926,7 @@ function handleStoryEnd() {
 
 
 /* =========================================================
-   PAUSAR
+   PAUSAR STORY
 ========================================================= */
 
 function pauseCurrentStory() {
@@ -942,7 +948,7 @@ function pauseCurrentStory() {
 
 
 /* =========================================================
-   CONTINUAR
+   CONTINUAR STORY
 ========================================================= */
 
 function resumeCurrentStory() {
@@ -1013,6 +1019,7 @@ function resumeCurrentStory() {
 
     promise.catch(
       () => {}
+
     );
 
   }
@@ -1356,7 +1363,7 @@ function unlockExperience() {
 
 
   /*
-    Barras ainda escondidas.
+    Barras continuam escondidas.
   */
 
   deactivateStories();
@@ -1843,6 +1850,7 @@ function initialize() {
     loginVideo.play()
       .catch(
         () => {}
+
       );
 
   }
