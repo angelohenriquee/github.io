@@ -81,7 +81,7 @@ const enterButton =
 
 
 /* =========================================================
-   ABERTURA 3 × C
+   ABERTURA
 ========================================================= */
 
 const startVideo =
@@ -125,7 +125,7 @@ const finalPanel =
 
 
 /* =========================================================
-   CONTROLES DOS STORIES
+   CONTROLES
 ========================================================= */
 
 const storyPrev =
@@ -148,17 +148,6 @@ const storyNext =
 
 /* =========================================================
    ÍNDICES
-
-   0 = LOGIN
-   1 = ABERTURA 3 × C
-   2 = STORY 1
-   3 = STORY 2
-   4 = STORY 3
-   5 = STORY 4
-   6 = STORY 5
-   7 = STORY 6
-   8 = STORY 7
-   9 = STORY 8 / ÚLTIMO
 ========================================================= */
 
 const LOGIN_SCENE = 0;
@@ -339,7 +328,7 @@ function startProgress() {
 
 
 /* =========================================================
-   INTERFACE DOS STORIES
+   STORIES
 ========================================================= */
 
 function activateStories() {
@@ -403,6 +392,7 @@ function preloadNext(
   ) {
 
     return;
+
   }
 
 
@@ -458,7 +448,7 @@ function showScene(
 
 
 /* =========================================================
-   RESET DO ÚLTIMO BOTÃO
+   BOTÃO FINAL
 ========================================================= */
 
 function resetFinalButton() {
@@ -490,10 +480,6 @@ function resetFinalButton() {
 
 }
 
-
-/* =========================================================
-   REVELAR BOTÃO FINAL
-========================================================= */
 
 function scheduleFinalButton() {
 
@@ -527,7 +513,7 @@ function scheduleFinalButton() {
 
 
 /* =========================================================
-   PREPARAR ABERTURA 3 × C
+   TELA 3 × C
 ========================================================= */
 
 function prepareStartScreen() {
@@ -537,6 +523,7 @@ function prepareStartScreen() {
   ) {
 
     return;
+
   }
 
 
@@ -548,25 +535,11 @@ function prepareStartScreen() {
   startVideo.loop =
     false;
 
-
   startVideo.muted =
     true;
 
-
   startVideo.playsInline =
     true;
-
-
-  startVideo.setAttribute(
-    "playsinline",
-    ""
-  );
-
-
-  startVideo.setAttribute(
-    "webkit-playsinline",
-    ""
-  );
 
 
   try {
@@ -600,10 +573,6 @@ function prepareStartScreen() {
 }
 
 
-/* =========================================================
-   FINAL DO 3 × C
-========================================================= */
-
 function revealStartButton() {
 
   if (
@@ -611,6 +580,7 @@ function revealStartButton() {
   ) {
 
     return;
+
   }
 
 
@@ -622,7 +592,7 @@ function revealStartButton() {
 
 
 /* =========================================================
-   COMEÇAR UM STORY
+   INICIAR STORY
 ========================================================= */
 
 function startStory(
@@ -644,22 +614,10 @@ function startStory(
 
   stopProgress();
 
-
   resetFinalButton();
-
-
-  /*
-    Para e silencia todos
-    antes da troca.
-  */
 
   stopAllVideos();
 
-
-  /*
-    Reposiciona o vídeo antes
-    de mostrar sua cena.
-  */
 
   try {
 
@@ -677,38 +635,33 @@ function startStory(
     true;
 
 
-  video.setAttribute(
-    "playsinline",
-    ""
-  );
-
-
-  video.setAttribute(
-    "webkit-playsinline",
-    ""
-  );
-
-
   /*
     O último vídeo é sempre mudo.
   */
 
-  video.muted =
-    index === LAST_STORY;
+  if (
+    index ===
+    LAST_STORY
+  ) {
 
+    video.muted =
+      true;
 
-  /*
-    Mostra a cena.
-  */
+    video.defaultMuted =
+      true;
+
+  } else {
+
+    video.muted =
+      false;
+
+  }
+
 
   showScene(
     index
   );
 
-
-  /*
-    Reproduz.
-  */
 
   const playPromise =
     video.play();
@@ -748,7 +701,7 @@ function startStory(
 
 
 /* =========================================================
-   IR PARA STORY
+   NAVEGAÇÃO
 ========================================================= */
 
 function goToStory(
@@ -763,6 +716,7 @@ function goToStory(
   ) {
 
     return;
+
   }
 
 
@@ -772,6 +726,7 @@ function goToStory(
   ) {
 
     return;
+
   }
 
 
@@ -782,10 +737,6 @@ function goToStory(
 }
 
 
-/* =========================================================
-   STORY ANTERIOR
-========================================================= */
-
 function previousStory() {
 
   if (
@@ -794,6 +745,7 @@ function previousStory() {
   ) {
 
     return;
+
   }
 
 
@@ -804,10 +756,6 @@ function previousStory() {
 }
 
 
-/* =========================================================
-   STORY SEGUINTE
-========================================================= */
-
 function nextStory() {
 
   if (
@@ -816,6 +764,7 @@ function nextStory() {
   ) {
 
     return;
+
   }
 
 
@@ -827,7 +776,7 @@ function nextStory() {
 
 
 /* =========================================================
-   FINAL DO STORY
+   FINAL DO VÍDEO
 ========================================================= */
 
 function handleStoryEnd() {
@@ -857,6 +806,7 @@ function handleStoryEnd() {
 
 
     return;
+
   }
 
 
@@ -866,7 +816,7 @@ function handleStoryEnd() {
 
 
 /* =========================================================
-   PAUSAR STORY
+   PAUSA
 ========================================================= */
 
 function pauseCurrentStory() {
@@ -885,10 +835,6 @@ function pauseCurrentStory() {
 }
 
 
-/* =========================================================
-   CONTINUAR STORY
-========================================================= */
-
 function resumeCurrentStory() {
 
   const video =
@@ -901,6 +847,7 @@ function resumeCurrentStory() {
   ) {
 
     return;
+
   }
 
 
@@ -915,6 +862,7 @@ function resumeCurrentStory() {
       ) {
 
         return;
+
       }
 
 
@@ -934,12 +882,9 @@ function resumeCurrentStory() {
   );
 
 
-  /*
-    O último vídeo continua mudo.
-  */
-
   video.muted =
-    currentScene === LAST_STORY;
+    currentScene ===
+    LAST_STORY;
 
 
   const promise =
@@ -962,7 +907,7 @@ function resumeCurrentStory() {
 
 
 /* =========================================================
-   PRESSÃO NO CENTRO
+   SEGURAR PARA PAUSAR
 ========================================================= */
 
 storyPause.addEventListener(
@@ -976,6 +921,7 @@ storyPause.addEventListener(
     ) {
 
       return;
+
     }
 
 
@@ -985,12 +931,12 @@ storyPause.addEventListener(
     ) {
 
       return;
+
     }
 
 
     activePointerId =
       event.pointerId;
-
 
     isHolding =
       true;
@@ -1021,10 +967,6 @@ storyPause.addEventListener(
 );
 
 
-/* =========================================================
-   SOLTAR NO CENTRO
-========================================================= */
-
 storyPause.addEventListener(
   "pointerup",
   event => {
@@ -1035,6 +977,7 @@ storyPause.addEventListener(
     ) {
 
       return;
+
     }
 
 
@@ -1050,7 +993,6 @@ storyPause.addEventListener(
     isHolding =
       false;
 
-
     activePointerId =
       null;
 
@@ -1063,10 +1005,6 @@ storyPause.addEventListener(
   }
 );
 
-
-/* =========================================================
-   CANCELAR CENTRO
-========================================================= */
 
 storyPause.addEventListener(
   "pointercancel",
@@ -1078,6 +1016,7 @@ storyPause.addEventListener(
     ) {
 
       return;
+
     }
 
 
@@ -1093,7 +1032,6 @@ storyPause.addEventListener(
     isHolding =
       false;
 
-
     activePointerId =
       null;
 
@@ -1108,7 +1046,7 @@ storyPause.addEventListener(
 
 
 /* =========================================================
-   TOQUE ESQUERDO
+   ESQUERDA
 ========================================================= */
 
 storyPrev.addEventListener(
@@ -1122,6 +1060,7 @@ storyPrev.addEventListener(
     ) {
 
       return;
+
     }
 
 
@@ -1138,7 +1077,7 @@ storyPrev.addEventListener(
 
 
 /* =========================================================
-   TOQUE DIREITO
+   DIREITA
 ========================================================= */
 
 storyNext.addEventListener(
@@ -1152,6 +1091,7 @@ storyNext.addEventListener(
     ) {
 
       return;
+
     }
 
 
@@ -1168,7 +1108,7 @@ storyNext.addEventListener(
 
 
 /* =========================================================
-   CLIQUE NAS BARRAS
+   BARRAS
 ========================================================= */
 
 progressSegments.forEach(
@@ -1186,16 +1126,13 @@ progressSegments.forEach(
         ) {
 
           return;
+
         }
 
 
-        const targetScene =
-          FIRST_STORY +
-          index;
-
-
         goToStory(
-          targetScene
+          FIRST_STORY +
+          index
         );
 
 
@@ -1282,7 +1219,7 @@ function unlockExperience() {
 
 
 /* =========================================================
-   BOTÃO ENTRAR
+   LOGIN
 ========================================================= */
 
 enterButton.addEventListener(
@@ -1290,10 +1227,6 @@ enterButton.addEventListener(
   unlockExperience
 );
 
-
-/* =========================================================
-   ENTER NO CAMPO
-========================================================= */
 
 passwordInput.addEventListener(
   "keydown",
@@ -1314,10 +1247,6 @@ passwordInput.addEventListener(
 );
 
 
-/* =========================================================
-   LIMPAR ERRO
-========================================================= */
-
 passwordInput.addEventListener(
   "input",
   () => {
@@ -1331,24 +1260,14 @@ passwordInput.addEventListener(
 
 
 /* =========================================================
-   FINAL DO VÍDEO 3 × C
+   ABERTURA
 ========================================================= */
 
-if (
-  startVideo
-) {
+startVideo.addEventListener(
+  "ended",
+  revealStartButton
+);
 
-  startVideo.addEventListener(
-    "ended",
-    revealStartButton
-  );
-
-}
-
-
-/* =========================================================
-   BOTÃO COMEÇAR
-========================================================= */
 
 startButton.addEventListener(
   "click",
@@ -1359,6 +1278,7 @@ startButton.addEventListener(
     ) {
 
       return;
+
     }
 
 
@@ -1374,7 +1294,7 @@ startButton.addEventListener(
 
 
 /* =========================================================
-   VÍDEOS DOS STORIES
+   FINAL DOS STORIES
 ========================================================= */
 
 videos.forEach(
@@ -1398,6 +1318,7 @@ videos.forEach(
         ) {
 
           return;
+
         }
 
 
@@ -1407,6 +1328,7 @@ videos.forEach(
         ) {
 
           return;
+
         }
 
 
@@ -1416,6 +1338,7 @@ videos.forEach(
         ) {
 
           return;
+
         }
 
 
@@ -1429,7 +1352,7 @@ videos.forEach(
 
 
 /* =========================================================
-   CONFIGURAÇÃO DO LOGIN
+   CONFIGURAÇÕES DE VÍDEO
 ========================================================= */
 
 if (
@@ -1448,10 +1371,6 @@ if (
 }
 
 
-/* =========================================================
-   CONFIGURAÇÃO DO 3 × C
-========================================================= */
-
 if (
   startVideo
 ) {
@@ -1467,10 +1386,6 @@ if (
 
 }
 
-
-/* =========================================================
-   CONFIGURAÇÃO DO ÚLTIMO VÍDEO
-========================================================= */
 
 if (
   finalVideo
@@ -1497,16 +1412,16 @@ if (
 
 
 /* =========================================================
-   BLOQUEIO DE PINCH ZOOM
+   PROTEÇÃO CONTRA ZOOM NO IOS
 ========================================================= */
+
+/*
+   Pinch com dois dedos.
+*/
 
 document.addEventListener(
   "touchstart",
   event => {
-
-    /*
-      Bloqueia dois ou mais dedos.
-    */
 
     if (
       event.touches.length > 1
@@ -1523,9 +1438,32 @@ document.addEventListener(
 );
 
 
-/* =========================================================
-   BLOQUEIO DE GESTO DE ZOOM
-========================================================= */
+/*
+   Movimento com dois dedos.
+*/
+
+document.addEventListener(
+  "touchmove",
+  event => {
+
+    if (
+      event.touches.length > 1
+    ) {
+
+      event.preventDefault();
+
+    }
+
+  },
+  {
+    passive: false
+  }
+);
+
+
+/*
+   Gestos específicos do Safari.
+*/
 
 document.addEventListener(
   "gesturestart",
@@ -1566,9 +1504,9 @@ document.addEventListener(
 );
 
 
-/* =========================================================
-   BLOQUEIO DE ZOOM POR DUPLO TOQUE
-========================================================= */
+/*
+   Impede double-tap zoom.
+*/
 
 document.addEventListener(
   "touchend",
@@ -1578,34 +1516,19 @@ document.addEventListener(
       Date.now();
 
 
-    const timeSinceLastTouch =
+    const elapsed =
       now -
       lastTouchEnd;
 
 
-    /*
-      Evita o zoom causado por
-      dois toques rápidos.
-    */
-
     if (
-      timeSinceLastTouch < 300
+      elapsed < 300 &&
+      !event.target.closest(
+        "input"
+      )
     ) {
 
-      /*
-        Permite o campo de senha
-        manter seu comportamento normal.
-      */
-
-      if (
-        !event.target.closest(
-          "input"
-        )
-      ) {
-
-        event.preventDefault();
-
-      }
+      event.preventDefault();
 
     }
 
@@ -1737,10 +1660,6 @@ function initialize() {
   );
 
 
-  /*
-    Login em loop.
-  */
-
   if (
     loginVideo
   ) {
@@ -1759,10 +1678,6 @@ function initialize() {
 
   }
 
-
-  /*
-    Story 1 pré-carregado.
-  */
 
   preloadNext(
     START_SCENE
