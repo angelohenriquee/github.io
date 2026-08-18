@@ -643,6 +643,24 @@ input.ui-box {
 }
 
 
+/*
+   NO ÚLTIMO STORY:
+
+   Os controles invisíveis deixam de existir
+   para fins de interação.
+
+   Isso libera completamente o botão final.
+*/
+
+.story-controls.final-lock {
+  pointer-events: none !important;
+
+  opacity: 0 !important;
+
+  visibility: hidden !important;
+}
+
+
 .story-hit-area {
   position: absolute;
 
@@ -735,8 +753,7 @@ input.ui-box {
 
 
 /*
-   Último Story acima dos controles
-   invisíveis.
+   Último Story acima dos controles.
 */
 
 .final-story.active {
