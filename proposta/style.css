@@ -10,29 +10,7 @@
 }
 
 
-html {
-  width: 100%;
-  height: 100%;
-
-  margin: 0;
-  padding: 0;
-
-  overflow: hidden;
-
-  background: #000000;
-
-  overscroll-behavior: none;
-
-  /*
-    Bloqueia gestos de zoom no navegador.
-  */
-  touch-action: none;
-
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-}
-
-
+html,
 body {
   width: 100%;
   height: 100%;
@@ -46,10 +24,19 @@ body {
 
   overscroll-behavior: none;
 
-  touch-action: none;
-
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+}
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+body {
+  position: fixed;
+
+  inset: 0;
 
   font-family:
     "Poppins",
@@ -58,6 +45,17 @@ body {
   font-weight: 400;
 
   color: #ffffff;
+
+  background: #000000;
+
+  overflow: hidden;
+
+  /*
+    Evita scroll e gestos de navegação
+    que possam alterar a escala.
+  */
+
+  touch-action: none;
 
   -webkit-font-smoothing: antialiased;
 
@@ -82,6 +80,7 @@ body {
   background: #000000;
 
   display: grid;
+
   place-items: center;
 
   user-select: none;
@@ -142,6 +141,7 @@ body {
   overflow: hidden;
 
   display: grid;
+
   place-items: center;
 
   background: #000000;
@@ -168,7 +168,7 @@ body {
 
 
 /* =========================================================
-   ORDEM DAS CENAS
+   ORDEM
 ========================================================= */
 
 .scene[data-scene="0"] {
@@ -229,11 +229,13 @@ body {
   background: #000000;
 
   border: 0;
+
   outline: 0;
 
   pointer-events: none;
 
   user-select: none;
+
   -webkit-user-select: none;
 
   -webkit-user-drag: none;
@@ -243,7 +245,7 @@ body {
 
 
 /* =========================================================
-   VÍDEO 3 × C
+   ABERTURA 3 × C
 ========================================================= */
 
 .start-video {
@@ -261,7 +263,7 @@ body {
 
 
 /* =========================================================
-   TELA COMEÇAR
+   COMEÇAR
 ========================================================= */
 
 .start-screen {
@@ -289,6 +291,7 @@ body {
   display: flex;
 
   justify-content: center;
+
   align-items: center;
 
   opacity: 0;
@@ -311,8 +314,6 @@ body {
 
 .start-button {
   width: 100%;
-
-  cursor: pointer;
 }
 
 
@@ -353,8 +354,6 @@ body {
   opacity: 0;
 
   visibility: hidden;
-
-  touch-action: none;
 }
 
 
@@ -367,10 +366,6 @@ body {
   pointer-events: auto;
 }
 
-
-/* =========================================================
-   SEGMENTOS
-========================================================= */
 
 .story-segment {
   position: relative;
@@ -390,8 +385,6 @@ body {
       255,
       0.22
     );
-
-  cursor: pointer;
 
   touch-action: none;
 }
@@ -505,9 +498,11 @@ body {
   font-weight: 400;
 
   backdrop-filter: blur(7px);
+
   -webkit-backdrop-filter: blur(7px);
 
   -webkit-appearance: none;
+
   appearance: none;
 
   pointer-events: auto;
@@ -517,13 +512,9 @@ body {
 
 
 input.ui-box {
-  touch-action: manipulation;
-
-  /*
-    Impede o Safari de ampliar
-    o campo ao receber foco.
-  */
   font-size: 16px;
+
+  touch-action: manipulation;
 }
 
 
@@ -628,7 +619,7 @@ input.ui-box {
 
 
 /* =========================================================
-   ÁREAS DE TOQUE
+   CONTROLES INVISÍVEIS
 ========================================================= */
 
 .story-controls {
@@ -672,10 +663,6 @@ input.ui-box {
 }
 
 
-/* =========================================================
-   ESQUERDA
-========================================================= */
-
 .story-prev {
   left:
     max(
@@ -701,10 +688,6 @@ input.ui-box {
 }
 
 
-/* =========================================================
-   CENTRO
-========================================================= */
-
 .story-pause {
   left: 50%;
 
@@ -720,10 +703,6 @@ input.ui-box {
     translateX(-50%);
 }
 
-
-/* =========================================================
-   DIREITA
-========================================================= */
 
 .story-next {
   right:
@@ -761,18 +740,22 @@ input.ui-box {
 }
 
 
+/*
+   IMPORTANTE:
+
+   O painel pertence ao quadro 9:16.
+
+   Portanto:
+   50% = exatamente metade da largura
+   do próprio quadro, e não da tela inteira.
+*/
+
 .final-panel {
   position: absolute;
 
-  /*
-    O posicionamento é calculado
-    exclusivamente dentro do quadro
-    9:16.
-  */
-
   left: 50%;
 
-  top: 65%;
+  top: 66%;
 
   transform:
     translate(
@@ -780,26 +763,15 @@ input.ui-box {
       -50%
     );
 
-  /*
-    Tamanho fixo visualmente,
-    mas limitado à largura do quadro.
-  */
+  width: 50%;
 
-  width: 240px;
-
-  max-width:
-    calc(
-      100% - 48px
-    );
+  max-width: none;
 
   margin: 0;
 
   padding: 0;
 
-  display: flex;
-
-  justify-content: center;
-  align-items: center;
+  display: block;
 
   opacity: 0;
 
@@ -826,7 +798,12 @@ input.ui-box {
 
   width: 100%;
 
+  height: 50px;
+
   margin: 0;
+
+  padding:
+    0 12px;
 
   text-align: center;
 
@@ -878,23 +855,28 @@ input.ui-box {
 
 
   /*
-    Mantemos o mesmo tamanho
-    do botão final no celular.
+    Exatamente a mesma regra
+    do computador.
+
+    Não aumentamos o botão
+    no celular.
   */
 
   .final-panel {
-    width: 240px;
+    width: 50%;
 
-    max-width:
-      calc(
-        100vw - 48px
-      );
-
-    top: 65%;
+    top: 66%;
   }
 
 
   .ui-box {
+    height: 48px;
+
+    font-size: 16px;
+  }
+
+
+  .final-button {
     height: 48px;
 
     font-size: 16px;
@@ -947,7 +929,7 @@ input.ui-box {
 
 
 /* =========================================================
-   CONTROLES NATIVOS DE VÍDEO
+   VÍDEOS
 ========================================================= */
 
 video::-webkit-media-controls {
