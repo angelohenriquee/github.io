@@ -125,7 +125,7 @@ const finalPanel =
 
 
 /* =========================================================
-   CONTROLES
+   CONTROLES DOS STORIES
 ========================================================= */
 
 const storyPrev =
@@ -148,6 +148,17 @@ const storyNext =
 
 /* =========================================================
    ÍNDICES
+
+   0 = LOGIN
+   1 = ABERTURA 3 × C
+   2 = STORY 1
+   3 = STORY 2
+   4 = STORY 3
+   5 = STORY 4
+   6 = STORY 5
+   7 = STORY 6
+   8 = STORY 7
+   9 = STORY 8 / ÚLTIMO
 ========================================================= */
 
 const LOGIN_SCENE = 0;
@@ -328,7 +339,7 @@ function startProgress() {
 
 
 /* =========================================================
-   STORIES
+   INTERFACE DOS STORIES
 ========================================================= */
 
 function activateStories() {
@@ -359,9 +370,7 @@ function stopAllVideos() {
     video => {
 
       if (!video) {
-
         return;
-
       }
 
 
@@ -394,7 +403,6 @@ function preloadNext(
   ) {
 
     return;
-
   }
 
 
@@ -403,9 +411,7 @@ function preloadNext(
 
 
   if (!nextVideo) {
-
     return;
-
   }
 
 
@@ -452,7 +458,7 @@ function showScene(
 
 
 /* =========================================================
-   BOTÃO FINAL
+   RESET DO ÚLTIMO BOTÃO
 ========================================================= */
 
 function resetFinalButton() {
@@ -484,6 +490,10 @@ function resetFinalButton() {
 
 }
 
+
+/* =========================================================
+   REVELAR BOTÃO FINAL
+========================================================= */
 
 function scheduleFinalButton() {
 
@@ -517,7 +527,7 @@ function scheduleFinalButton() {
 
 
 /* =========================================================
-   TELA 3 × C
+   PREPARAR ABERTURA 3 × C
 ========================================================= */
 
 function prepareStartScreen() {
@@ -527,7 +537,6 @@ function prepareStartScreen() {
   ) {
 
     return;
-
   }
 
 
@@ -591,6 +600,10 @@ function prepareStartScreen() {
 }
 
 
+/* =========================================================
+   FINAL DO 3 × C
+========================================================= */
+
 function revealStartButton() {
 
   if (
@@ -598,7 +611,6 @@ function revealStartButton() {
   ) {
 
     return;
-
   }
 
 
@@ -610,7 +622,7 @@ function revealStartButton() {
 
 
 /* =========================================================
-   INICIAR STORY
+   COMEÇAR UM STORY
 ========================================================= */
 
 function startStory(
@@ -622,9 +634,7 @@ function startStory(
 
 
   if (!video) {
-
     return;
-
   }
 
 
@@ -638,12 +648,17 @@ function startStory(
   resetFinalButton();
 
 
+  /*
+    Para e silencia todos
+    antes da troca.
+  */
+
   stopAllVideos();
 
 
   /*
-    Evita mostrar qualquer frame
-    antigo da cena anterior.
+    Reposiciona o vídeo antes
+    de mostrar sua cena.
   */
 
   try {
@@ -678,27 +693,12 @@ function startStory(
     O último vídeo é sempre mudo.
   */
 
-  if (
-    index ===
-    LAST_STORY
-  ) {
-
-    video.muted =
-      true;
-
-    video.defaultMuted =
-      true;
-
-  } else {
-
-    video.muted =
-      false;
-
-  }
+  video.muted =
+    index === LAST_STORY;
 
 
   /*
-    Mostra a nova cena.
+    Mostra a cena.
   */
 
   showScene(
@@ -707,7 +707,7 @@ function startStory(
 
 
   /*
-    Reproduz imediatamente.
+    Reproduz.
   */
 
   const playPromise =
@@ -735,10 +735,6 @@ function startStory(
   startProgress();
 
 
-  /*
-    Botão final após 1 segundo.
-  */
-
   if (
     index ===
     LAST_STORY
@@ -752,7 +748,7 @@ function startStory(
 
 
 /* =========================================================
-   NAVEGAÇÃO
+   IR PARA STORY
 ========================================================= */
 
 function goToStory(
@@ -767,7 +763,6 @@ function goToStory(
   ) {
 
     return;
-
   }
 
 
@@ -777,7 +772,6 @@ function goToStory(
   ) {
 
     return;
-
   }
 
 
@@ -788,6 +782,10 @@ function goToStory(
 }
 
 
+/* =========================================================
+   STORY ANTERIOR
+========================================================= */
+
 function previousStory() {
 
   if (
@@ -796,7 +794,6 @@ function previousStory() {
   ) {
 
     return;
-
   }
 
 
@@ -807,6 +804,10 @@ function previousStory() {
 }
 
 
+/* =========================================================
+   STORY SEGUINTE
+========================================================= */
+
 function nextStory() {
 
   if (
@@ -815,7 +816,6 @@ function nextStory() {
   ) {
 
     return;
-
   }
 
 
@@ -857,7 +857,6 @@ function handleStoryEnd() {
 
 
     return;
-
   }
 
 
@@ -867,7 +866,7 @@ function handleStoryEnd() {
 
 
 /* =========================================================
-   PAUSAR
+   PAUSAR STORY
 ========================================================= */
 
 function pauseCurrentStory() {
@@ -877,9 +876,7 @@ function pauseCurrentStory() {
 
 
   if (!video) {
-
     return;
-
   }
 
 
@@ -887,6 +884,10 @@ function pauseCurrentStory() {
 
 }
 
+
+/* =========================================================
+   CONTINUAR STORY
+========================================================= */
 
 function resumeCurrentStory() {
 
@@ -900,7 +901,6 @@ function resumeCurrentStory() {
   ) {
 
     return;
-
   }
 
 
@@ -915,7 +915,6 @@ function resumeCurrentStory() {
       ) {
 
         return;
-
       }
 
 
@@ -936,12 +935,11 @@ function resumeCurrentStory() {
 
 
   /*
-    Último vídeo continua mudo.
+    O último vídeo continua mudo.
   */
 
   video.muted =
-    currentScene ===
-    LAST_STORY;
+    currentScene === LAST_STORY;
 
 
   const promise =
@@ -964,7 +962,7 @@ function resumeCurrentStory() {
 
 
 /* =========================================================
-   SEGURAR NO CENTRO = PAUSAR
+   PRESSÃO NO CENTRO
 ========================================================= */
 
 storyPause.addEventListener(
@@ -978,7 +976,6 @@ storyPause.addEventListener(
     ) {
 
       return;
-
     }
 
 
@@ -988,7 +985,6 @@ storyPause.addEventListener(
     ) {
 
       return;
-
     }
 
 
@@ -1026,7 +1022,7 @@ storyPause.addEventListener(
 
 
 /* =========================================================
-   SOLTAR = CONTINUAR
+   SOLTAR NO CENTRO
 ========================================================= */
 
 storyPause.addEventListener(
@@ -1039,7 +1035,6 @@ storyPause.addEventListener(
     ) {
 
       return;
-
     }
 
 
@@ -1070,7 +1065,7 @@ storyPause.addEventListener(
 
 
 /* =========================================================
-   CANCELAR PAUSA
+   CANCELAR CENTRO
 ========================================================= */
 
 storyPause.addEventListener(
@@ -1083,7 +1078,6 @@ storyPause.addEventListener(
     ) {
 
       return;
-
     }
 
 
@@ -1128,7 +1122,6 @@ storyPrev.addEventListener(
     ) {
 
       return;
-
     }
 
 
@@ -1159,7 +1152,6 @@ storyNext.addEventListener(
     ) {
 
       return;
-
     }
 
 
@@ -1194,13 +1186,16 @@ progressSegments.forEach(
         ) {
 
           return;
-
         }
 
 
-        goToStory(
+        const targetScene =
           FIRST_STORY +
-          index
+          index;
+
+
+        goToStory(
+          targetScene
         );
 
 
@@ -1253,10 +1248,6 @@ function unlockExperience() {
     true;
 
 
-  /*
-    Para o vídeo de login.
-  */
-
   if (
     loginVideo
   ) {
@@ -1274,25 +1265,13 @@ function unlockExperience() {
   );
 
 
-  /*
-    Mostra a abertura.
-  */
-
   showScene(
     START_SCENE
   );
 
 
-  /*
-    Barras permanecem escondidas.
-  */
-
   deactivateStories();
 
-
-  /*
-    Inicia 3 × C.
-  */
 
   stopAllVideos();
 
@@ -1352,7 +1331,7 @@ passwordInput.addEventListener(
 
 
 /* =========================================================
-   FIM DO 3 × C
+   FINAL DO VÍDEO 3 × C
 ========================================================= */
 
 if (
@@ -1380,13 +1359,8 @@ startButton.addEventListener(
     ) {
 
       return;
-
     }
 
-
-    /*
-      Aqui começam as 8 barras.
-    */
 
     activateStories();
 
@@ -1400,7 +1374,7 @@ startButton.addEventListener(
 
 
 /* =========================================================
-   EVENTOS DE FINAL DOS VÍDEOS
+   VÍDEOS DOS STORIES
 ========================================================= */
 
 videos.forEach(
@@ -1410,9 +1384,7 @@ videos.forEach(
   ) => {
 
     if (!video) {
-
       return;
-
     }
 
 
@@ -1420,23 +1392,14 @@ videos.forEach(
       "ended",
       () => {
 
-        /*
-          Login não participa.
-        */
-
         if (
           index ===
           LOGIN_SCENE
         ) {
 
           return;
-
         }
 
-
-        /*
-          3 × C não participa.
-        */
 
         if (
           index ===
@@ -1444,14 +1407,8 @@ videos.forEach(
         ) {
 
           return;
-
         }
 
-
-        /*
-          Apenas a cena ativa pode
-          comandar a navegação.
-        */
 
         if (
           index !==
@@ -1459,7 +1416,6 @@ videos.forEach(
         ) {
 
           return;
-
         }
 
 
@@ -1489,16 +1445,6 @@ if (
   loginVideo.playsInline =
     true;
 
-  loginVideo.setAttribute(
-    "playsinline",
-    ""
-  );
-
-  loginVideo.setAttribute(
-    "webkit-playsinline",
-    ""
-  );
-
 }
 
 
@@ -1518,16 +1464,6 @@ if (
 
   startVideo.playsInline =
     true;
-
-  startVideo.setAttribute(
-    "playsinline",
-    ""
-  );
-
-  startVideo.setAttribute(
-    "webkit-playsinline",
-    ""
-  );
 
 }
 
@@ -1557,45 +1493,20 @@ if (
     ""
   );
 
-  finalVideo.setAttribute(
-    "playsinline",
-    ""
-  );
-
-  finalVideo.setAttribute(
-    "webkit-playsinline",
-    ""
-  );
-
 }
 
 
 /* =========================================================
-   PROTEÇÃO CONTRA PINCH ZOOM
+   BLOQUEIO DE PINCH ZOOM
 ========================================================= */
 
 document.addEventListener(
   "touchstart",
   event => {
 
-    if (
-      event.touches.length > 1
-    ) {
-
-      event.preventDefault();
-
-    }
-
-  },
-  {
-    passive: false
-  }
-);
-
-
-document.addEventListener(
-  "touchmove",
-  event => {
+    /*
+      Bloqueia dois ou mais dedos.
+    */
 
     if (
       event.touches.length > 1
@@ -1613,7 +1524,7 @@ document.addEventListener(
 
 
 /* =========================================================
-   GESTOS DO SAFARI
+   BLOQUEIO DE GESTO DE ZOOM
 ========================================================= */
 
 document.addEventListener(
@@ -1656,7 +1567,7 @@ document.addEventListener(
 
 
 /* =========================================================
-   DOUBLE TAP ZOOM
+   BLOQUEIO DE ZOOM POR DUPLO TOQUE
 ========================================================= */
 
 document.addEventListener(
@@ -1667,28 +1578,34 @@ document.addEventListener(
       Date.now();
 
 
-    const elapsed =
+    const timeSinceLastTouch =
       now -
       lastTouchEnd;
 
 
     /*
-      Não interfere no campo de senha
-      nem no link final.
+      Evita o zoom causado por
+      dois toques rápidos.
     */
 
-    const isInteractiveElement =
-      event.target.closest(
-        "input, button, a"
-      );
-
-
     if (
-      elapsed < 300 &&
-      !isInteractiveElement
+      timeSinceLastTouch < 300
     ) {
 
-      event.preventDefault();
+      /*
+        Permite o campo de senha
+        manter seu comportamento normal.
+      */
+
+      if (
+        !event.target.closest(
+          "input"
+        )
+      ) {
+
+        event.preventDefault();
+
+      }
 
     }
 
@@ -1754,10 +1671,6 @@ function initialize() {
   resetFinalButton();
 
 
-  /*
-    Esconde o botão Começar.
-  */
-
   if (
     startScreen
   ) {
@@ -1768,10 +1681,6 @@ function initialize() {
 
   }
 
-
-  /*
-    Somente o Login aparece.
-  */
 
   scenes.forEach(
     (
@@ -1789,11 +1698,6 @@ function initialize() {
   );
 
 
-  /*
-    Todos os vídeos começam
-    parados e sem áudio.
-  */
-
   videos.forEach(
     (
       video,
@@ -1801,9 +1705,7 @@ function initialize() {
     ) => {
 
       if (!video) {
-
         return;
-
       }
 
 
@@ -1859,7 +1761,7 @@ function initialize() {
 
 
   /*
-    Pré-carrega o Story 1.
+    Story 1 pré-carregado.
   */
 
   preloadNext(
