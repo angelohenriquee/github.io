@@ -86,7 +86,7 @@ body {
 
 
 /* =========================================================
-   QUADRO 9:16
+   QUADRO PRINCIPAL 9:16
 ========================================================= */
 
 .story-stage {
@@ -163,7 +163,7 @@ body {
 
 
 /* =========================================================
-   ORDEM
+   ORDEM DAS CENAS
 ========================================================= */
 
 .scene[data-scene="0"] {
@@ -240,7 +240,7 @@ body {
 
 
 /* =========================================================
-   3 × C
+   VÍDEO 3 × C
 ========================================================= */
 
 .start-video {
@@ -258,7 +258,7 @@ body {
 
 
 /* =========================================================
-   COMEÇAR
+   TELA COMEÇAR
 ========================================================= */
 
 .start-screen {
@@ -314,7 +314,7 @@ body {
 
 
 /* =========================================================
-   BARRAS
+   BARRAS DOS STORIES
 ========================================================= */
 
 .story-progress {
@@ -588,7 +588,7 @@ input.ui-box {
 
 
 /* =========================================================
-   ERRO
+   ERRO DA SENHA
 ========================================================= */
 
 .password-error {
@@ -614,7 +614,7 @@ input.ui-box {
 
 
 /* =========================================================
-   CONTROLES INVISÍVEIS
+   CONTROLES INVISÍVEIS DOS STORIES
 ========================================================= */
 
 .story-controls {
@@ -724,7 +724,7 @@ input.ui-box {
 
 
 /* =========================================================
-   ÚLTIMA TELA
+   ÚLTIMO STORY
 ========================================================= */
 
 .final-story {
@@ -735,14 +735,18 @@ input.ui-box {
 
 
 /*
-   Coloca a última cena acima
-   dos controles invisíveis.
+   Último Story acima dos controles
+   invisíveis.
 */
 
 .final-story.active {
   z-index: 450 !important;
 }
 
+
+/* =========================================================
+   PAINEL FINAL
+========================================================= */
 
 .final-panel {
   position: absolute;
@@ -789,7 +793,7 @@ input.ui-box {
 
 
 /* =========================================================
-   BOTÃO FINAL
+   BOTÃO FINAL — WHATSAPP
 ========================================================= */
 
 .final-button {
@@ -841,21 +845,19 @@ input.ui-box {
 
   text-align: center;
 
-  text-decoration: none;
+  cursor: pointer;
 
   pointer-events: auto;
 
-  cursor: pointer;
-
   touch-action: manipulation;
-
-  backdrop-filter: blur(7px);
-
-  -webkit-backdrop-filter: blur(7px);
 
   -webkit-appearance: none;
 
   appearance: none;
+
+  backdrop-filter: blur(7px);
+
+  -webkit-backdrop-filter: blur(7px);
 }
 
 
@@ -1013,8 +1015,7 @@ video::-webkit-media-controls-panel {
 ========================================================= */
 
 button:focus-visible,
-input:focus-visible,
-a:focus-visible {
+input:focus-visible {
   outline:
     1px solid
     rgba(
