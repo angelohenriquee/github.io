@@ -10,11 +10,29 @@
 }
 
 
-/* =========================================================
-   DOCUMENTO
-========================================================= */
+html {
+  width: 100%;
+  height: 100%;
 
-html,
+  margin: 0;
+  padding: 0;
+
+  overflow: hidden;
+
+  background: #000000;
+
+  overscroll-behavior: none;
+
+  /*
+    Bloqueia gestos de zoom no navegador.
+  */
+  touch-action: none;
+
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+
 body {
   width: 100%;
   height: 100%;
@@ -28,14 +46,10 @@ body {
 
   overscroll-behavior: none;
 
+  touch-action: none;
+
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-}
-
-
-body {
-  width: 100vw;
-  height: 100dvh;
 
   font-family:
     "Poppins",
@@ -44,10 +58,6 @@ body {
   font-weight: 400;
 
   color: #ffffff;
-
-  background: #000000;
-
-  overflow: hidden;
 
   -webkit-font-smoothing: antialiased;
 
@@ -76,11 +86,13 @@ body {
 
   user-select: none;
   -webkit-user-select: none;
+
+  touch-action: none;
 }
 
 
 /* =========================================================
-   QUADRO VERTICAL 9:16
+   QUADRO 9:16
 ========================================================= */
 
 .story-stage {
@@ -110,6 +122,8 @@ body {
   overflow: hidden;
 
   background: #000000;
+
+  touch-action: none;
 }
 
 
@@ -139,6 +153,8 @@ body {
   pointer-events: none;
 
   transition: none;
+
+  touch-action: none;
 }
 
 
@@ -301,7 +317,7 @@ body {
 
 
 /* =========================================================
-   BARRAS DOS STORIES
+   BARRAS
 ========================================================= */
 
 .story-progress {
@@ -337,6 +353,8 @@ body {
   opacity: 0;
 
   visibility: hidden;
+
+  touch-action: none;
 }
 
 
@@ -374,6 +392,8 @@ body {
     );
 
   cursor: pointer;
+
+  touch-action: none;
 }
 
 
@@ -405,6 +425,7 @@ body {
   z-index: 1000;
 
   left: 50%;
+
   top: 58%;
 
   transform:
@@ -424,6 +445,8 @@ body {
   gap: 8px;
 
   pointer-events: auto;
+
+  touch-action: auto;
 }
 
 
@@ -488,6 +511,19 @@ body {
   appearance: none;
 
   pointer-events: auto;
+
+  touch-action: manipulation;
+}
+
+
+input.ui-box {
+  touch-action: manipulation;
+
+  /*
+    Impede o Safari de ampliar
+    o campo ao receber foco.
+  */
+  font-size: 16px;
 }
 
 
@@ -592,7 +628,7 @@ body {
 
 
 /* =========================================================
-   ÁREAS DE TOQUE DOS STORIES
+   ÁREAS DE TOQUE
 ========================================================= */
 
 .story-controls {
@@ -607,6 +643,8 @@ body {
   opacity: 0;
 
   visibility: hidden;
+
+  touch-action: none;
 }
 
 
@@ -718,15 +756,23 @@ body {
 
 .final-story {
   background: #000000;
+
+  touch-action: none;
 }
 
 
 .final-panel {
   position: absolute;
 
+  /*
+    O posicionamento é calculado
+    exclusivamente dentro do quadro
+    9:16.
+  */
+
   left: 50%;
 
-  top: 66%;
+  top: 65%;
 
   transform:
     translate(
@@ -734,15 +780,34 @@ body {
       -50%
     );
 
-  width: 58%;
+  /*
+    Tamanho fixo visualmente,
+    mas limitado à largura do quadro.
+  */
 
-  max-width: 300px;
+  width: 240px;
+
+  max-width:
+    calc(
+      100% - 48px
+    );
+
+  margin: 0;
+
+  padding: 0;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
 
   opacity: 0;
 
   visibility: hidden;
 
   pointer-events: none;
+
+  touch-action: manipulation;
 }
 
 
@@ -760,6 +825,12 @@ body {
   display: block;
 
   width: 100%;
+
+  margin: 0;
+
+  text-align: center;
+
+  touch-action: manipulation;
 }
 
 
@@ -803,6 +874,23 @@ body {
     max-width: 340px;
 
     top: 60%;
+  }
+
+
+  /*
+    Mantemos o mesmo tamanho
+    do botão final no celular.
+  */
+
+  .final-panel {
+    width: 240px;
+
+    max-width:
+      calc(
+        100vw - 48px
+      );
+
+    top: 65%;
   }
 
 
@@ -859,7 +947,7 @@ body {
 
 
 /* =========================================================
-   CONTROLES NATIVOS
+   CONTROLES NATIVOS DE VÍDEO
 ========================================================= */
 
 video::-webkit-media-controls {
