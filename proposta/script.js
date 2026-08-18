@@ -81,7 +81,7 @@ const enterButton =
 
 
 /* =========================================================
-   ABERTURA
+   ABERTURA 3 × C
 ========================================================= */
 
 const startVideo =
@@ -635,6 +635,18 @@ function startStory(
     true;
 
 
+  video.setAttribute(
+    "playsinline",
+    ""
+  );
+
+
+  video.setAttribute(
+    "webkit-playsinline",
+    ""
+  );
+
+
   /*
     O último vídeo é sempre mudo.
   */
@@ -776,7 +788,7 @@ function nextStory() {
 
 
 /* =========================================================
-   FINAL DO VÍDEO
+   FINAL DO STORY
 ========================================================= */
 
 function handleStoryEnd() {
@@ -938,6 +950,7 @@ storyPause.addEventListener(
     activePointerId =
       event.pointerId;
 
+
     isHolding =
       true;
 
@@ -993,6 +1006,7 @@ storyPause.addEventListener(
     isHolding =
       false;
 
+
     activePointerId =
       null;
 
@@ -1031,6 +1045,7 @@ storyPause.addEventListener(
 
     isHolding =
       false;
+
 
     activePointerId =
       null;
@@ -1260,41 +1275,53 @@ passwordInput.addEventListener(
 
 
 /* =========================================================
-   ABERTURA
+   ABERTURA 3 × C
 ========================================================= */
 
-startVideo.addEventListener(
-  "ended",
-  revealStartButton
-);
+if (
+  startVideo
+) {
+
+  startVideo.addEventListener(
+    "ended",
+    revealStartButton
+  );
+
+}
 
 
-startButton.addEventListener(
-  "click",
-  () => {
+if (
+  startButton
+) {
 
-    if (
-      !unlocked
-    ) {
+  startButton.addEventListener(
+    "click",
+    () => {
 
-      return;
+      if (
+        !unlocked
+      ) {
+
+        return;
+
+      }
+
+
+      activateStories();
+
+
+      startStory(
+        FIRST_STORY
+      );
 
     }
+  );
 
-
-    activateStories();
-
-
-    startStory(
-      FIRST_STORY
-    );
-
-  }
-);
+}
 
 
 /* =========================================================
-   FINAL DOS STORIES
+   VÍDEOS DOS STORIES
 ========================================================= */
 
 videos.forEach(
@@ -1352,7 +1379,7 @@ videos.forEach(
 
 
 /* =========================================================
-   CONFIGURAÇÕES DE VÍDEO
+   CONFIGURAÇÃO DO LOGIN
 ========================================================= */
 
 if (
@@ -1371,6 +1398,10 @@ if (
 }
 
 
+/* =========================================================
+   CONFIGURAÇÃO DO 3 × C
+========================================================= */
+
 if (
   startVideo
 ) {
@@ -1386,6 +1417,10 @@ if (
 
 }
 
+
+/* =========================================================
+   CONFIGURAÇÃO DO ÚLTIMO VÍDEO
+========================================================= */
 
 if (
   finalVideo
@@ -1412,12 +1447,8 @@ if (
 
 
 /* =========================================================
-   PROTEÇÃO CONTRA ZOOM NO IOS
+   BLOQUEIO DE PINCH ZOOM
 ========================================================= */
-
-/*
-   Pinch com dois dedos.
-*/
 
 document.addEventListener(
   "touchstart",
@@ -1438,10 +1469,6 @@ document.addEventListener(
 );
 
 
-/*
-   Movimento com dois dedos.
-*/
-
 document.addEventListener(
   "touchmove",
   event => {
@@ -1461,9 +1488,9 @@ document.addEventListener(
 );
 
 
-/*
-   Gestos específicos do Safari.
-*/
+/* =========================================================
+   GESTOS DO SAFARI
+========================================================= */
 
 document.addEventListener(
   "gesturestart",
@@ -1504,9 +1531,9 @@ document.addEventListener(
 );
 
 
-/*
-   Impede double-tap zoom.
-*/
+/* =========================================================
+   DOUBLE TAP ZOOM
+========================================================= */
 
 document.addEventListener(
   "touchend",
@@ -1520,6 +1547,10 @@ document.addEventListener(
       now -
       lastTouchEnd;
 
+
+    /*
+      Não bloqueia o campo de senha.
+    */
 
     if (
       elapsed < 300 &&
