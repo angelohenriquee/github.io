@@ -1,985 +1,522 @@
-/* =========================================================
-   RESET
-========================================================= */
+<!DOCTYPE html>
+<html lang="pt-BR">
 
-* {
-  box-sizing: border-box;
+<head>
 
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-}
+  <meta charset="UTF-8">
 
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover"
+  >
 
-html {
-  width: 100%;
-  height: 100%;
+  <meta
+    name="theme-color"
+    content="#000000"
+  >
 
-  margin: 0;
-  padding: 0;
+  <title>Experiência Fotográfica</title>
 
-  overflow: hidden;
 
-  background: #000000;
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
 
-  overscroll-behavior: none;
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
 
-  /*
-    Bloqueia gestos de zoom no navegador.
-  */
-  touch-action: none;
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap"
+    rel="stylesheet"
+  >
 
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-}
 
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 
-body {
-  width: 100%;
-  height: 100%;
+</head>
 
-  margin: 0;
-  padding: 0;
 
-  overflow: hidden;
+<body>
 
-  background: #000000;
+  <main
+    id="experience"
+    class="experience"
+  >
 
-  overscroll-behavior: none;
 
-  touch-action: none;
+    <!-- =====================================================
+         BARRAS DOS STORIES
+    ====================================================== -->
 
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
+    <div
+      id="storyProgress"
+      class="story-progress"
+      aria-hidden="true"
+    >
 
-  font-family:
-    "Poppins",
-    sans-serif;
+      <div class="story-segment">
+        <span class="story-fill"></span>
+      </div>
 
-  font-weight: 400;
+      <div class="story-segment">
+        <span class="story-fill"></span>
+      </div>
 
-  color: #ffffff;
+      <div class="story-segment">
+        <span class="story-fill"></span>
+      </div>
 
-  -webkit-font-smoothing: antialiased;
+      <div class="story-segment">
+        <span class="story-fill"></span>
+      </div>
 
-  text-rendering: optimizeLegibility;
-}
+      <div class="story-segment">
+        <span class="story-fill"></span>
+      </div>
 
+      <div class="story-segment">
+        <span class="story-fill"></span>
+      </div>
 
-/* =========================================================
-   EXPERIÊNCIA
-========================================================= */
+      <div class="story-segment">
+        <span class="story-fill"></span>
+      </div>
 
-.experience {
-  position: fixed;
+      <div class="story-segment">
+        <span class="story-fill"></span>
+      </div>
 
-  inset: 0;
+    </div>
 
-  width: 100vw;
-  height: 100dvh;
 
-  overflow: hidden;
 
-  background: #000000;
+    <!-- =====================================================
+         QUADRO PRINCIPAL 9:16
+    ====================================================== -->
+
+    <div
+      id="storyStage"
+      class="story-stage"
+    >
+
+
+      <!-- ===================================================
+           LOGIN
+      ==================================================== -->
+
+      <section
+        class="scene scene-login active"
+        data-scene="0"
+      >
+
+        <video
+          id="loginVideo"
+          class="scene-video"
+          autoplay
+          muted
+          loop
+          playsinline
+          webkit-playsinline
+          preload="auto"
+          disablepictureinpicture
+          controlslist="nodownload nofullscreen noremoteplayback"
+        >
+
+          <source
+            src="login.mp4"
+            type="video/mp4"
+          >
+
+        </video>
+
+
+        <div
+          class="login-panel"
+        >
+
+          <input
+            id="password"
+            class="ui-box"
+            type="password"
+            inputmode="text"
+            autocomplete="off"
+            autocapitalize="none"
+            autocorrect="off"
+            spellcheck="false"
+            placeholder="Senha"
+            aria-label="Senha"
+          >
+
 
-  display: grid;
-  place-items: center;
+          <button
+            id="enterButton"
+            class="ui-box ui-button"
+            type="button"
+          >
+            Entrar
+          </button>
+
+
+          <div
+            id="passwordError"
+            class="password-error"
+            role="alert"
+            aria-live="polite"
+          >
+            Senha incorreta.
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ===================================================
+           ABERTURA 3 × C
+      ==================================================== -->
 
-  user-select: none;
-  -webkit-user-select: none;
+      <section
+        class="scene start-screen"
+        data-scene="1"
+      >
 
-  touch-action: none;
-}
+        <video
+          id="startVideo"
+          class="scene-video start-video"
+          muted
+          playsinline
+          webkit-playsinline
+          preload="auto"
+          disablepictureinpicture
+          controlslist="nodownload nofullscreen noremoteplayback"
+        >
+
+          <source
+            src="3xc.mp4"
+            type="video/mp4"
+          >
+
+        </video>
+
+
+        <div
+          class="start-panel"
+        >
 
+          <button
+            id="startButton"
+            class="ui-box ui-button start-button"
+            type="button"
+          >
+            Começar
+          </button>
 
-/* =========================================================
-   QUADRO 9:16
-========================================================= */
+        </div>
 
-.story-stage {
-  position: absolute;
+      </section>
 
-  top: 50%;
-  left: 50%;
 
-  width:
-    min(
-      100vw,
-      56.25dvh
-    );
 
-  height:
-    min(
-      177.7777777778vw,
-      100dvh
-    );
+      <!-- ===================================================
+           STORY 1
+      ==================================================== -->
+
+      <section
+        class="scene story-scene"
+        data-scene="2"
+      >
+
+        <video
+          class="scene-video"
+          preload="auto"
+          playsinline
+          webkit-playsinline
+          disablepictureinpicture
+          controlslist="nodownload nofullscreen noremoteplayback"
+        >
 
-  transform:
-    translate(
-      -50%,
-      -50%
-    );
+          <source
+            src="tela 1.mp4"
+            type="video/mp4"
+          >
 
-  overflow: hidden;
+        </video>
 
-  background: #000000;
+      </section>
 
-  touch-action: none;
-}
 
 
-/* =========================================================
-   CENAS
-========================================================= */
+      <!-- ===================================================
+           STORY 2
+      ==================================================== -->
 
-.scene {
-  position: absolute;
+      <section
+        class="scene story-scene"
+        data-scene="3"
+      >
 
-  inset: 0;
+        <video
+          class="scene-video"
+          preload="auto"
+          playsinline
+          webkit-playsinline
+          disablepictureinpicture
+          controlslist="nodownload nofullscreen noremoteplayback"
+        >
 
-  width: 100%;
-  height: 100%;
+          <source
+            src="tela 2.mp4"
+            type="video/mp4"
+          >
 
-  overflow: hidden;
+        </video>
 
-  display: grid;
-  place-items: center;
+      </section>
 
-  background: #000000;
 
-  opacity: 0;
 
-  visibility: hidden;
+      <!-- ===================================================
+           STORY 3
+      ==================================================== -->
 
-  pointer-events: none;
+      <section
+        class="scene story-scene"
+        data-scene="4"
+      >
 
-  transition: none;
+        <video
+          class="scene-video"
+          preload="auto"
+          playsinline
+          webkit-playsinline
+          disablepictureinpicture
+          controlslist="nodownload nofullscreen noremoteplayback"
+        >
 
-  touch-action: none;
-}
+          <source
+            src="claridade.mp4"
+            type="video/mp4"
+          >
 
+        </video>
 
-.scene.active {
-  opacity: 1;
+      </section>
 
-  visibility: visible;
 
-  pointer-events: auto;
-}
 
+      <!-- ===================================================
+           STORY 4
+      ==================================================== -->
 
-/* =========================================================
-   ORDEM DAS CENAS
-========================================================= */
+      <section
+        class="scene story-scene"
+        data-scene="5"
+      >
 
-.scene[data-scene="0"] {
-  z-index: 1;
-}
+        <video
+          class="scene-video"
+          preload="auto"
+          playsinline
+          webkit-playsinline
+          disablepictureinpicture
+          controlslist="nodownload nofullscreen noremoteplayback"
+        >
 
-.scene[data-scene="1"] {
-  z-index: 2;
-}
+          <source
+            src="contraste.mp4"
+            type="video/mp4"
+          >
 
-.scene[data-scene="2"] {
-  z-index: 3;
-}
+        </video>
 
-.scene[data-scene="3"] {
-  z-index: 4;
-}
+      </section>
 
-.scene[data-scene="4"] {
-  z-index: 5;
-}
 
-.scene[data-scene="5"] {
-  z-index: 6;
-}
 
-.scene[data-scene="6"] {
-  z-index: 7;
-}
+      <!-- ===================================================
+           STORY 5
+      ==================================================== -->
 
-.scene[data-scene="7"] {
-  z-index: 8;
-}
+      <section
+        class="scene story-scene"
+        data-scene="6"
+      >
 
-.scene[data-scene="8"] {
-  z-index: 9;
-}
+        <video
+          class="scene-video"
+          preload="auto"
+          playsinline
+          webkit-playsinline
+          disablepictureinpicture
+          controlslist="nodownload nofullscreen noremoteplayback"
+        >
 
-.scene[data-scene="9"] {
-  z-index: 10;
-}
+          <source
+            src="controle.mp4"
+            type="video/mp4"
+          >
 
+        </video>
 
-/* =========================================================
-   VÍDEOS
-========================================================= */
+      </section>
 
-.scene-video {
-  position: absolute;
 
-  inset: 0;
 
-  width: 100%;
-  height: 100%;
+      <!-- ===================================================
+           STORY 6
+      ==================================================== -->
 
-  object-fit: cover;
+      <section
+        class="scene story-scene"
+        data-scene="7"
+      >
 
-  background: #000000;
+        <video
+          class="scene-video"
+          preload="auto"
+          playsinline
+          webkit-playsinline
+          disablepictureinpicture
+          controlslist="nodownload nofullscreen noremoteplayback"
+        >
 
-  border: 0;
-  outline: 0;
+          <source
+            src="incluidos.mp4"
+            type="video/mp4"
+          >
 
-  pointer-events: none;
+        </video>
 
-  user-select: none;
-  -webkit-user-select: none;
+      </section>
 
-  -webkit-user-drag: none;
 
-  -webkit-touch-callout: none;
-}
 
+      <!-- ===================================================
+           STORY 7
+      ==================================================== -->
 
-/* =========================================================
-   VÍDEO 3 × C
-========================================================= */
+      <section
+        class="scene story-scene"
+        data-scene="8"
+      >
 
-.start-video {
-  position: absolute;
+        <video
+          class="scene-video"
+          preload="auto"
+          playsinline
+          webkit-playsinline
+          disablepictureinpicture
+          controlslist="nodownload nofullscreen noremoteplayback"
+        >
 
-  inset: 0;
+          <source
+            src="investimento.mp4"
+            type="video/mp4"
+          >
 
-  width: 100%;
-  height: 100%;
+        </video>
 
-  object-fit: cover;
+      </section>
 
-  background: #000000;
-}
 
 
-/* =========================================================
-   TELA COMEÇAR
-========================================================= */
+      <!-- ===================================================
+           STORY 8 — ÚLTIMO
+      ==================================================== -->
 
-.start-screen {
-  background: #000000;
-}
+      <section
+        class="scene story-scene final-story"
+        data-scene="9"
+      >
 
+        <video
+          id="finalVideo"
+          class="scene-video"
+          muted
+          playsinline
+          webkit-playsinline
+          preload="auto"
+          disablepictureinpicture
+          controlslist="nodownload nofullscreen noremoteplayback"
+        >
 
-.start-panel {
-  position: absolute;
+          <source
+            src="ultimo.mp4"
+            type="video/mp4"
+          >
 
-  left: 50%;
+        </video>
 
-  top: 60%;
 
-  transform:
-    translate(
-      -50%,
-      -50%
-    );
+        <div
+          id="finalPanel"
+          class="final-panel"
+        >
 
-  width: 68%;
+          <a
+            id="whatsappButton"
+            class="ui-box final-button"
+            href="https://wa.me/5531972055172?text=Ol%C3%A1%2C%20%C3%82ngelo.%20Conheci%20o%20projeto%203%20%C3%97%20C%20e%20quero%20fazer%20parte.%20Gostaria%20de%20seguir%20com%20a%20contrata%C3%A7%C3%A3o."
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Quero fazer parte
+          </a>
 
-  max-width: 420px;
+        </div>
 
-  display: flex;
+      </section>
 
-  justify-content: center;
-  align-items: center;
 
-  opacity: 0;
+    </div>
 
-  visibility: hidden;
 
-  pointer-events: none;
-}
 
+    <!-- =====================================================
+         CONTROLES INVISÍVEIS DOS STORIES
+    ====================================================== -->
 
-.start-screen.ready
-.start-panel {
-  opacity: 1;
+    <div
+      id="storyControls"
+      class="story-controls"
+      aria-hidden="true"
+    >
 
-  visibility: visible;
+      <div
+        id="storyPrev"
+        class="story-hit-area story-prev"
+      ></div>
 
-  pointer-events: auto;
-}
 
+      <div
+        id="storyPause"
+        class="story-hit-area story-pause"
+      ></div>
 
-.start-button {
-  width: 100%;
 
-  cursor: pointer;
-}
+      <div
+        id="storyNext"
+        class="story-hit-area story-next"
+      ></div>
 
+    </div>
 
-/* =========================================================
-   BARRAS
-========================================================= */
 
-.story-progress {
-  position: fixed;
+  </main>
 
-  z-index: 500;
 
-  top:
-    max(
-      10px,
-      env(safe-area-inset-top)
-    );
+  <script
+    src="script.js"
+  ></script>
 
-  left: 50%;
+</body>
 
-  transform:
-    translateX(-50%);
-
-  width:
-    min(
-      calc(100vw - 24px),
-      calc(56.25dvh - 24px)
-    );
-
-  height: 4px;
-
-  display: flex;
-
-  gap: 3px;
-
-  pointer-events: none;
-
-  opacity: 0;
-
-  visibility: hidden;
-
-  touch-action: none;
-}
-
-
-.experience.story-active
-.story-progress {
-  opacity: 1;
-
-  visibility: visible;
-
-  pointer-events: auto;
-}
-
-
-/* =========================================================
-   SEGMENTOS
-========================================================= */
-
-.story-segment {
-  position: relative;
-
-  flex: 1;
-
-  height: 100%;
-
-  overflow: hidden;
-
-  border-radius: 999px;
-
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      0.22
-    );
-
-  cursor: pointer;
-
-  touch-action: none;
-}
-
-
-.story-fill {
-  position: absolute;
-
-  top: 0;
-  left: 0;
-
-  width: 0%;
-  height: 100%;
-
-  border-radius: inherit;
-
-  background: #ffffff;
-
-  transform-origin:
-    left center;
-}
-
-
-/* =========================================================
-   LOGIN
-========================================================= */
-
-.login-panel {
-  position: absolute;
-
-  z-index: 1000;
-
-  left: 50%;
-
-  top: 58%;
-
-  transform:
-    translate(
-      -50%,
-      -50%
-    );
-
-  width: 68%;
-
-  max-width: 420px;
-
-  display: flex;
-
-  flex-direction: column;
-
-  gap: 8px;
-
-  pointer-events: auto;
-
-  touch-action: auto;
-}
-
-
-.login-panel.hidden {
-  opacity: 0;
-
-  visibility: hidden;
-
-  pointer-events: none;
-}
-
-
-/* =========================================================
-   CAMPOS
-========================================================= */
-
-.ui-box {
-  width: 100%;
-
-  height: 50px;
-
-  padding:
-    0 16px;
-
-  border:
-    1px solid
-    rgba(
-      255,
-      255,
-      255,
-      0.24
-    );
-
-  border-radius: 7px;
-
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      0.10
-    );
-
-  color: #ffffff;
-
-  outline: none;
-
-  font-family:
-    "Poppins",
-    sans-serif;
-
-  font-size: 16px;
-
-  line-height: 1;
-
-  font-weight: 400;
-
-  backdrop-filter: blur(7px);
-  -webkit-backdrop-filter: blur(7px);
-
-  -webkit-appearance: none;
-  appearance: none;
-
-  pointer-events: auto;
-
-  touch-action: manipulation;
-}
-
-
-input.ui-box {
-  touch-action: manipulation;
-
-  /*
-    Impede o Safari de ampliar
-    o campo ao receber foco.
-  */
-  font-size: 16px;
-}
-
-
-.ui-box::placeholder {
-  color:
-    rgba(
-      255,
-      255,
-      255,
-      0.88
-    );
-
-  opacity: 1;
-}
-
-
-.ui-box:focus {
-  outline: none;
-
-  border-color:
-    rgba(
-      255,
-      255,
-      255,
-      0.48
-    );
-
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      0.14
-    );
-
-  box-shadow: none;
-}
-
-
-/* =========================================================
-   BOTÕES
-========================================================= */
-
-.ui-button {
-  cursor: pointer;
-
-  text-align: center;
-
-  touch-action: manipulation;
-
-  transition:
-    background 160ms ease,
-    transform 140ms ease;
-
-  text-decoration: none;
-}
-
-
-.ui-button:hover {
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      0.16
-    );
-}
-
-
-.ui-button:active {
-  transform:
-    scale(
-      0.985
-    );
-}
-
-
-/* =========================================================
-   ERRO
-========================================================= */
-
-.password-error {
-  min-height: 18px;
-
-  margin-top: 2px;
-
-  color: #ffffff;
-
-  font-size: 12px;
-
-  line-height: 1.4;
-
-  text-align: center;
-
-  opacity: 0;
-}
-
-
-.password-error.visible {
-  opacity: 1;
-}
-
-
-/* =========================================================
-   ÁREAS DE TOQUE
-========================================================= */
-
-.story-controls {
-  position: fixed;
-
-  inset: 0;
-
-  z-index: 400;
-
-  pointer-events: none;
-
-  opacity: 0;
-
-  visibility: hidden;
-
-  touch-action: none;
-}
-
-
-.experience.story-active
-.story-controls {
-  pointer-events: auto;
-
-  opacity: 1;
-
-  visibility: visible;
-}
-
-
-.story-hit-area {
-  position: absolute;
-
-  top: 0;
-  bottom: 0;
-
-  background: transparent;
-
-  pointer-events: auto;
-
-  touch-action: none;
-}
-
-
-/* =========================================================
-   ESQUERDA
-========================================================= */
-
-.story-prev {
-  left:
-    max(
-      calc(
-        (
-          100vw -
-          min(
-            100vw,
-            56.25dvh
-          )
-        ) / 2
-      ),
-      0px
-    );
-
-  width:
-    calc(
-      min(
-        100vw,
-        56.25dvh
-      ) * 0.30
-    );
-}
-
-
-/* =========================================================
-   CENTRO
-========================================================= */
-
-.story-pause {
-  left: 50%;
-
-  width:
-    calc(
-      min(
-        100vw,
-        56.25dvh
-      ) * 0.40
-    );
-
-  transform:
-    translateX(-50%);
-}
-
-
-/* =========================================================
-   DIREITA
-========================================================= */
-
-.story-next {
-  right:
-    max(
-      calc(
-        (
-          100vw -
-          min(
-            100vw,
-            56.25dvh
-          )
-        ) / 2
-      ),
-      0px
-    );
-
-  width:
-    calc(
-      min(
-        100vw,
-        56.25dvh
-      ) * 0.30
-    );
-}
-
-
-/* =========================================================
-   ÚLTIMA TELA
-========================================================= */
-
-.final-story {
-  background: #000000;
-
-  touch-action: none;
-}
-
-
-.final-panel {
-  position: absolute;
-
-  /*
-    O posicionamento é calculado
-    exclusivamente dentro do quadro
-    9:16.
-  */
-
-  left: 50%;
-
-  top: 65%;
-
-  transform:
-    translate(
-      -50%,
-      -50%
-    );
-
-  /*
-    Tamanho fixo visualmente,
-    mas limitado à largura do quadro.
-  */
-
-  width: 240px;
-
-  max-width:
-    calc(
-      100% - 48px
-    );
-
-  margin: 0;
-
-  padding: 0;
-
-  display: flex;
-
-  justify-content: center;
-  align-items: center;
-
-  opacity: 0;
-
-  visibility: hidden;
-
-  pointer-events: none;
-
-  touch-action: manipulation;
-}
-
-
-.final-story.final-ready
-.final-panel {
-  opacity: 1;
-
-  visibility: visible;
-
-  pointer-events: auto;
-}
-
-
-.final-button {
-  display: block;
-
-  width: 100%;
-
-  margin: 0;
-
-  text-align: center;
-
-  touch-action: manipulation;
-}
-
-
-/* =========================================================
-   CELULAR
-========================================================= */
-
-@media (max-width: 600px) {
-
-  .story-stage {
-    width: 100vw;
-
-    height: 100dvh;
-  }
-
-
-  .story-progress {
-    width:
-      calc(
-        100vw - 20px
-      );
-
-    height: 3px;
-
-    gap: 3px;
-  }
-
-
-  .login-panel {
-    width: 76%;
-
-    max-width: 340px;
-
-    top: 60%;
-  }
-
-
-  .start-panel {
-    width: 76%;
-
-    max-width: 340px;
-
-    top: 60%;
-  }
-
-
-  /*
-    Mantemos o mesmo tamanho
-    do botão final no celular.
-  */
-
-  .final-panel {
-    width: 240px;
-
-    max-width:
-      calc(
-        100vw - 48px
-      );
-
-    top: 65%;
-  }
-
-
-  .ui-box {
-    height: 48px;
-
-    font-size: 16px;
-  }
-
-
-  .story-prev,
-  .story-next {
-    width: 30vw;
-  }
-
-
-  .story-pause {
-    width: 40vw;
-  }
-
-}
-
-
-/* =========================================================
-   COMPUTADOR
-========================================================= */
-
-@media (min-width: 601px) {
-
-  .story-stage {
-    width:
-      min(
-        100vw,
-        56.25dvh
-      );
-
-    height:
-      min(
-        177.7777777778vw,
-        100dvh
-      );
-  }
-
-
-  .story-progress {
-    width:
-      min(
-        calc(100vw - 24px),
-        calc(56.25dvh - 24px)
-      );
-  }
-
-}
-
-
-/* =========================================================
-   CONTROLES NATIVOS DE VÍDEO
-========================================================= */
-
-video::-webkit-media-controls {
-  display: none !important;
-}
-
-
-video::-webkit-media-controls-enclosure {
-  display: none !important;
-}
-
-
-video::-webkit-media-controls-panel {
-  display: none !important;
-}
-
-
-/* =========================================================
-   FOCO
-========================================================= */
-
-button:focus-visible,
-input:focus-visible,
-a:focus-visible {
-  outline:
-    1px solid
-    rgba(
-      255,
-      255,
-      255,
-      0.55
-    );
-
-  outline-offset: 2px;
-}
+</html>
