@@ -726,12 +726,7 @@ body {
 
   left: 50%;
 
-  /*
-    Mesmo eixo visual do botão Começar,
-    ligeiramente abaixo do centro.
-  */
-
-  top: 60%;
+  top: 66%;
 
   transform:
     translate(
@@ -739,9 +734,9 @@ body {
       -50%
     );
 
-  width: 68%;
+  width: 58%;
 
-  max-width: 420px;
+  max-width: 300px;
 
   opacity: 0;
 
@@ -803,15 +798,6 @@ body {
 
 
   .start-panel {
-    width: 76%;
-
-    max-width: 340px;
-
-    top: 60%;
-  }
-
-
-  .final-panel {
     width: 76%;
 
     max-width: 340px;
