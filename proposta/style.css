@@ -1,0 +1,1028 @@
+/* =========================================================
+   RESET
+========================================================= */
+
+* {
+  box-sizing: border-box;
+
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+
+  margin: 0;
+  padding: 0;
+
+  overflow: hidden;
+
+  background: #000000;
+
+  overscroll-behavior: none;
+
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+
+/* =========================================================
+   BODY
+========================================================= */
+
+body {
+  position: fixed;
+
+  inset: 0;
+
+  font-family:
+    "Poppins",
+    sans-serif;
+
+  font-weight: 400;
+
+  color: #ffffff;
+
+  background: #000000;
+
+  overflow: hidden;
+
+  touch-action: none;
+
+  -webkit-font-smoothing: antialiased;
+
+  text-rendering: optimizeLegibility;
+}
+
+
+/* =========================================================
+   EXPERIÊNCIA
+========================================================= */
+
+.experience {
+  position: fixed;
+
+  inset: 0;
+
+  width: 100vw;
+  height: 100dvh;
+
+  overflow: hidden;
+
+  background: #000000;
+
+  display: grid;
+
+  place-items: center;
+
+  user-select: none;
+  -webkit-user-select: none;
+
+  touch-action: none;
+}
+
+
+/* =========================================================
+   QUADRO 9:16
+========================================================= */
+
+.story-stage {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+
+  width:
+    min(
+      100vw,
+      56.25dvh
+    );
+
+  height:
+    min(
+      177.7777777778vw,
+      100dvh
+    );
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+
+  overflow: hidden;
+
+  background: #000000;
+
+  touch-action: none;
+}
+
+
+/* =========================================================
+   CENAS
+========================================================= */
+
+.scene {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+
+  display: grid;
+
+  place-items: center;
+
+  background: #000000;
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  pointer-events: none;
+
+  transition: none;
+
+  touch-action: none;
+}
+
+
+.scene.active {
+  opacity: 1;
+
+  visibility: visible;
+
+  pointer-events: auto;
+}
+
+
+/* =========================================================
+   ORDEM
+========================================================= */
+
+.scene[data-scene="0"] {
+  z-index: 1;
+}
+
+.scene[data-scene="1"] {
+  z-index: 2;
+}
+
+.scene[data-scene="2"] {
+  z-index: 3;
+}
+
+.scene[data-scene="3"] {
+  z-index: 4;
+}
+
+.scene[data-scene="4"] {
+  z-index: 5;
+}
+
+.scene[data-scene="5"] {
+  z-index: 6;
+}
+
+.scene[data-scene="6"] {
+  z-index: 7;
+}
+
+.scene[data-scene="7"] {
+  z-index: 8;
+}
+
+.scene[data-scene="8"] {
+  z-index: 9;
+}
+
+.scene[data-scene="9"] {
+  z-index: 10;
+}
+
+
+/* =========================================================
+   VÍDEOS
+========================================================= */
+
+.scene-video {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  background: #000000;
+
+  border: 0;
+
+  outline: 0;
+
+  pointer-events: none;
+
+  user-select: none;
+
+  -webkit-user-select: none;
+
+  -webkit-user-drag: none;
+
+  -webkit-touch-callout: none;
+}
+
+
+/* =========================================================
+   3 × C
+========================================================= */
+
+.start-video {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  background: #000000;
+}
+
+
+/* =========================================================
+   COMEÇAR
+========================================================= */
+
+.start-screen {
+  background: #000000;
+}
+
+
+.start-panel {
+  position: absolute;
+
+  left: 50%;
+
+  top: 60%;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+
+  width: 68%;
+
+  max-width: 420px;
+
+  display: flex;
+
+  justify-content: center;
+
+  align-items: center;
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  pointer-events: none;
+
+  z-index: 100;
+}
+
+
+.start-screen.ready .start-panel {
+  opacity: 1;
+
+  visibility: visible;
+
+  pointer-events: auto;
+}
+
+
+.start-button {
+  width: 100%;
+}
+
+
+/* =========================================================
+   BARRAS
+========================================================= */
+
+.story-progress {
+  position: fixed;
+
+  z-index: 500;
+
+  top:
+    max(
+      10px,
+      env(safe-area-inset-top)
+    );
+
+  left: 50%;
+
+  transform:
+    translateX(-50%);
+
+  width:
+    min(
+      calc(100vw - 24px),
+      calc(56.25dvh - 24px)
+    );
+
+  height: 4px;
+
+  display: flex;
+
+  gap: 3px;
+
+  pointer-events: none;
+
+  opacity: 0;
+
+  visibility: hidden;
+}
+
+
+.experience.story-active .story-progress {
+  opacity: 1;
+
+  visibility: visible;
+
+  pointer-events: auto;
+}
+
+
+.story-segment {
+  position: relative;
+
+  flex: 1;
+
+  height: 100%;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.22
+    );
+
+  touch-action: none;
+}
+
+
+.story-fill {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 0%;
+  height: 100%;
+
+  border-radius: inherit;
+
+  background: #ffffff;
+
+  transform-origin:
+    left center;
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+.login-panel {
+  position: absolute;
+
+  z-index: 1000;
+
+  left: 50%;
+
+  top: 58%;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+
+  width: 68%;
+
+  max-width: 420px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+  pointer-events: auto;
+
+  touch-action: auto;
+}
+
+
+.login-panel.hidden {
+  opacity: 0;
+
+  visibility: hidden;
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   CAMPOS
+========================================================= */
+
+.ui-box {
+  width: 100%;
+
+  height: 50px;
+
+  padding:
+    0 16px;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.24
+    );
+
+  border-radius: 7px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.10
+    );
+
+  color: #ffffff;
+
+  outline: none;
+
+  font-family:
+    "Poppins",
+    sans-serif;
+
+  font-size: 16px;
+
+  line-height: 1;
+
+  font-weight: 400;
+
+  backdrop-filter: blur(7px);
+
+  -webkit-backdrop-filter: blur(7px);
+
+  -webkit-appearance: none;
+
+  appearance: none;
+
+  pointer-events: auto;
+
+  touch-action: manipulation;
+}
+
+
+input.ui-box {
+  font-size: 16px;
+
+  touch-action: manipulation;
+}
+
+
+.ui-box::placeholder {
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.88
+    );
+
+  opacity: 1;
+}
+
+
+.ui-box:focus {
+  outline: none;
+
+  border-color:
+    rgba(
+      255,
+      255,
+      255,
+      0.48
+    );
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.14
+    );
+
+  box-shadow: none;
+}
+
+
+/* =========================================================
+   BOTÕES
+========================================================= */
+
+.ui-button {
+  cursor: pointer;
+
+  text-align: center;
+
+  touch-action: manipulation;
+
+  transition:
+    background 160ms ease,
+    transform 140ms ease;
+
+  text-decoration: none;
+}
+
+
+.ui-button:hover {
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.16
+    );
+}
+
+
+.ui-button:active {
+  transform:
+    scale(
+      0.985
+    );
+}
+
+
+/* =========================================================
+   ERRO
+========================================================= */
+
+.password-error {
+  min-height: 18px;
+
+  margin-top: 2px;
+
+  color: #ffffff;
+
+  font-size: 12px;
+
+  line-height: 1.4;
+
+  text-align: center;
+
+  opacity: 0;
+}
+
+
+.password-error.visible {
+  opacity: 1;
+}
+
+
+/* =========================================================
+   CONTROLES INVISÍVEIS
+========================================================= */
+
+.story-controls {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 400;
+
+  pointer-events: none;
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  touch-action: none;
+}
+
+
+.experience.story-active .story-controls {
+  pointer-events: auto;
+
+  opacity: 1;
+
+  visibility: visible;
+}
+
+
+.story-hit-area {
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+
+  background: transparent;
+
+  pointer-events: auto;
+
+  touch-action: none;
+}
+
+
+.story-prev {
+  left:
+    max(
+      calc(
+        (
+          100vw -
+          min(
+            100vw,
+            56.25dvh
+          )
+        ) / 2
+      ),
+      0px
+    );
+
+  width:
+    calc(
+      min(
+        100vw,
+        56.25dvh
+      ) * 0.30
+    );
+}
+
+
+.story-pause {
+  left: 50%;
+
+  width:
+    calc(
+      min(
+        100vw,
+        56.25dvh
+      ) * 0.40
+    );
+
+  transform:
+    translateX(-50%);
+}
+
+
+.story-next {
+  right:
+    max(
+      calc(
+        (
+          100vw -
+          min(
+            100vw,
+            56.25dvh
+          )
+        ) / 2
+      ),
+      0px
+    );
+
+  width:
+    calc(
+      min(
+        100vw,
+        56.25dvh
+      ) * 0.30
+    );
+}
+
+
+/* =========================================================
+   ÚLTIMA TELA
+========================================================= */
+
+.final-story {
+  background: #000000;
+
+  touch-action: none;
+}
+
+
+/*
+   Coloca a última cena acima
+   dos controles invisíveis.
+*/
+
+.final-story.active {
+  z-index: 450 !important;
+}
+
+
+.final-panel {
+  position: absolute;
+
+  left: 50%;
+
+  top: 66%;
+
+  transform:
+    translate(
+      -50%,
+      -50%
+    );
+
+  width: 50%;
+
+  max-width: none;
+
+  margin: 0;
+
+  padding: 0;
+
+  display: block;
+
+  z-index: 1001;
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  pointer-events: none;
+
+  touch-action: manipulation;
+}
+
+
+.final-story.final-ready .final-panel {
+  opacity: 1;
+
+  visibility: visible;
+
+  pointer-events: auto;
+}
+
+
+/* =========================================================
+   BOTÃO FINAL
+========================================================= */
+
+.final-button {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 100%;
+
+  height: 50px;
+
+  margin: 0;
+
+  padding:
+    0 12px;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.24
+    );
+
+  border-radius: 7px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.10
+    );
+
+  color: #ffffff;
+
+  font-family:
+    "Poppins",
+    sans-serif;
+
+  font-size: 16px;
+
+  line-height: 1.2;
+
+  font-weight: 400;
+
+  text-align: center;
+
+  text-decoration: none;
+
+  pointer-events: auto;
+
+  cursor: pointer;
+
+  touch-action: manipulation;
+
+  backdrop-filter: blur(7px);
+
+  -webkit-backdrop-filter: blur(7px);
+
+  -webkit-appearance: none;
+
+  appearance: none;
+}
+
+
+.final-button:hover {
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.16
+    );
+}
+
+
+.final-button:active {
+  transform:
+    scale(
+      0.985
+    );
+}
+
+
+/* =========================================================
+   CELULAR
+========================================================= */
+
+@media (max-width: 600px) {
+
+  .story-stage {
+    width: 100vw;
+
+    height: 100dvh;
+  }
+
+
+  .story-progress {
+    width:
+      calc(
+        100vw - 20px
+      );
+
+    height: 3px;
+
+    gap: 3px;
+  }
+
+
+  .login-panel {
+    width: 76%;
+
+    max-width: 340px;
+
+    top: 60%;
+  }
+
+
+  .start-panel {
+    width: 76%;
+
+    max-width: 340px;
+
+    top: 60%;
+  }
+
+
+  .final-panel {
+    width: 50%;
+
+    top: 66%;
+
+    z-index: 1001;
+  }
+
+
+  .ui-box {
+    height: 48px;
+
+    font-size: 16px;
+  }
+
+
+  .final-button {
+    height: 48px;
+
+    font-size: 16px;
+  }
+
+
+  .story-prev,
+  .story-next {
+    width: 30vw;
+  }
+
+
+  .story-pause {
+    width: 40vw;
+  }
+
+}
+
+
+/* =========================================================
+   COMPUTADOR
+========================================================= */
+
+@media (min-width: 601px) {
+
+  .story-stage {
+    width:
+      min(
+        100vw,
+        56.25dvh
+      );
+
+    height:
+      min(
+        177.7777777778vw,
+        100dvh
+      );
+  }
+
+
+  .story-progress {
+    width:
+      min(
+        calc(100vw - 24px),
+        calc(56.25dvh - 24px)
+      );
+  }
+
+}
+
+
+/* =========================================================
+   CONTROLES NATIVOS DOS VÍDEOS
+========================================================= */
+
+video::-webkit-media-controls {
+  display: none !important;
+}
+
+
+video::-webkit-media-controls-enclosure {
+  display: none !important;
+}
+
+
+video::-webkit-media-controls-panel {
+  display: none !important;
+}
+
+
+/* =========================================================
+   FOCO
+========================================================= */
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      0.55
+    );
+
+  outline-offset: 2px;
+}
