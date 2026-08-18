@@ -1,5 +1,8 @@
 const CONFIG = {
-  password: "3xc"
+  password: "3xc",
+
+  whatsappUrl:
+    "https://wa.me/5531972055172?text=Ol%C3%A1%2C%20%C3%82ngelo.%20Conheci%20o%20projeto%203%20%C3%97%20C%20e%20quero%20fazer%20parte.%20Gostaria%20de%20seguir%20com%20a%20contrata%C3%A7%C3%A3o."
 };
 
 
@@ -124,9 +127,21 @@ const finalPanel =
   );
 
 
+const whatsappButton =
+  document.getElementById(
+    "whatsappButton"
+  );
+
+
 /* =========================================================
    CONTROLES DOS STORIES
 ========================================================= */
+
+const storyControls =
+  document.getElementById(
+    "storyControls"
+  );
+
 
 const storyPrev =
   document.getElementById(
@@ -161,11 +176,17 @@ const storyNext =
    9 = STORY 8 / ÚLTIMO
 ========================================================= */
 
-const LOGIN_SCENE = 0;
+const LOGIN_SCENE =
+  0;
 
-const START_SCENE = 1;
 
-const FIRST_STORY = 2;
+const START_SCENE =
+  1;
+
+
+const FIRST_STORY =
+  2;
+
 
 const LAST_STORY =
   scenes.length - 1;
@@ -178,20 +199,26 @@ const LAST_STORY =
 let currentScene =
   LOGIN_SCENE;
 
+
 let unlocked =
   false;
+
 
 let activePointerId =
   null;
 
+
 let isHolding =
   false;
+
 
 let progressFrame =
   null;
 
+
 let finalButtonTimer =
   null;
+
 
 let lastTouchEnd =
   0;
@@ -210,6 +237,7 @@ function stopProgress() {
     cancelAnimationFrame(
       progressFrame
     );
+
 
     progressFrame =
       null;
@@ -361,6 +389,40 @@ function deactivateStories() {
 
 
 /* =========================================================
+   CONTROLES DO ÚLTIMO STORY
+========================================================= */
+
+function disableStoryControlsForFinal() {
+
+  if (
+    storyControls
+  ) {
+
+    storyControls.classList.add(
+      "final-lock"
+    );
+
+  }
+
+}
+
+
+function enableStoryControls() {
+
+  if (
+    storyControls
+  ) {
+
+    storyControls.classList.remove(
+      "final-lock"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
    PARAR TODOS OS VÍDEOS
 ========================================================= */
 
@@ -369,8 +431,12 @@ function stopAllVideos() {
   videos.forEach(
     video => {
 
-      if (!video) {
+      if (
+        !video
+      ) {
+
         return;
+
       }
 
 
@@ -403,6 +469,7 @@ function preloadNext(
   ) {
 
     return;
+
   }
 
 
@@ -410,8 +477,12 @@ function preloadNext(
     videos[nextIndex];
 
 
-  if (!nextVideo) {
+  if (
+    !nextVideo
+  ) {
+
     return;
+
   }
 
 
@@ -423,7 +494,9 @@ function preloadNext(
 
     nextVideo.load();
 
-  } catch (error) {
+  } catch (
+    error
+  ) {
 
     // Ignorar
 
@@ -448,7 +521,8 @@ function showScene(
 
       scene.classList.toggle(
         "active",
-        sceneIndex === index
+        sceneIndex ===
+          index
       );
 
     }
@@ -458,19 +532,19 @@ function showScene(
 
 
 /* =========================================================
-   RESET DO ÚLTIMO BOTÃO
+   BOTÃO FINAL
 ========================================================= */
 
 function resetFinalButton() {
 
   if (
-    finalButtonTimer !==
-    null
+    finalButtonTimer !== null
   ) {
 
     clearTimeout(
       finalButtonTimer
     );
+
 
     finalButtonTimer =
       null;
@@ -490,10 +564,6 @@ function resetFinalButton() {
 
 }
 
-
-/* =========================================================
-   REVELAR BOTÃO FINAL
-========================================================= */
 
 function scheduleFinalButton() {
 
@@ -527,7 +597,7 @@ function scheduleFinalButton() {
 
 
 /* =========================================================
-   PREPARAR ABERTURA 3 × C
+   TELA 3 × C
 ========================================================= */
 
 function prepareStartScreen() {
@@ -537,6 +607,7 @@ function prepareStartScreen() {
   ) {
 
     return;
+
   }
 
 
@@ -574,7 +645,9 @@ function prepareStartScreen() {
     startVideo.currentTime =
       0;
 
-  } catch (error) {
+  } catch (
+    error
+  ) {
 
     // Ignorar
 
@@ -600,10 +673,6 @@ function prepareStartScreen() {
 }
 
 
-/* =========================================================
-   FINAL DO 3 × C
-========================================================= */
-
 function revealStartButton() {
 
   if (
@@ -611,6 +680,7 @@ function revealStartButton() {
   ) {
 
     return;
+
   }
 
 
@@ -622,7 +692,7 @@ function revealStartButton() {
 
 
 /* =========================================================
-   COMEÇAR UM STORY
+   INICIAR STORY
 ========================================================= */
 
 function startStory(
@@ -633,8 +703,12 @@ function startStory(
     videos[index];
 
 
-  if (!video) {
+  if (
+    !video
+  ) {
+
     return;
+
   }
 
 
@@ -648,17 +722,12 @@ function startStory(
   resetFinalButton();
 
 
-  /*
-    Para e silencia todos
-    antes da troca.
-  */
-
   stopAllVideos();
 
 
   /*
-    Reposiciona o vídeo antes
-    de mostrar sua cena.
+    Retorna ao primeiro frame
+    antes de mostrar a cena.
   */
 
   try {
@@ -666,7 +735,9 @@ function startStory(
     video.currentTime =
       0;
 
-  } catch (error) {
+  } catch (
+    error
+  ) {
 
     // Ignorar
 
@@ -690,16 +761,37 @@ function startStory(
 
 
   /*
-    O último vídeo é sempre mudo.
+    O último vídeo é sempre
+    silencioso.
   */
 
-  video.muted =
-    index === LAST_STORY;
+  if (
+    index ===
+    LAST_STORY
+  ) {
+
+    video.muted =
+      true;
 
 
-  /*
-    Mostra a cena.
-  */
+    video.defaultMuted =
+      true;
+
+
+    disableStoryControlsForFinal();
+
+  }
+
+  else {
+
+    video.muted =
+      false;
+
+
+    enableStoryControls();
+
+  }
+
 
   showScene(
     index
@@ -707,7 +799,7 @@ function startStory(
 
 
   /*
-    Reproduz.
+    Reproduz imediatamente.
   */
 
   const playPromise =
@@ -748,7 +840,7 @@ function startStory(
 
 
 /* =========================================================
-   IR PARA STORY
+   NAVEGAÇÃO
 ========================================================= */
 
 function goToStory(
@@ -763,6 +855,7 @@ function goToStory(
   ) {
 
     return;
+
   }
 
 
@@ -772,6 +865,7 @@ function goToStory(
   ) {
 
     return;
+
   }
 
 
@@ -782,10 +876,6 @@ function goToStory(
 }
 
 
-/* =========================================================
-   STORY ANTERIOR
-========================================================= */
-
 function previousStory() {
 
   if (
@@ -794,6 +884,7 @@ function previousStory() {
   ) {
 
     return;
+
   }
 
 
@@ -804,10 +895,6 @@ function previousStory() {
 }
 
 
-/* =========================================================
-   STORY SEGUINTE
-========================================================= */
-
 function nextStory() {
 
   if (
@@ -816,6 +903,7 @@ function nextStory() {
   ) {
 
     return;
+
   }
 
 
@@ -848,7 +936,9 @@ function handleStoryEnd() {
       ];
 
 
-    if (fill) {
+    if (
+      fill
+    ) {
 
       fill.style.width =
         "100%";
@@ -857,6 +947,7 @@ function handleStoryEnd() {
 
 
     return;
+
   }
 
 
@@ -866,7 +957,7 @@ function handleStoryEnd() {
 
 
 /* =========================================================
-   PAUSAR STORY
+   PAUSAR
 ========================================================= */
 
 function pauseCurrentStory() {
@@ -875,8 +966,12 @@ function pauseCurrentStory() {
     videos[currentScene];
 
 
-  if (!video) {
+  if (
+    !video
+  ) {
+
     return;
+
   }
 
 
@@ -884,10 +979,6 @@ function pauseCurrentStory() {
 
 }
 
-
-/* =========================================================
-   CONTINUAR STORY
-========================================================= */
 
 function resumeCurrentStory() {
 
@@ -901,6 +992,7 @@ function resumeCurrentStory() {
   ) {
 
     return;
+
   }
 
 
@@ -915,6 +1007,7 @@ function resumeCurrentStory() {
       ) {
 
         return;
+
       }
 
 
@@ -935,11 +1028,12 @@ function resumeCurrentStory() {
 
 
   /*
-    O último vídeo continua mudo.
+    Último vídeo permanece mudo.
   */
 
   video.muted =
-    currentScene === LAST_STORY;
+    currentScene ===
+    LAST_STORY;
 
 
   const promise =
@@ -962,7 +1056,7 @@ function resumeCurrentStory() {
 
 
 /* =========================================================
-   PRESSÃO NO CENTRO
+   SEGURAR NO CENTRO
 ========================================================= */
 
 storyPause.addEventListener(
@@ -972,10 +1066,13 @@ storyPause.addEventListener(
     if (
       !unlocked ||
       currentScene <
-        FIRST_STORY
+        FIRST_STORY ||
+      currentScene ===
+        LAST_STORY
     ) {
 
       return;
+
     }
 
 
@@ -985,6 +1082,7 @@ storyPause.addEventListener(
     ) {
 
       return;
+
     }
 
 
@@ -1005,7 +1103,9 @@ storyPause.addEventListener(
         event.pointerId
       );
 
-    } catch (error) {
+    } catch (
+      error
+    ) {
 
       // Ignorar
 
@@ -1022,7 +1122,7 @@ storyPause.addEventListener(
 
 
 /* =========================================================
-   SOLTAR NO CENTRO
+   SOLTAR
 ========================================================= */
 
 storyPause.addEventListener(
@@ -1035,6 +1135,7 @@ storyPause.addEventListener(
     ) {
 
       return;
+
     }
 
 
@@ -1065,7 +1166,7 @@ storyPause.addEventListener(
 
 
 /* =========================================================
-   CANCELAR CENTRO
+   CANCELAR
 ========================================================= */
 
 storyPause.addEventListener(
@@ -1078,6 +1179,7 @@ storyPause.addEventListener(
     ) {
 
       return;
+
     }
 
 
@@ -1118,10 +1220,13 @@ storyPrev.addEventListener(
     if (
       !unlocked ||
       currentScene <
-        FIRST_STORY
+        FIRST_STORY ||
+      currentScene ===
+        LAST_STORY
     ) {
 
       return;
+
     }
 
 
@@ -1148,10 +1253,13 @@ storyNext.addEventListener(
     if (
       !unlocked ||
       currentScene <
-        FIRST_STORY
+        FIRST_STORY ||
+      currentScene ===
+        LAST_STORY
     ) {
 
       return;
+
     }
 
 
@@ -1186,16 +1294,23 @@ progressSegments.forEach(
         ) {
 
           return;
+
         }
 
 
-        const targetScene =
-          FIRST_STORY +
-          index;
+        if (
+          currentScene ===
+          LAST_STORY
+        ) {
+
+          return;
+
+        }
 
 
         goToStory(
-          targetScene
+          FIRST_STORY +
+          index
         );
 
 
@@ -1273,6 +1388,9 @@ function unlockExperience() {
   deactivateStories();
 
 
+  enableStoryControls();
+
+
   stopAllVideos();
 
 
@@ -1331,7 +1449,7 @@ passwordInput.addEventListener(
 
 
 /* =========================================================
-   FINAL DO VÍDEO 3 × C
+   FIM DO 3 × C
 ========================================================= */
 
 if (
@@ -1359,10 +1477,14 @@ startButton.addEventListener(
     ) {
 
       return;
+
     }
 
 
     activateStories();
+
+
+    enableStoryControls();
 
 
     startStory(
@@ -1374,7 +1496,63 @@ startButton.addEventListener(
 
 
 /* =========================================================
-   VÍDEOS DOS STORIES
+   BOTÃO FINAL — WHATSAPP
+========================================================= */
+
+if (
+  whatsappButton
+) {
+
+  whatsappButton.addEventListener(
+    "click",
+    event => {
+
+      /*
+        Bloqueia qualquer comportamento
+        padrão do botão.
+      */
+
+      event.preventDefault();
+
+
+      event.stopPropagation();
+
+
+      /*
+        Garante que estamos no
+        último Story.
+      */
+
+      if (
+        currentScene !==
+        LAST_STORY
+      ) {
+
+        return;
+
+      }
+
+
+      /*
+        Redirecionamento direto
+        para o WhatsApp.
+      */
+
+      window.location.assign(
+        CONFIG.whatsappUrl
+      );
+
+    },
+    {
+      passive: false
+    }
+  );
+
+}
+
+
+/* =========================================================
+   EVENTOS DE FINAL DOS VÍDEOS
 ========================================================= */
 
 videos.forEach(
@@ -1383,8 +1561,12 @@ videos.forEach(
     index
   ) => {
 
-    if (!video) {
+    if (
+      !video
+    ) {
+
       return;
+
     }
 
 
@@ -1392,14 +1574,23 @@ videos.forEach(
       "ended",
       () => {
 
+        /*
+          Login não participa.
+        */
+
         if (
           index ===
           LOGIN_SCENE
         ) {
 
           return;
+
         }
 
+
+        /*
+          3 × C não participa.
+        */
 
         if (
           index ===
@@ -1407,8 +1598,14 @@ videos.forEach(
         ) {
 
           return;
+
         }
 
+
+        /*
+          Apenas a cena ativa
+          pode comandar a navegação.
+        */
 
         if (
           index !==
@@ -1416,6 +1613,7 @@ videos.forEach(
         ) {
 
           return;
+
         }
 
 
@@ -1439,11 +1637,25 @@ if (
   loginVideo.loop =
     true;
 
+
   loginVideo.muted =
     true;
 
+
   loginVideo.playsInline =
     true;
+
+
+  loginVideo.setAttribute(
+    "playsinline",
+    ""
+  );
+
+
+  loginVideo.setAttribute(
+    "webkit-playsinline",
+    ""
+  );
 
 }
 
@@ -1459,11 +1671,25 @@ if (
   startVideo.loop =
     false;
 
+
   startVideo.muted =
     true;
 
+
   startVideo.playsInline =
     true;
+
+
+  startVideo.setAttribute(
+    "playsinline",
+    ""
+  );
+
+
+  startVideo.setAttribute(
+    "webkit-playsinline",
+    ""
+  );
 
 }
 
@@ -1479,17 +1705,33 @@ if (
   finalVideo.loop =
     false;
 
+
   finalVideo.muted =
     true;
+
 
   finalVideo.defaultMuted =
     true;
 
+
   finalVideo.playsInline =
     true;
 
+
   finalVideo.setAttribute(
     "muted",
+    ""
+  );
+
+
+  finalVideo.setAttribute(
+    "playsinline",
+    ""
+  );
+
+
+  finalVideo.setAttribute(
+    "webkit-playsinline",
     ""
   );
 
@@ -1504,9 +1746,24 @@ document.addEventListener(
   "touchstart",
   event => {
 
-    /*
-      Bloqueia dois ou mais dedos.
-    */
+    if (
+      event.touches.length > 1
+    ) {
+
+      event.preventDefault();
+
+    }
+
+  },
+  {
+    passive: false
+  }
+);
+
+
+document.addEventListener(
+  "touchmove",
+  event => {
 
     if (
       event.touches.length > 1
@@ -1524,7 +1781,7 @@ document.addEventListener(
 
 
 /* =========================================================
-   BLOQUEIO DE GESTO DE ZOOM
+   GESTOS DO SAFARI
 ========================================================= */
 
 document.addEventListener(
@@ -1567,7 +1824,7 @@ document.addEventListener(
 
 
 /* =========================================================
-   BLOQUEIO DE ZOOM POR DUPLO TOQUE
+   DOUBLE TAP ZOOM
 ========================================================= */
 
 document.addEventListener(
@@ -1578,34 +1835,28 @@ document.addEventListener(
       Date.now();
 
 
-    const timeSinceLastTouch =
+    const elapsed =
       now -
       lastTouchEnd;
 
 
     /*
-      Evita o zoom causado por
-      dois toques rápidos.
+      Elementos interativos precisam
+      continuar recebendo seu toque.
     */
 
+    const isInteractiveElement =
+      event.target.closest(
+        "input, button"
+      );
+
+
     if (
-      timeSinceLastTouch < 300
+      elapsed < 300 &&
+      !isInteractiveElement
     ) {
 
-      /*
-        Permite o campo de senha
-        manter seu comportamento normal.
-      */
-
-      if (
-        !event.target.closest(
-          "input"
-        )
-      ) {
-
-        event.preventDefault();
-
-      }
+      event.preventDefault();
 
     }
 
@@ -1662,6 +1913,9 @@ function initialize() {
   deactivateStories();
 
 
+  enableStoryControls();
+
+
   resetProgressBars();
 
 
@@ -1704,12 +1958,17 @@ function initialize() {
       index
     ) => {
 
-      if (!video) {
+      if (
+        !video
+      ) {
+
         return;
+
       }
 
 
       video.pause();
+
 
       video.muted =
         true;
@@ -1725,7 +1984,9 @@ function initialize() {
           video.currentTime =
             0;
 
-        } catch (error) {
+        } catch (
+          error
+        ) {
 
           // Ignorar
 
@@ -1748,6 +2009,7 @@ function initialize() {
     loginVideo.loop =
       true;
 
+
     loginVideo.muted =
       true;
 
@@ -1761,7 +2023,7 @@ function initialize() {
 
 
   /*
-    Story 1 pré-carregado.
+    Pré-carrega o Story 1.
   */
 
   preloadNext(
@@ -1770,6 +2032,10 @@ function initialize() {
 
 }
 
+
+/* =========================================================
+   INICIAR
+========================================================= */
 
 window.addEventListener(
   "load",
