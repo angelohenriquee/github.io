@@ -250,10 +250,6 @@ function updateProgress() {
     FIRST_STORY;
 
 
-  /*
-    Barras anteriores.
-  */
-
   progressFills.forEach(
     (
       fill,
@@ -283,10 +279,6 @@ function updateProgress() {
     }
   );
 
-
-  /*
-    Barra atual.
-  */
 
   const currentFill =
     progressFills[
@@ -510,11 +502,6 @@ function scheduleFinalButton() {
   resetFinalButton();
 
 
-  /*
-    O botão aparece 1 segundo
-    depois da entrada no Story 8.
-  */
-
   finalButtonTimer =
     window.setTimeout(
       () => {
@@ -564,10 +551,8 @@ function prepareStartScreen() {
   startVideo.loop =
     false;
 
-
   startVideo.muted =
     true;
-
 
   startVideo.playsInline =
     true;
@@ -609,7 +594,6 @@ function prepareStartScreen() {
 
     promise.catch(
       () => {}
-
     );
 
   }
@@ -665,17 +649,12 @@ function startStory(
   stopProgress();
 
 
-  /*
-    Fecha qualquer botão final
-    pendente.
-  */
-
   resetFinalButton();
 
 
   /*
     Para e silencia todos
-    antes da troca.
+    os vídeos anteriores.
   */
 
   stopAllVideos();
@@ -684,7 +663,7 @@ function startStory(
   /*
     O vídeo de destino volta
     ao primeiro frame antes
-    de sua cena aparecer.
+    da troca.
   */
 
   try {
@@ -697,10 +676,6 @@ function startStory(
     // Ignorar
 
   }
-
-
-  video.muted =
-    true;
 
 
   video.playsInline =
@@ -720,21 +695,36 @@ function startStory(
 
 
   /*
+    O ÚLTIMO vídeo é sempre
+    silencioso.
+
+    Todos os outros Stories
+    continuam com áudio.
+  */
+
+  if (
+    index ===
+    LAST_STORY
+  ) {
+
+    video.muted =
+      true;
+
+  } else {
+
+    video.muted =
+      false;
+
+  }
+
+
+  /*
     Mostra a nova cena.
   */
 
   showScene(
     index
   );
-
-
-  /*
-    Só o vídeo atual recebe
-    áudio.
-  */
-
-  video.muted =
-    false;
 
 
   /*
@@ -753,7 +743,6 @@ function startStory(
 
     playPromise.catch(
       () => {}
-
     );
 
   }
@@ -769,15 +758,16 @@ function startStory(
 
 
   /*
-    Barra começa acompanhando.
+    Atualiza a barra.
   */
 
   startProgress();
 
 
   /*
-    Se for o último Story,
-    agenda o botão.
+    Último Story:
+    botão aparece depois
+    de 1 segundo.
   */
 
   if (
@@ -834,11 +824,6 @@ function goToStory(
 ========================================================= */
 
 function previousStory() {
-
-  /*
-    Story 1 não volta
-    para a abertura.
-  */
 
   if (
     currentScene <=
@@ -910,11 +895,6 @@ function handleStoryEnd() {
     }
 
 
-    /*
-      O botão permanece
-      disponível no final.
-    */
-
     return;
 
   }
@@ -967,11 +947,6 @@ function resumeCurrentStory() {
   }
 
 
-  /*
-    Mantém todos os outros
-    vídeos parados e mudos.
-  */
-
   videos.forEach(
     (
       videoItem,
@@ -1003,8 +978,26 @@ function resumeCurrentStory() {
   );
 
 
-  video.muted =
-    false;
+  /*
+    O último vídeo continua
+    SEM ÁUDIO mesmo ao soltar
+    depois de pausar.
+  */
+
+  if (
+    currentScene ===
+    LAST_STORY
+  ) {
+
+    video.muted =
+      true;
+
+  } else {
+
+    video.muted =
+      false;
+
+  }
 
 
   const promise =
@@ -1019,7 +1012,6 @@ function resumeCurrentStory() {
 
     promise.catch(
       () => {}
-
     );
 
   }
@@ -1262,13 +1254,6 @@ progressSegments.forEach(
         }
 
 
-        /*
-          Barra 0 = Story 1
-          Barra 1 = Story 2
-          ...
-          Barra 7 = Story 8
-        */
-
         const targetScene =
           FIRST_STORY +
           index;
@@ -1363,7 +1348,8 @@ function unlockExperience() {
 
 
   /*
-    Barras continuam escondidas.
+    As barras continuam
+    escondidas.
   */
 
   deactivateStories();
@@ -1630,6 +1616,9 @@ if (
 
 /* =========================================================
    ÚLTIMO VÍDEO
+
+   IMPORTANTE:
+   O ultimo.mp4 NÃO possui áudio.
 ========================================================= */
 
 if (
@@ -1639,8 +1628,20 @@ if (
   finalVideo.loop =
     false;
 
+  finalVideo.muted =
+    true;
+
+  finalVideo.defaultMuted =
+    true;
+
   finalVideo.playsInline =
     true;
+
+
+  finalVideo.setAttribute(
+    "muted",
+    ""
+  );
 
 
   finalVideo.setAttribute(
@@ -1850,7 +1851,6 @@ function initialize() {
     loginVideo.play()
       .catch(
         () => {}
-
       );
 
   }
