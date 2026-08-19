@@ -220,7 +220,7 @@ let finalButtonTimer =
   null;
 
 
-let lastTouchEnd =
+let lastTouchStart =
   0;
 
 
@@ -1200,6 +1200,19 @@ storyPause.addEventListener(
 ========================================================= */
 
 storyPrev.addEventListener(
+  "pointerdown",
+  event => {
+
+    event.preventDefault();
+
+  },
+  {
+    passive: false
+  }
+);
+
+
+storyPrev.addEventListener(
   "pointerup",
   event => {
 
@@ -1234,6 +1247,19 @@ storyPrev.addEventListener(
 /* =========================================================
    TOQUE DIREITO
 ========================================================= */
+
+storyNext.addEventListener(
+  "pointerdown",
+  event => {
+
+    event.preventDefault();
+
+  },
+  {
+    passive: false
+  }
+);
+
 
 storyNext.addEventListener(
   "pointerup",
@@ -1273,6 +1299,19 @@ progressSegments.forEach(
     segment,
     index
   ) => {
+
+    segment.addEventListener(
+      "pointerdown",
+      event => {
+
+        event.preventDefault();
+
+      },
+      {
+        passive: false
+      }
+    );
+
 
     segment.addEventListener(
       "pointerup",
@@ -1794,11 +1833,11 @@ document.addEventListener(
 
 
 /* =========================================================
-   DOUBLE TAP ZOOM
+   DOUBLE TAP ZOOM FIX
 ========================================================= */
 
 document.addEventListener(
-  "touchend",
+  "touchstart",
   event => {
 
     const now =
@@ -1807,12 +1846,12 @@ document.addEventListener(
 
     const elapsed =
       now -
-      lastTouchEnd;
+      lastTouchStart;
 
 
     const isInteractiveElement =
       event.target.closest(
-        "input, button"
+        "input, button, a"
       );
 
 
@@ -1826,7 +1865,7 @@ document.addEventListener(
     }
 
 
-    lastTouchEnd =
+    lastTouchStart =
       now;
 
   },
