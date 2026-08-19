@@ -220,7 +220,7 @@ let finalButtonTimer =
   null;
 
 
-let lastTouchStart =
+let lastTouchEnd =
   0;
 
 
@@ -1205,17 +1205,6 @@ storyPrev.addEventListener(
 
     event.preventDefault();
 
-  },
-  {
-    passive: false
-  }
-);
-
-
-storyPrev.addEventListener(
-  "pointerup",
-  event => {
-
     if (
       !unlocked ||
       currentScene <
@@ -1226,16 +1215,7 @@ storyPrev.addEventListener(
 
     }
 
-
-    /*
-      Agora também funciona
-      no último Story.
-    */
-
     previousStory();
-
-
-    event.preventDefault();
 
   },
   {
@@ -1254,17 +1234,6 @@ storyNext.addEventListener(
 
     event.preventDefault();
 
-  },
-  {
-    passive: false
-  }
-);
-
-
-storyNext.addEventListener(
-  "pointerup",
-  event => {
-
     if (
       !unlocked ||
       currentScene <
@@ -1277,11 +1246,7 @@ storyNext.addEventListener(
 
     }
 
-
     nextStory();
-
-
-    event.preventDefault();
 
   },
   {
@@ -1306,17 +1271,6 @@ progressSegments.forEach(
 
         event.preventDefault();
 
-      },
-      {
-        passive: false
-      }
-    );
-
-
-    segment.addEventListener(
-      "pointerup",
-      event => {
-
         if (
           !unlocked
         ) {
@@ -1324,13 +1278,6 @@ progressSegments.forEach(
           return;
 
         }
-
-
-        /*
-          Agora também é possível
-          clicar nas barras anteriores
-          estando no último Story.
-        */
 
         const targetScene =
           FIRST_STORY +
@@ -1351,14 +1298,35 @@ progressSegments.forEach(
           targetScene
         );
 
-
-        event.preventDefault();
-
       },
       {
         passive: false
       }
     );
+
+  }
+);
+
+
+/* =========================================================
+   BLOQUEIO DEFINITIVO DE ZOOM NOS CONTROLES
+========================================================= */
+
+[storyPrev, storyPause, storyNext, ...progressSegments].forEach(
+  element => {
+
+    if (element) {
+      element.addEventListener(
+        "touchend",
+        event => {
+          // Mata o double-tap zoom do Safari cortando o evento raiz
+          event.preventDefault();
+        },
+        {
+          passive: false
+        }
+      );
+    }
 
   }
 );
@@ -1395,6 +1363,10 @@ function unlockExperience() {
   passwordError.classList.remove(
     "visible"
   );
+
+
+  // Remove o foco do input para o teclado baixar e evitar zoom oculto do iOS
+  passwordInput.blur();
 
 
   unlocked =
@@ -1748,7 +1720,7 @@ if (
 
 
 /* =========================================================
-   BLOQUEIO DE PINCH ZOOM
+   BLOQUEIO DE PINCH ZOOM GLOBAL
 ========================================================= */
 
 document.addEventListener(
@@ -1790,7 +1762,7 @@ document.addEventListener(
 
 
 /* =========================================================
-   GESTOS SAFARI
+   GESTOS SAFARI GLOBAIS
 ========================================================= */
 
 document.addEventListener(
@@ -1833,11 +1805,11 @@ document.addEventListener(
 
 
 /* =========================================================
-   DOUBLE TAP ZOOM FIX
+   DOUBLE TAP ZOOM FIX GLOBAL (CORRIGIDO PARA TOUCHEND)
 ========================================================= */
 
 document.addEventListener(
-  "touchstart",
+  "touchend",
   event => {
 
     const now =
@@ -1846,7 +1818,7 @@ document.addEventListener(
 
     const elapsed =
       now -
-      lastTouchStart;
+      lastTouchEnd;
 
 
     const isInteractiveElement =
@@ -1865,7 +1837,7 @@ document.addEventListener(
     }
 
 
-    lastTouchStart =
+    lastTouchEnd =
       now;
 
   },
